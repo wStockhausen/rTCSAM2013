@@ -1,0 +1,20 @@
+\name{plotData.Survey.NatZ}
+\alias{plotData.Survey.NatZ}
+\title{Function to plot numbers-at-size from survey data.}
+\usage{
+plotData.Survey.NatZ(nAtZ, label = "trawl survey")
+}
+\arguments{
+  \item{nAtZ}{- survey numbers-at size 5d array}
+
+  \item{label}{- label for plot}
+}
+\description{
+This function plots survey numbers-at-size data by year for
+each sex as circles. Immatures are plotted in blue, matures
+in green. Shell condition is summed over.
+}
+\details{
+
+}
+

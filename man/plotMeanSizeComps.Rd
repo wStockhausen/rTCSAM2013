@@ -1,0 +1,46 @@
+\name{plotMeanSizeComps}
+\alias{plotMeanSizeComps}
+\title{Function to plot comparisons of mean size comps.}
+\usage{
+plotMeanSizeComps(size.bins, obs.comp, prd.comp, cols = NULL, ymx = NULL,
+  xlab = NULL, ylab = NULL, pch = 21, lty = 1, lwd = 1,
+  clr = "black", CI = 0.8, bar.width = 1, addToPlot = FALSE)
+}
+\arguments{
+  \item{size.bins}{-}
+
+  \item{obs.comp}{-}
+
+  \item{prd.comp}{-}
+
+  \item{cols}{- vector of column numbers to extract (NULL
+  results in all columns used)}
+
+  \item{ymx}{- max y value}
+
+  \item{xlab}{- x axis title}
+
+  \item{ylab}{- y axis title}
+
+  \item{pch}{- vector of point symbols to use}
+
+  \item{lty}{- vector of line types to use}
+
+  \item{lwd}{- vector of line widths to use}
+
+  \item{clr}{- vector of colors to use}
+
+  \item{CI}{- confidence}
+
+  \item{bar.width}{-}
+
+  \item{addToPlot}{-}
+}
+\description{
+This function plots comparisons of size comps using their
+averages.
+}
+\details{
+
+}
+

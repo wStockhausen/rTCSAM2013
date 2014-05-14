@@ -1,0 +1,81 @@
+#'
+#'@title Function to plot parameter values.
+#'
+#'@description This function plots parameters values, together with their limits
+#'(if any) and the posterior distributions implied by their estimated standard
+#'errors.
+#'
+#'@param obj.prs - dataframe from reading in.prs
+#'@param obj.std - object (dataframe) obtained from reading the TCSAM2013 .std file
+#'@param in.prs - input csv file from which to read parameters information
+#'@param in.std - input TCSAM2013 .std filename
+#'@param dp - % difference between parameter value and upper/lower limits used to color plot
+#'
+#'@return - list
+#'
+#'@import graphics
+#'
+#'@export
+#'
+checkParams<-function(obj.prs=NULL,
+                      obj.std=NULL,
+                      in.prs='TCSAM_WTS.final_params.active.csv',
+                      in.std='tcsam_wtsRKFon.std',
+                      dp=0.01){
+    if (is.null(obj.prs)) {
+        obj.prs<-read.csv(in.prs);
+    }
+    if (in.std){
+        if (is.null(obj.std)){
+            base.dir<-dirname(in.prs)
+            obj.std = read.table(in.std,as.is=T,header=F,skip=1);        
+        }
+    }
+    nr<-nrow(obj.prs);
+    old.par<-par(mfcol=c(10,5),mai=c(0,0,0,0),omi=c(0.5,0.5,0.5,0.5));
+    on.exit(par(old.par));
+    res<-NULL;
+    for (r in 1:nr){
+        pmn<-obj.prs$min[r];
+        pmx<-obj.prs$max[r];
+        pvl<-obj.prs$value[r];
+        pnm<-obj.prs$name[r];
+        if (is.finite(pmn)){
+            plot(c(pmn,pmx),c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n',ylim=c(0,1));
+            clr<-'green';
+            if (abs(pvl-pmn)/(pmx-pmn)<dp/100) {
+                clr<-'blue';
+                if (is.null(res)) {
+                    res<-as.data.frame(list(name=pnm,type='low',idx=obj.prs$index[r],min=pmn,max=pmx,value=pvl),stringsAsFactors=FALSE);
+                } else {
+                    res<-rbind(res,list(name=pnm,type='low',idx=obj.prs$index[r],min=pmn,max=pmx,value=pvl));
+                }
+            }
+            if (abs(pvl-pmx)/(pmx-pmn)<dp/100) {
+                clr<-'red';
+                if (is.null(res)) {
+                    res<-as.data.frame(list(name=pnm,type='high',idx=obj.prs$index[r],min=pmn,max=pmx,value=pvl),stringsAsFactors=FALSE);
+                } else {
+                    res<-rbind(res,list(name=pnm,type='high',idx=obj.prs$index[r],min=pmn,max=pmx,value=pvl));
+                }
+            }
+            adj=0.01;
+            if ((pvl-pmn<0.5)/(pmx-pmn)) adj<-0.99
+            rect(pmn,0,pmx,0.8,col=clr);
+            lines(c(pvl,pvl),c(0,1),lwd=3,col='black');
+            if (in.std){
+                stdv<-obj.std[r,4];
+                x<-seq(from=pmn,to=pmx,length.out=31);
+                y<-0.9*exp(-0.5*((pvl-x)/stdv)^2);
+                polygon(c(pmn,x,pmx),c(0,y,0),col=grey(0.5,alpha=0.5));
+            }
+            mtext(pnm,side=3,line=-1,cex=0.6,adj=adj);
+        } else {
+            plot(0.9*pvl,1.1*pvl,c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n');
+            lines(c(pvl,pvl),c(0,1),lwd=3,col='black');
+            mtext(pnm,side=3,line=-1,cex=0.6,adj=0.01);
+            mtext("no limits",side=1,line=-1,cex=0.6,adj=0.01,col='green');
+        }
+    }
+    return(res);
+}

@@ -1,0 +1,34 @@
+\name{plotNatMort}
+\alias{plotNatMort}
+\title{Function to plot natural mortality rates by year}
+\usage{
+plotNatMort(sdobj, styr = 1949, endyr = 2013, min.yr = 1970,
+  max.yr = endyr, clrs = c("green", "blue", "black"), pchs = c(21, 21,
+  21), ltys = c(1, 1, 1))
+}
+\arguments{
+  \item{sdobj}{- object (dataframe) obtained from reading
+  the TCSAM2013 .std file}
+
+  \item{styr}{- model start year}
+
+  \item{endyr}{- model end year}
+
+  \item{min.yr}{- min year to plot}
+
+  \item{max.yr}{- max year to plot}
+
+  \item{clrs}{- colors to use}
+
+  \item{pchs}{- point types to use}
+
+  \item{ltys}{- line types to use}
+}
+\description{
+This function plots natural mortality estimates by year and
+sex for immatures, new shell matures and old shell matures.
+}
+\details{
+
+}
+

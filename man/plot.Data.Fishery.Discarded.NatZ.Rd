@@ -1,0 +1,21 @@
+\name{plot.Data.Fishery.Discarded.NatZ}
+\alias{plot.Data.Fishery.Discarded.NatZ}
+\title{Function to plot numbers-at-size from fishery discard data.}
+\usage{
+\method{plot}{Data.Fishery.Discarded.NatZ}(nAtZ, label = "")
+}
+\arguments{
+  \item{nAtZ}{- discarded catch numbers-at size 3d array
+  (sex,shell condition, year, size).}
+
+  \item{label}{- label for plot}
+}
+\description{
+This function plots discarded catch numbers-at-size data by
+year as circles. New shell crab are plotted in blue, old
+shells in green. Plots are created by sex.
+}
+\details{
+
+}
+

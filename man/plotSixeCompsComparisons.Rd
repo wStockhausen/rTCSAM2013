@@ -1,0 +1,34 @@
+\name{plotSixeCompsComparisons}
+\alias{plotSixeCompsComparisons}
+\title{Function to plot size comps comparisons by year}
+\usage{
+plotSixeCompsComparisons(data.o, data.p, nr = 4, nc = 4, nplots = nr * nc,
+  new = TRUE, len = TRUE, maxy = NULL, yearlb = NULL)
+}
+\arguments{
+  \item{data.o}{- observed size comps}
+
+  \item{data.p}{- predicted size comps}
+
+  \item{nr}{- number of rows per page}
+
+  \item{nc}{- number of columns per page}
+
+  \item{nplots}{- total number of plots}
+
+  \item{new}{- flag to set and return graphics parameters}
+
+  \item{len}{- flag indicating length comps}
+
+  \item{maxy}{- max y value to plot}
+
+  \item{yearlb}{- year labels, one per plot}
+}
+\description{
+This function compares observed and predicted size comps by
+year.
+}
+\details{
+
+}
+

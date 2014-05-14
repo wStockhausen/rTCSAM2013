@@ -1,0 +1,27 @@
+\name{plotData}
+\alias{plotData}
+\title{Function to plot TCSAM2013 input data from a .R file}
+\usage{
+plotData(lst = NULL, fn = NULL, out.dir = NULL, pdfFile = NULL)
+}
+\arguments{
+  \item{lst}{- the data list object}
+
+  \item{fn}{- the file}
+
+  \item{out.dir}{- directory to write pdf output to}
+
+  \item{pdfFile}{- (base) filename for output pdf file (if
+  not NULL)}
+}
+\description{
+This function plots input data to TCSAM2013 from a .R
+output file
+}
+\details{
+
+
+Creates a set of plots (in a pdf file, if desired) from a
+TCSAM2013 .R output file.
+}
+
