@@ -19,18 +19,31 @@
 #'
 checkParams<-function(obj.prs=NULL,
                       obj.std=NULL,
-                      in.prs='TCSAM_WTS.final_params.active.csv',
-                      in.std='tcsam_wtsRKFon.std',
+                      in.prs=NULL,
+                      in.std=NULL,
                       dp=0.01){
-    if (is.null(obj.prs)) {
+    if (is.null(obj.prs)){
+        if (is.null(in.prs)){
+            Filters<-wtsUtilities::addFilter("csv","csv files (*.csv)","*.csv",Filters=NULL);
+            in.prs<-tcltk::tk_choose.files(caption="Select parameters csv file",
+                                                 multi=FALSE,filters=Filters);
+        }
         obj.prs<-read.csv(in.prs);
     }
-    if (in.std){
-        if (is.null(obj.std)){
-            base.dir<-dirname(in.prs)
-            obj.std = read.table(in.std,as.is=T,header=F,skip=1);        
+    if (is.null(obj.std)){
+        if (is.null(in.std)){
+            if (is.null(in.prs)){
+                Filters<-wtsUtilities::addFilter("std","std files (*.std)","*.std",Filters=NULL);
+                in.std<-tcltk::tk_choose.files(caption="Select std file",
+                                                     multi=FALSE,filters=Filters);
+            } else {
+                base.dir<-dirname(in.prs)
+                obj.std = read.table(in.std,as.is=T,header=F,skip=1);        
+            }
         }
+        obj.std = read.table(in.std,as.is=T,header=F,skip=1);
     }
+    
     nr<-nrow(obj.prs);
     old.par<-par(mfcol=c(10,5),mai=c(0,0,0,0),omi=c(0.5,0.5,0.5,0.5));
     on.exit(par(old.par));
@@ -63,7 +76,7 @@ checkParams<-function(obj.prs=NULL,
             if ((pvl-pmn<0.5)/(pmx-pmn)) adj<-0.99
             rect(pmn,0,pmx,0.8,col=clr);
             lines(c(pvl,pvl),c(0,1),lwd=3,col='black');
-            if (in.std){
+            if (!is.null(obj.std)){
                 stdv<-obj.std[r,4];
                 x<-seq(from=pmn,to=pmx,length.out=31);
                 y<-0.9*exp(-0.5*((pvl-x)/stdv)^2);

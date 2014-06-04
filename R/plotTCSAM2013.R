@@ -74,10 +74,10 @@ plotTCSAM2013<-function(obj.rep=NULL,
             in.rep<-tcltk::tk_choose.files(caption="Select Jack's R output file",
                                                  multi=FALSE,filters=Filters);
             base.dir=dirname(in.rep);
-            mdl<-strsplit(basename(obj.rep.file),".",fixed=TRUE)[[1]][1];
+            mdl<-strsplit(basename(in.rep),".",fixed=TRUE)[[1]][1];
         }
         obj.rep = readList(in.rep);
-        if (i.null(obj.std)) obj.std = read.table(file.path(base.dir,paste(mdl,"std",sep='.')),as.is=T,header=F,skip=1);
+        if (is.null(obj.std)) obj.std = read.table(file.path(base.dir,paste(mdl,"std",sep='.')),as.is=T,header=F,skip=1);
     }
     if (is.null(obj.std)){
         if (is.null(in.sd)){
