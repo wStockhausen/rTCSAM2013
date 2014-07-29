@@ -2,9 +2,8 @@
 \alias{checkParams}
 \title{Function to plot parameter values.}
 \usage{
-checkParams(obj.prs = NULL, obj.std = NULL,
-  in.prs = "TCSAM_WTS.final_params.active.csv",
-  in.std = "tcsam_wtsRKFon.std", dp = 0.01)
+checkParams(obj.prs = NULL, obj.std = NULL, in.prs = NULL,
+  in.std = NULL, dp = 0.01)
 }
 \arguments{
   \item{obj.prs}{- dataframe from reading in.prs}

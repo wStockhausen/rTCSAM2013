@@ -90,5 +90,5 @@ checkParams<-function(obj.prs=NULL,
             mtext("no limits",side=1,line=-1,cex=0.6,adj=0.01,col='green');
         }
     }
-    return(res);
+    return(invisible(res));
 }

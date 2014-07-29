@@ -80,7 +80,7 @@ plotTCSAM2013<-function(obj.rep=NULL,
         if (is.null(obj.std)) obj.std = read.table(file.path(base.dir,paste(mdl,"std",sep='.')),as.is=T,header=F,skip=1);
     }
     if (is.null(obj.std)){
-        if (is.null(in.sd)){
+        if (is.null(in.std)){
             Filters<-wtsUtilities::addFilter("std","std files (*.std)","*.std",Filters=NULL);
             in.std<-tcltk::tk_choose.files(caption="Select std file",
                                                  multi=FALSE,filters=Filters);

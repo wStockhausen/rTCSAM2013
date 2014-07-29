@@ -22,7 +22,7 @@
 #'@param model - filename of model executable to run
 #'@param model.dir - path to model executable
 #'@param mc - path/filename for model configuration file
-#'@param in.csv - filename for jitter info (seed, obj fun value)
+#'@param in.csv - filename for jitter info (seed, obj fun value) from ADMB model run
 #'@param out.csv - filename for jittered results
 #'
 #'@return - list w/ 2 elements:
@@ -33,7 +33,7 @@
 #'
 runTCSAM2013<-function(N=5,
                       model="tcsam_wtsRKFon",
-                      model.dir='/Users/WilliamStockhausen/StockAssessments-Crab/AssessmentModelDevelopment/TCSAM_WTS/dist/Debug/GNU-MacOSX',
+                      model.dir='/Users/WilliamStockhausen/StockAssessments-Crab/AssessmentModelDevelopment/TCSAM2013/dist/Debug/GNU-MacOSX',
                       mc="../TCSAM2013e_ModelConfig.txt",
                       in.csv='jitterInfo.csv',
                       out.csv='jitterResults.csv'){

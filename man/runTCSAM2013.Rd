@@ -3,7 +3,7 @@
 \title{Function to run TCSAM2013 multiple times using jittered initial parameter values.}
 \usage{
 runTCSAM2013(N = 5, model = "tcsam_wtsRKFon",
-  model.dir = "/Users/WilliamStockhausen/StockAssessments-Crab/AssessmentModelDevelopment/TCSAM_WTS/dist/Debug/GNU-MacOSX",
+  model.dir = "/Users/WilliamStockhausen/StockAssessments-Crab/AssessmentModelDevelopment/TCSAM2013/dist/Debug/GNU-MacOSX",
   mc = "../TCSAM2013e_ModelConfig.txt", in.csv = "jitterInfo.csv",
   out.csv = "jitterResults.csv")
 }
@@ -17,7 +17,7 @@ runTCSAM2013(N = 5, model = "tcsam_wtsRKFon",
   \item{mc}{- path/filename for model configuration file}
 
   \item{in.csv}{- filename for jitter info (seed, obj fun
-  value)}
+  value) from ADMB model run}
 
   \item{out.csv}{- filename for jittered results}
 }
