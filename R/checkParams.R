@@ -5,10 +5,8 @@
 #'(if any) and the posterior distributions implied by their estimated standard
 #'errors.
 #'
-#'@param obj.prs - dataframe from reading in.prs
-#'@param obj.std - object (dataframe) obtained from reading the TCSAM2013 .std file
-#'@param in.prs - input csv file from which to read parameters information
-#'@param in.std - input TCSAM2013 .std filename
+#'@param obj.prs - dataframe or filename for csv file containing parameters information
+#'@param obj.std - dataframe obtained from reading, or filename of, the .std file
 #'@param dp - % difference between parameter value and upper/lower limits used to color plot
 #'
 #'@return - list
@@ -19,27 +17,20 @@
 #'
 checkParams<-function(obj.prs=NULL,
                       obj.std=NULL,
-                      in.prs=NULL,
-                      in.std=NULL,
                       dp=0.01){
-    if (is.null(obj.prs)){
-        if (is.null(in.prs)){
-            Filters<-wtsUtilities::addFilter("csv","csv files (*.csv)","*.csv",Filters=NULL);
-            in.prs<-tcltk::tk_choose.files(caption="Select parameters csv file",
-                                                 multi=FALSE,filters=Filters);
+    if (!is.data.frame(obj.prs)){
+        if (!is.character(obj.prs)){
+            in.prs<-wtsUtilities::selectFile(ext='csv',caption="Select parameters info csv file");
+        } else {
+            in.prs<-obj.prs;
         }
-        obj.prs<-read.csv(in.prs);
+        obj.prs<-read.csv(in.prs,stringsAsFactors=FALSE);
     }
-    if (is.null(obj.std)){
-        if (is.null(in.std)){
-            if (is.null(in.prs)){
-                Filters<-wtsUtilities::addFilter("std","std files (*.std)","*.std",Filters=NULL);
-                in.std<-tcltk::tk_choose.files(caption="Select std file",
-                                                     multi=FALSE,filters=Filters);
-            } else {
-                base.dir<-dirname(in.prs)
-                obj.std = read.table(in.std,as.is=T,header=F,skip=1);        
-            }
+    if (!is.data.frame(obj.std)){
+        if (!is.character(obj.std)){
+            in.std<-wtsUtilities::selectFile(ext='std',caption="Select std file");
+        } else {
+            in.std<-obj.std;
         }
         obj.std = read.table(in.std,as.is=T,header=F,skip=1);
     }

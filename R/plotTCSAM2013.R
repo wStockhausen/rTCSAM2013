@@ -3,12 +3,9 @@
 #' 
 #' @description Function to plot model results from TCSAM2013.
 #' 
-#' @param obj.rep - report file list object
-#' @param obj.std - dataframe object with parameter std info
-#' @param obj.prs - dataframe object w/ parameters info
-#' @param in.rep - R-style report filename 
-#' @param in.std - std filename
-#' @param in.prs - parameters info filename (csv)
+#' @param obj.rep - report file list object or filename for R-style report
+#' @param obj.std - dataframe object with parameter std info or filename for std file
+#' @param obj.prs - dataframe object w/ parameters info or csv file with parameters info
 #' @param base.dir - path to base folder
 #' @param mdl   - model name (optional if R report file is read)
 #' @param styr  - model start year
@@ -46,11 +43,8 @@
 plotTCSAM2013<-function(obj.rep=NULL,
                         obj.std=NULL,
                         obj.prs=NULL,
-                        in.rep=NULL,
-                        in.std=NULL,
-                        in.prs=NULL,
                         base.dir='./',
-                        mdl='TCSAM2013',
+                        mdl=NULL,      #executable model name
                         styr=1949,     #model start year
                         endyr=2013,    #assessment year
                         obsyr=1974,    #first year of observations
@@ -68,32 +62,32 @@ plotTCSAM2013<-function(obj.rep=NULL,
 
     #----------------------------------
     # Load files
-    if(is.null(obj.rep)){
-        if (is.null(in.rep)){
-            Filters<-wtsUtilities::addFilter("R","R files (*.R)","*.R",Filters=NULL);
-            in.rep<-tcltk::tk_choose.files(caption="Select Jack's R output file",
-                                                 multi=FALSE,filters=Filters);
+    if(!is.list(obj.rep)){
+        if (!is.character(obj.rep)){
+            in.rep<-wtsUtilities::selectFile(ext="R",caption="Select Jack's R output file");
             base.dir=dirname(in.rep);
-            mdl<-strsplit(basename(in.rep),".",fixed=TRUE)[[1]][1];
+            if (is.null(mdl)) {mdl<-strsplit(basename(in.rep),".",fixed=TRUE)[[1]][1];}
+        } else {
+            in.rep<-obj.rep;
         }
         obj.rep = readList(in.rep);
         if (is.null(obj.std)) obj.std = read.table(file.path(base.dir,paste(mdl,"std",sep='.')),as.is=T,header=F,skip=1);
     }
-    if (is.null(obj.std)){
-        if (is.null(in.std)){
-            Filters<-wtsUtilities::addFilter("std","std files (*.std)","*.std",Filters=NULL);
-            in.std<-tcltk::tk_choose.files(caption="Select std file",
-                                                 multi=FALSE,filters=Filters);
+    if (!is.data.frame(obj.std)){
+        if (!is.character(obj.std)){
+            in.std<-wtsUtilities::selectFile(ext='std',caption="Select std file");
+        } else {
+            in.std<-obj.std;
         }
         obj.std = read.table(in.std,as.is=T,header=F,skip=1);
     }
-    if (is.null(obj.prs)){
-        if (is.null(in.prs)){
-            Filters<-wtsUtilities::addFilter("csv","csv files (*.csv)","*.csv",Filters=NULL);
-            in.prs<-tcltk::tk_choose.files(caption="Select parameters csv file",
-                                                 multi=FALSE,filters=Filters);
+    if (!is.data.frame(obj.prs)){
+        if (!is.character(obj.prs)){
+            in.prs<-wtsUtilities::selectFile(ext='csv',caption="Select active parameters info csv file");
+        } else {
+            in.prs<-obj.prs;
         }
-        obj.prs<-read.csv(in.prs);
+        obj.prs<-read.csv(in.prs,stringsAsFactors=FALSE);
     }
     
     #----------------------------------
@@ -975,22 +969,24 @@ plotTCSAM2013<-function(obj.rep=NULL,
     #------------------------------------
     # Fits to retained & discarded catch
     #------------------------------------
+    obs.rd<-obj.rep$"observed.retained.discard.male.catch.biomass"; #total mortality for TCF
+    prd.rd<-obj.rep$"predicted.retained.discard.male.catch.biomass";#total mortality for TCF
     obs.r<-obj.rep$"observed.retained.catch.biomass";
     prd.r<-obj.rep$"predicted.retained.catch.biomass";
-    obs.rd<-obj.rep$"observed.retained.discard.male.catch.biomass";
-    prd.rd<-obj.rep$"predicted.retained.discard.male.catch.biomass";
-    prd.t<-obj.rep$"predicted.total.male.catch.biomass"
+    prd.t<-obj.rep$"predicted.total.male.catch.biomass";#total over all fisheries
     
-    plot(years[2:(length(years))],    prd.rd,
+    plot(years[2:(length(years))], prd.t,lty=3,lwd=2,col="green",
          type="l",xlab="Fishery Year",ylab="Catch (1000 t)",xlim=range(plotyears),
          ylim=c(0,max(prd.rd)));
+    lines(years[2:(length(years))],    prd.rd,lty=1)
     points(1993:(years[length(years)]),obs.rd,pch=22)
     lines(years[2:(length(years))],   prd.r,lty=2,lwd=1)
     points(1966:(max(years)),          obs.r,pch=21)
-    lines(years[2:(length(years))],   prd.t,lty=3,lwd=2,col="green")
-    mtext("Retained catch in directed fishery",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
+    mtext("Male catch mortality",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted Total","Predicted Total: TCF","Observed Total: TCF","Predicted Retained","Observed Retained"),
+           lty=c( 3, 1,NA, 2,NA),
+           pch=c(NA,NA,22,NA,21),
+           col=c('green','black','black','black','black'),cex=1)
 
     plot(years[2:(length(years))], prd.r,
          type="l",xlab="Fishery Year",ylab="Retained Catch (1000 t)",xlim=range(plotyears),
@@ -1002,14 +998,14 @@ plotTCSAM2013<-function(obj.rep=NULL,
     #----------------------------------
 
     #-------------------------------------------------
-    # Fraction of males discarded in directed fishery
+    # Fraction of male discard mortality in directed fishery
     #-------------------------------------------------
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
     frc<-obj.rep$"predicted.discard.male.catch.biomass"/obj.rep$"predicted.retained.catch.biomass";
     plot(years[1:(length(years)-1)],frc,type='l',
          xlab="Fishery Year",ylab="ratio",
          xlim=range(years),ylim=c(0,2.0))
-    mtext("Directed fishery male discard biomass relative to retained catch biomass",side=3,adj=0.0,outer=FALSE);
+    mtext("Directed fishery male discard mortality biomass relative to retained catch biomass",side=3,adj=0.0,outer=FALSE);
     #----------------------------------
 
     #-------------------------------------------------

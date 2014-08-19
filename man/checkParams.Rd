@@ -2,19 +2,14 @@
 \alias{checkParams}
 \title{Function to plot parameter values.}
 \usage{
-checkParams(obj.prs = NULL, obj.std = NULL, in.prs = NULL,
-  in.std = NULL, dp = 0.01)
+checkParams(obj.prs = NULL, obj.std = NULL, dp = 0.01)
 }
 \arguments{
-  \item{obj.prs}{- dataframe from reading in.prs}
+  \item{obj.prs}{- dataframe or filename for csv file
+  containing parameters information}
 
-  \item{obj.std}{- object (dataframe) obtained from reading
-  the TCSAM2013 .std file}
-
-  \item{in.prs}{- input csv file from which to read
-  parameters information}
-
-  \item{in.std}{- input TCSAM2013 .std filename}
+  \item{obj.std}{- dataframe obtained from reading, or
+  filename of, the .std file}
 
   \item{dp}{- % difference between parameter value and
   upper/lower limits used to color plot}

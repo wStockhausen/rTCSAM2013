@@ -3,23 +3,18 @@
 \title{Plot TCSAM2013 model results.}
 \usage{
 plotTCSAM2013(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
-  in.rep = NULL, in.std = NULL, in.prs = NULL, base.dir = "./",
-  mdl = "TCSAM2013", styr = 1949, endyr = 2013, obsyr = 1974,
-  pltyr = 1969, F35 = 0.73, B35 = 33.54)
+  base.dir = "./", mdl = NULL, styr = 1949, endyr = 2013,
+  obsyr = 1974, pltyr = 1969, F35 = 0.73, B35 = 33.54)
 }
 \arguments{
-  \item{obj.rep}{- report file list object}
+  \item{obj.rep}{- report file list object or filename for
+  R-style report}
 
-  \item{obj.std}{- dataframe object with parameter std
-  info}
+  \item{obj.std}{- dataframe object with parameter std info
+  or filename for std file}
 
-  \item{obj.prs}{- dataframe object w/ parameters info}
-
-  \item{in.rep}{- R-style report filename}
-
-  \item{in.std}{- std filename}
-
-  \item{in.prs}{- parameters info filename (csv)}
+  \item{obj.prs}{- dataframe object w/ parameters info or
+  csv file with parameters info}
 
   \item{base.dir}{- path to base folder}
 

@@ -49,7 +49,7 @@ plotMeanSizeComps<-function(size.bins,
         if (is.null(ymx)){
             ymx<-max(mns.obs+std.obs);
         }
-        plot(length.bins, mns.obs,
+        plot(size.bins, mns.obs,
              type="n",pch=pch,col=clr,
              ylim=c(0,ymx),
              xlab=xlab,ylab=ylab);
