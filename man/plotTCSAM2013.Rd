@@ -2,11 +2,13 @@
 \alias{plotTCSAM2013}
 \title{Plot TCSAM2013 model results.}
 \usage{
-plotTCSAM2013(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
-  base.dir = "./", mdl = NULL, styr = 1949, endyr = 2013,
-  obsyr = 1974, pltyr = 1969, F35 = 0.73, B35 = 33.54)
+plotTCSAM2013(endyr = NULL, obj.rep = NULL, obj.std = NULL,
+  obj.prs = NULL, base.dir = "./", mdl = NULL, isFRev = FALSE,
+  styr = 1949, obsyr = 1974, pltyr = 1969, F35 = 0.73, B35 = 33.54)
 }
 \arguments{
+  \item{endyr}{- assessment year [required]}
+
   \item{obj.rep}{- report file list object or filename for
   R-style report}
 
@@ -21,9 +23,10 @@ plotTCSAM2013(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
   \item{mdl}{- model name (optional if R report file is
   read)}
 
-  \item{styr}{- model start year}
+  \item{isFRev}{- flag (T/F) indicating whether TCSAM2103
+  is FRev (TRUE) or not (FALSE)}
 
-  \item{endyr}{- assessment year}
+  \item{styr}{- model start year}
 
   \item{obsyr}{- first year for survey observations}
 

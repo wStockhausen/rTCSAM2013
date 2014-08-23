@@ -32,7 +32,8 @@ checkParams<-function(obj.prs=NULL,
         } else {
             in.std<-obj.std;
         }
-        obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+        obj.std<-NULL;
+        if (!is.null(in.std)) obj.std = read.table(in.std,as.is=T,header=F,skip=1);
     }
     
     nr<-nrow(obj.prs);
