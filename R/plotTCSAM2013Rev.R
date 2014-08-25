@@ -1,18 +1,18 @@
 #'
-#' @title Plot TCSAM2013 model results.
+#' @title Plot TCSAM2013Rev model results.
 #' 
-#' @description Function to plot model results from TCSAM2013.
+#' @description Function to plot model results from TCSAM2013Rev.
 #' 
 #' @param endyr - assessment year [required]
 #' @param obj.rep - report file list object or filename for R-style report
 #' @param obj.std - dataframe object with parameter std info or filename for std file
 #' @param obj.prs - dataframe object w/ parameters info or csv file with parameters info
 #' @param base.dir - path to base folder
-#' @param mdl   - model name (optional if R report file is read)
+#' @param mdl    - model name (optional if R report file is read)
 #' @param isFRev - flag (T/F) indicating whether TCSAM2103 is FRev (TRUE) or not (FALSE)
-#' @param styr  - model start year
-#' @param obsyr - first year for survey observations
-#' @param pltyr - first year for some plots
+#' @param styr   - model start year
+#' @param obsyr  - first year for survey observations
+#' @param pltyr  - first year for some plots
 #' @param F35 - F35 value for control rule plot
 #' @param B35 - B35 value for control rule plot
 #' 
@@ -41,18 +41,18 @@
 
 #----------------------------------
 # Set model variables for plots
-plotTCSAM2013<-function(endyr=NULL,    #assessment year
-                        obj.rep=NULL,
-                        obj.std=NULL,
-                        obj.prs=NULL,
-                        base.dir='./',
-                        mdl=NULL,      #executable model name
-                        isFRev=FALSE,  #flag indicating model is FRev type
-                        styr=1949,     #model start year
-                        obsyr=1974,    #first year of survey observations
-                        pltyr=1969,    #first year for plots
-                        F35=0.73,      #F35 value
-                        B35=33.54){    #B35 value
+plotTCSAM2013Rev<-function(endyr=NULL,    #assessment year
+                            obj.rep=NULL,
+                            obj.std=NULL,
+                            obj.prs=NULL,
+                            base.dir='./',
+                            mdl=NULL,      #executable model name
+                            isFRev=TRUE,  #flag indicating model is FRev type
+                            styr=1949,     #model start year
+                            obsyr=1974,    #first year of survey observations
+                            pltyr=1969,    #first year for plots
+                            F35=0.73,      #F35 value
+                            B35=33.54){    #B35 value
 
     if (is.null(endyr)){
         cat("Must set 'endyr' to assessment year.\n",
@@ -1142,11 +1142,15 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
              xlim=range(plotyears),ylim=c(0,max(fm,na.rm=TRUE)))
         mtext("Directed fishery",side=3,adj=0.0,outer=FALSE);
     } else {
-        fm<-obj.rep$"estimated.annual.total.directed.fishing.capture.rate"
-        plot(years.m1, fm, type="l",
-             xlab="Year", ylab="Full Selection Total Fishery Capture Rate",
-             xlim=range(plotyears),ylim=c(0,max(fm,na.rm=TRUE)))
-        mtext("Directed fishery, males",side=3,adj=0.0,outer=FALSE);
+        fm.m<-obj.rep$"estimated.annual.total.directed.male.fishing.capture.rate"
+        fm.f<-obj.rep$"estimated.annual.total.directed.female.fishing.capture.rate"
+        plot(years.m1, fm.m, type="l",col='blue',lwd=3,
+             xlab="Year", ylab="Full Selection Fishery Capture Rate",
+             xlim=range(plotyears),ylim=c(0,max(fm.m,fm.f,na.rm=TRUE)))
+        lines(years.m1,fm.f,lty=2,col='green',lwd=3)
+        mtext("Directed fishery",side=3,adj=0.0,outer=FALSE);
+        legend("topright",legend=c("males","females"),pch=c(NA,NA),
+               lty=c(1,2),lwd=c(3,3),col=c('blue','green'),cex=1)
     }
     #----------------------------------
 

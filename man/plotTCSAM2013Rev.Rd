@@ -1,0 +1,49 @@
+\name{plotTCSAM2013Rev}
+\alias{plotTCSAM2013Rev}
+\title{Plot TCSAM2013Rev model results.}
+\usage{
+plotTCSAM2013Rev(endyr = NULL, obj.rep = NULL, obj.std = NULL,
+  obj.prs = NULL, base.dir = "./", mdl = NULL, isFRev = TRUE,
+  styr = 1949, obsyr = 1974, pltyr = 1969, F35 = 0.73, B35 = 33.54)
+}
+\arguments{
+  \item{endyr}{- assessment year [required]}
+
+  \item{obj.rep}{- report file list object or filename for
+  R-style report}
+
+  \item{obj.std}{- dataframe object with parameter std info
+  or filename for std file}
+
+  \item{obj.prs}{- dataframe object w/ parameters info or
+  csv file with parameters info}
+
+  \item{base.dir}{- path to base folder}
+
+  \item{mdl}{- model name (optional if R report file is
+  read)}
+
+  \item{isFRev}{- flag (T/F) indicating whether TCSAM2103
+  is FRev (TRUE) or not (FALSE)}
+
+  \item{styr}{- model start year}
+
+  \item{obsyr}{- first year for survey observations}
+
+  \item{pltyr}{- first year for some plots}
+
+  \item{F35}{- F35 value for control rule plot}
+
+  \item{B35}{- B35 value for control rule plot}
+}
+\value{
+list with elements: \cr rep - obj.rep std - obj.std prs -
+obj.prs
+}
+\description{
+Function to plot model results from TCSAM2013Rev.
+}
+\details{
+
+}
+
