@@ -6,6 +6,13 @@
 #'
 #'@param objs - list of objects derived from Jack's R files for the models to be compared
 #'@param cases - vector of labels for model cases (if 'objs' is not given)
+#'@param styr - start year
+#'@param endyr - end year
+#'@param obsyr - start year for survey observations
+#'@param pltyr - start year for plots with just model-predicted values
+#'@param reclag - recruitment lag
+#'@param clrs - colors to use for plots
+#'@param pdf - name for output pdf file
 #'
 #'@details If 'objs' is not given, then the user is prompted to select Jack's R file output from each 
 #'model to be compared. If 'cases' is given, the user is prompted to select the file
@@ -16,6 +23,7 @@
 #'@return vector of list objects corresponding to the objects returned by each model R file.
 #'
 #'@importFrom PBSmodelling readList
+#'@importFrom wtsUtiltities selectFiles
 #'
 #'@export
 #'
@@ -26,6 +34,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
                                          obsyr=1974,    #first year of survey observations
                                          pltyr=1969,    #first year for plots
                                          recLag=5,
+                                         clrs=c('blue','green','cyan','red','orange','darkgrey','darkseagreen'),
                                          pdf="ModelResultsComparisonPlots.pdf"){
     if (is.null(objs)){
         in.obj<-0;
@@ -91,6 +100,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     vartype<-"Predicted.Male.survey.mature.Biomass";
     plotModelComparisons.TimeSeries(obsyears,spB.m.obs,cv.m,
                                    years,vartype,objs,
+                                   clrs=clrs,
                                    title="Mature male survey biomass",
                                    ylab="Biomass (1000's t)")    
     exportModelComparisons.TimeSeries(obsyears,spB.m.obs,cv.m,
@@ -100,6 +110,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     vartype<-"Predicted.Female.survey.mature.Biomass";
     plotModelComparisons.TimeSeries(obsyears,spB.f.obs,cv.f,
                                    years,vartype,objs,
+                                   clrs=clrs,
                                    title="Mature female survey biomass",
                                    ylab="Biomass (1000's t)")    
     exportModelComparisons.TimeSeries(obsyears,spB.f.obs,cv.f,
@@ -111,6 +122,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(obsyears,obs,NULL,
                                    years,vartype,objs,
                                    scaleBy=1000,
+                                   clrs=clrs,
                                    title="'Legal' males (> 138 mm CW)",
                                    ylab="'Legal' males (millions)")    
     exportModelComparisons.TimeSeries(obsyears,obs,NULL,
@@ -121,6 +133,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     yrs<-styr:(endyr-1)
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
+                                   clrs=clrs,
                                    title="Mature male spawning biomass (MMB)",
                                    ylab="Biomass (1000's t)")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,
@@ -131,6 +144,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     yrs<-styr:(endyr-1)
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
+                                   clrs=clrs,
                                    title="Mature female spawning biomass",
                                    ylab="Biomass (1000's t)")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,
@@ -140,6 +154,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     vartype<-"estimated.number.of.recruitments.male";
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    years,vartype,objs,
+                                   clrs=clrs,
                                    scaleBy=1000,
                                    title="Male recruits",
                                    ylab="Recruitment (millions)")    
@@ -154,6 +169,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(oyrs,obs,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Retained catch biomass",
                                    ylab="Retained catch biomass (1000's t)")    
     exportModelComparisons.TimeSeries(oyrs,obs,NULL,
@@ -167,6 +183,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(oyrs,obs,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Males, directed fishery",
                                    ylab="Total mortality (1000's t)")    
     exportModelComparisons.TimeSeries(oyrs,obs,NULL,
@@ -180,6 +197,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(oyrs,obs,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Females, directed fishery",
                                    ylab="Bycatch mortality (1000's t)")    
     exportModelComparisons.TimeSeries(oyrs,obs,NULL,
@@ -191,6 +209,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Males, retained fishing mortality rate",
                                    ylab="Fully-selected Retained Mortality Rate")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,
@@ -202,6 +221,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Males, total directed fishing mortality rate",
                                    ylab="Fully-selected Fishing Mortality Rate")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,
@@ -213,6 +233,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Females, total directed fishing mortality rate",
                                    ylab="Fully-selected Fishing Mortality Rate")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,
@@ -224,6 +245,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Snow crab bycatch fishing mortality rate",
                                    ylab="Fully-selected Fishing Mortality Rate")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,
@@ -235,6 +257,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="BBRKC bycatch fishing mortality",
                                    ylab="Fully-selected Fishing Mortality Rate")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,
@@ -246,6 +269,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    yrs,vartype,objs,
                                    scaleBy=1,
+                                   clrs=clrs,
                                    title="Groundfish bycatch fishing mortality",
                                    ylab="Fully-selected Fishing Mortality Rate")    
     exportModelComparisons.TimeSeries(NULL,NULL,NULL,

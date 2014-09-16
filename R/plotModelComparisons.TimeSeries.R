@@ -1,3 +1,21 @@
+#'
+#'@title Plot time series from a set of model runs to csv for comparison.
+#'
+#'@description Function to plot time series from a set of model runs to csv for comparison.
+#'
+#'@param obsyrs - observed years to export 
+#'@param obs - observations
+#'@param obscv - cv's associated with observations
+#'@param prdyrs - years covering predictions
+#'@param vartype - variable type to plot
+#'@param objs - list of results objects to extract results from
+#'@param scaleBy - scale predictions by this
+#'@param clrs - colors to use for different models
+#'@param title - plot title
+#'@param ylab - y-axis label
+#'
+#'@export
+#'
 plotModelComparisons.TimeSeries<-function(obsyrs=NULL,
                                          obs=NULL,
                                          obscv=NULL,
@@ -5,7 +23,7 @@ plotModelComparisons.TimeSeries<-function(obsyrs=NULL,
                                          vartype=NULL,
                                          objs=NULL,
                                          scaleBy=1,
-                                         clrs=c('blue','green','cyan','red'),
+                                         clrs=c('blue','green','cyan','red','orange','darkgrey','darkseagreen'),
                                          title='',
                                          ylab=''){
     

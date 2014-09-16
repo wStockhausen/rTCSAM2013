@@ -4,7 +4,8 @@
 \usage{
 compareModelResults.TimeSeries(objs = NULL, cases = NULL, styr = 1949,
   endyr = 2014, obsyr = 1974, pltyr = 1969, recLag = 5,
-  pdf = "ModelResultsComparisonPlots.pdf")
+  clrs = c("blue", "green", "cyan", "red", "orange", "darkgrey",
+  "darkseagreen"), pdf = "ModelResultsComparisonPlots.pdf")
 }
 \arguments{
   \item{objs}{- list of objects derived from Jack's R files
@@ -12,6 +13,21 @@ compareModelResults.TimeSeries(objs = NULL, cases = NULL, styr = 1949,
 
   \item{cases}{- vector of labels for model cases (if
   'objs' is not given)}
+
+  \item{styr}{- start year}
+
+  \item{endyr}{- end year}
+
+  \item{obsyr}{- start year for survey observations}
+
+  \item{pltyr}{- start year for plots with just
+  model-predicted values}
+
+  \item{reclag}{- recruitment lag}
+
+  \item{clrs}{- colors to use for plots}
+
+  \item{pdf}{- name for output pdf file}
 }
 \value{
 vector of list objects corresponding to the objects

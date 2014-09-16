@@ -3,6 +3,14 @@
 #'
 #'@description Function to export time series from a set of model runs to csv for comparison.
 #'
+#'@param obsyrs - observed years to export 
+#'@param obs - observations
+#'@param obscv - cv's associated with observations
+#'@param prdyrs - years covering predictions
+#'@param vartype - variable type to plot
+#'@param objs - list of results objects to extract results from
+#'@param scaleBy - scale predictions by this
+#'
 #'@export
 #'
 exportModelComparisons.TimeSeries<-function(obsyrs=NULL,

@@ -1,0 +1,39 @@
+\name{plotModelComparisons.TimeSeries}
+\alias{plotModelComparisons.TimeSeries}
+\title{Plot time series from a set of model runs to csv for comparison.}
+\usage{
+plotModelComparisons.TimeSeries(obsyrs = NULL, obs = NULL, obscv = NULL,
+  prdyrs = NULL, vartype = NULL, objs = NULL, scaleBy = 1,
+  clrs = c("blue", "green", "cyan", "red", "orange", "darkgrey",
+  "darkseagreen"), title = "", ylab = "")
+}
+\arguments{
+  \item{obsyrs}{- observed years to export}
+
+  \item{obs}{- observations}
+
+  \item{obscv}{- cv's associated with observations}
+
+  \item{prdyrs}{- years covering predictions}
+
+  \item{vartype}{- variable type to plot}
+
+  \item{objs}{- list of results objects to extract results
+  from}
+
+  \item{scaleBy}{- scale predictions by this}
+
+  \item{clrs}{- colors to use for different models}
+
+  \item{title}{- plot title}
+
+  \item{ylab}{- y-axis label}
+}
+\description{
+Function to plot time series from a set of model runs to
+csv for comparison.
+}
+\details{
+
+}
+
