@@ -22,6 +22,8 @@
 #'
 #'@importFrom wtsPlots plotErrorBars.V
 #'
+#'@export
+#'
 plotMeanSizeComps<-function(size.bins,
                             obs.comp,
                             prd.comp,

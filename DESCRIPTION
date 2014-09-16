@@ -7,5 +7,5 @@ Author: William Stockhausen
 Maintainer: William Stockhausen <william.stockahusen@noaa.gov>
 Description: This package includes functions related to the ADMB assessment model TCSAM2013 (Tanner crab stock assessment model 2013). Functions are avaialble to run the model (multiple times), plot model data, and plot model results and diagnostics.
 License: MIT
-Requires: PBSadmb
-Imports: graphics, stats, tcltk, wtsUtilities, wtsPlots
+Requires: PBSmodelling
+Imports: graphics, stats, tcltk, wtsPlots, wtsUtilities

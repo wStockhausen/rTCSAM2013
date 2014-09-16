@@ -23,22 +23,13 @@
 #' 
 #' @import graphics
 #' @import stats
-#' @import PBSadmb
+#' @import PBSmodelling
 #' @import tcltk
-#' @import wtsUtilities
+#' @importFrom wtsUtilities selectFile
 #' @importFrom wtsPlots plotErrorBars.V
 #'
 #'@export
 #' 
-#library("PBSadmb");
-#source("plotErrorBars.V.R")
-#source("plot.sizcomps.r.nosp.r")
-#source("plot.bubble.residuals.addn.r")
-#source("plotMeanSizeComps.r")
-#source("plot.NatMort.r")
-#require("tcltk")
-#require("wtsUtilities")
-
 #----------------------------------
 # Set model variables for plots
 plotTCSAM2013<-function(endyr=NULL,    #assessment year
@@ -419,7 +410,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, females",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.all.females",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.all.females",
                     datap=obj.rep$"Predicted.length.prop.survey.all.females",
                     nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.all.females.sampsize"[1:15]);
     mtext("Survey proportions, females",side=3,adj=0.0);
@@ -433,7 +424,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, males",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.all.males",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.all.males",
                    datap=obj.rep$"Predicted.length.prop.survey.all.males",
                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.all.males.sampsize");
     mtext("Survey proportions, males",side=3,adj=0.0);
@@ -447,7 +438,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, immature new shell females",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.females",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.females",
                     datap=obj.rep$"Predicted.length.prop.survey.immature.new.females",
                     nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.immature.new.females.sampsize"[1:15]);
     mtext("Survey proportions, immature new shell females",side=3,adj=0.0);
@@ -460,7 +451,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, mature new shell females",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.females",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.females",
                     datap=obj.rep$"Predicted.length.prop.survey.mature.new.females",
                     nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.females.sampsize"[1:15]);
     mtext("Survey proportions, mature new shell females",side=3,adj=0.0);
@@ -474,7 +465,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, mature old shell females",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.females",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.females",
                     datap=obj.rep$"Predicted.length.prop.survey.mature.old.females",
                     nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.old.females.sampsize"[1:15]);
     mtext("Survey proportions, mature old shell females",side=3,adj=0.0);
@@ -488,7 +479,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, immature new shell males",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.males",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.males",
                     datap=obj.rep$"Predicted.length.prop.survey.immature.new.males",
                     nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.immature.new.males.sampsize");
     mtext("Survey proportions, immature new shell males",side=3,adj=0.0);
@@ -503,7 +494,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, mature new shell males",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.males",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.males",
                     datap=obj.rep$"Predicted.length.prop.survey.mature.new.males",
                     nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.males.sampsize");
     mtext("Survey proportions, mature new shell males",side=3,adj=0.0);
@@ -517,7 +508,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, mature old shell males",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.males",
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.males",
                     datap=obj.rep$"Predicted.length.prop.survey.mature.old.males",
                     nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.old.males.sampsize");
     mtext("Survey proportions, mature old shell males",side=3,adj=0.0);
@@ -533,7 +524,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     mtext("Survey proportions, mature males",side=3,adj=0.0,outer=TRUE);
     
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=tmpobs,
+    plotBubbles(datao=tmpobs,
                     datap=(obj.rep$"Predicted.length.prop.survey.mature.old.males"+obj.rep$"Predicted.length.prop.survey.mature.new.males"),
                     nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.males.sampsize");
     mtext("Survey proportions, mature males",side=3,adj=0.0);
@@ -612,7 +603,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     
     #bubble plot
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obs, datap=prd, nlen=32, sampsize=ss);
+    plotBubbles(datao=obs, datap=prd, nlen=32, sampsize=ss);
     mtext("directed fishery, all retained males",side=3,adj=0.0);
     
     #summed proportions
@@ -645,7 +636,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     
     #bubble plot
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obs, datap=prd, nlen=32, sampsize=ss);
+    plotBubbles(datao=obs, datap=prd, nlen=32, sampsize=ss);
     mtext("directed fishery, all males",side=3,adj=0.0);
     
     #summed proportions
@@ -672,7 +663,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     
     #bubble plot
     par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plot.bubble(datao=obs, datap=prd,
+    plotBubbles(datao=obs, datap=prd,
                     nlen=32,sampsize=ss);
     mtext("directed fishery, all females",side=3,adj=0.0);
     
@@ -1094,16 +1085,18 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     #----------------------------------
 
     #-------------------------------------------------
-    #predicted.red discard catch biomass
+    #predicted red king crab fishery discard catch biomass
     #-------------------------------------------------
     par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
     #--male discard mortality
+    yrs<-obj.rep$"years.obs.bycatch.redk.fishery";
+    if (is.null(yrs)) yrs<-1992:(endyr-1);
     obs<-obj.rep$"observed.redk.male.discard.mortality.biomass"
     prd<-obj.rep$"predicted.redk.male.discard.mortality.biomass";
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(1992:(endyr-1),obs)
+    points(yrs,obs)
     mtext("Red king crab fishery, male discards",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
@@ -1114,7 +1107,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(1992:(endyr-1),obs)
+    points(yrs,obs)
     mtext("Red king crab fishery, female discards",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
@@ -1135,21 +1128,70 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     # Directed fishery fishing mortality
     #-------------------------------------------------
     par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    if (!isFRev){
-        fm<-obj.rep$"estimated.annual.total.directed.fishing.mortality"
-        plot(years.m1, fm, type="l",
-             xlab="Year", ylab="Full Selection Total Fishing Mortality Rate",
-             xlim=range(plotyears),ylim=c(0,max(fm,na.rm=TRUE)))
-        mtext("Directed fishery",side=3,adj=0.0,outer=FALSE);
-    } else {
+    if (isFRev){
         fm<-obj.rep$"estimated.annual.total.directed.fishing.capture.rate"
         plot(years.m1, fm, type="l",
              xlab="Year", ylab="Full Selection Total Fishery Capture Rate",
              xlim=range(plotyears),ylim=c(0,max(fm,na.rm=TRUE)))
         mtext("Directed fishery, males",side=3,adj=0.0,outer=FALSE);
     }
+    
+    fm.r<-obj.rep$"retained.fmTCFR_syz"
+    fm.m<-obj.rep$"estimated.annual.male.total.directed.fishing.mortality"
+    fm.f<-obj.rep$"estimated.annual.female.total.directed.fishing.mortality"
+    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
+         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
+         xlim=range(plotyears),ylim=c(0,max(fm.m,fm.r,na.rm=TRUE)))
+    lines(years.m1,fm.f,lty=2,col='green',lwd=3)
+    mtext("Directed fishery",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("male (total)","female","retained"),pch=c(NA,NA,NA),
+           lty=c(1,2,3),lwd=c(3,3,3),col=c('blue','green','cyan'),cex=1)
     #----------------------------------
 
+    #-------------------------------------------------
+    # Snow crab fishery fishing mortality
+    #-------------------------------------------------
+    fm.m<-obj.rep$"estimated.annual.snow.fishing.mortality"
+    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
+         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
+         xlim=range(plotyears),ylim=c(0,max(fm.m,na.rm=TRUE)))
+    mtext("Snow crab fishery",side=3,adj=0.0,outer=FALSE);
+    #----------------------------------
+
+    #-------------------------------------------------
+    # Red king crab fishery fishing mortality
+    #-------------------------------------------------    
+    fm.m<-obj.rep$"estimated.annual.red.king.fishing.mortality"
+    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
+         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
+         xlim=range(plotyears),ylim=c(0,max(fm.m,na.rm=TRUE)))
+    mtext("BBRKC fishery",side=3,adj=0.0,outer=FALSE);
+    #----------------------------------
+
+    #-------------------------------------------------
+    # Groundfish fishery fishing mortality
+    #-------------------------------------------------
+    fm.m<-obj.rep$"estimated.annual.fishing.mortality.trawl.bycatch"
+    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
+         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
+         xlim=range(plotyears),ylim=c(0,max(fm.m,na.rm=TRUE)))
+    mtext("Groundfish fishery",side=3,adj=0.0,outer=FALSE);
+    #----------------------------------
+
+    #-------------------------------------------------
+    # Total fishing mortality
+    #-------------------------------------------------
+    fm.m<-obj.rep$"estimated.annual.max.male.total.fishing.mortality"
+    fm.f<-obj.rep$"estimated.annual.max.female.total.fishing.mortality"
+    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
+         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
+         xlim=range(plotyears),ylim=c(0,max(fm.m,fm.f,na.rm=TRUE)))
+    lines(years.m1,fm.f,lty=2,col='green',lwd=3)
+    mtext("Total (fully-selected) fishing mortality",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("males","females"),pch=c(NA,NA),
+           lty=c(1,2),lwd=c(3,3),col=c('blue','green'),cex=1)
+    #----------------------------------
+    
     #-------------------------------------------------
     # Mature male biomass at mating time
     #-------------------------------------------------
@@ -1194,7 +1236,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     if (!is.na(F35)){
         par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
         mmb<-obj.rep$"Mating.time.Male.Spawning.Biomass";
-        tfm<-obj.rep$"estimated.annual.total.fishing.mortality";
+        tfm<-obj.rep$"estimated.annual.max.male.total.fishing.mortality";
         if (isFRev){tfm<-obj.rep$"estimated.annual.total.fishing.mortality.males";}            
         yrs<-1949:(endyr-1)
         idx<-(yrs>=1968)

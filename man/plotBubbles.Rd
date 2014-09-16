@@ -1,8 +1,8 @@
-\name{plot.bubble}
-\alias{plot.bubble}
+\name{plotBubbles}
+\alias{plotBubbles}
 \title{Compare size comps using bubble plots for Pearson residuals}
 \usage{
-\method{plot}{bubble}(datao, datap, nlen = 22, sampsize)
+plotBubbles(datao, datap, nlen = 22, sampsize)
 }
 \arguments{
   \item{datao}{- dataframe of observed size frequencies

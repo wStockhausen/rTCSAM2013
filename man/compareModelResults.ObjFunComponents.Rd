@@ -1,0 +1,36 @@
+\name{compareModelResults.ObjFunComponents}
+\alias{compareModelResults.ObjFunComponents}
+\title{Compare changes in objective function components from a base model for several models.}
+\usage{
+compareModelResults.ObjFunComponents(in.csvs = NULL, cases = NULL)
+}
+\arguments{
+  \item{in.csvs}{- vector of paths to final likelihood
+  components csv files for the models to be compared}
+
+  \item{case}{- plot labels for model cases (same order as
+  in.csvs)}
+}
+\value{
+vector with selected file names as elements (can be used as
+in.csv on another call to the function)
+}
+\description{
+Function to compare changes in objective function
+components from a base model for several models.
+}
+\details{
+
+
+If in.csvs is not given, then the user is prompted to
+select final likelihood files for comparison. If cases is
+given but not in.csvs, the user is prompted to select the
+file corresponding to each case. If both 'cases' and
+'in.csvs' are NULL, then the user may select an arbitrary
+number of files (one at a time), ending selection by
+pressing 'cancel' on the selection box'.\cr\cr Objective
+function component comparisons are relative to the first
+(base) case. Positive differences indicate a better fit
+(smaller value for the component in the alternative model).
+}
+

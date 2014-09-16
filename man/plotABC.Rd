@@ -1,0 +1,28 @@
+\name{plotABC}
+\alias{plotABC}
+\title{Function to plot ABC and OFL calculations from calcABC(...)}
+\usage{
+plotABC(x, OFL, ABC.pstar, ABC.buff, buffer = 0.1, title = NULL,
+  xlim = c(22.5, 42.5))
+}
+\arguments{
+  \item{x}{- empirical cdf of OFL}
+
+  \item{OFL}{- estimated OFL}
+
+  \item{ABC.pstar}{- ABC based on pstar method}
+
+  \item{ABC.buff}{- ABC based on buffer method}
+
+  \item{buffer}{- buffer used for ABC.buff}
+
+  \item{title}{- title for plot}
+}
+\description{
+This function plots ABC and OFL from TCSAM2013 projection
+model output.
+}
+\details{
+
+}
+

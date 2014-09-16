@@ -13,7 +13,7 @@
 #'
 #'@export
 #'
-plot.bubble<-function(datao,datap,nlen=22,sampsize){
+plotBubbles<-function(datao,datap,nlen=22,sampsize){
     ny<-length(as.numeric(unlist(datao[,1])))
     #this is standardized pearson residual (o-p)/(sqrt(p(1-p)/sample size))
     sampsize[sampsize<1.0]=1.0
