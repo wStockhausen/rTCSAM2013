@@ -23,7 +23,7 @@
 #'@return vector of list objects corresponding to the objects returned by each model R file.
 #'
 #'@importFrom PBSmodelling readList
-#'@importFrom wtsUtiltities selectFiles
+#'@importFrom wtsUtilities selectFiles
 #'
 #'@export
 #'
