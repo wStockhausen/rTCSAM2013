@@ -1,3 +1,10 @@
+#'
+#'@title Export time series from a set of model runs to csv for comparison.
+#'
+#'@description Function to export time series from a set of model runs to csv for comparison.
+#'
+#'@export
+#'
 exportModelComparisons.TimeSeries<-function(obsyrs=NULL,
                                              obs=NULL,
                                              obscv=NULL,
