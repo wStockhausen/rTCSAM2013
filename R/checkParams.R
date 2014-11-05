@@ -7,7 +7,7 @@
 #'
 #'@param obj.prs - dataframe or filename for csv file containing parameters information
 #'@param obj.std - dataframe obtained from reading, or filename of, the .std file
-#'@param dp - % difference between parameter value and upper/lower limits used to color plot
+#'@param dp - percent difference between parameter value and upper/lower limits used to color plot
 #'
 #'@return - list
 #'

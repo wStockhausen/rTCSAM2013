@@ -11,7 +11,7 @@
 #'for comparison. If cases is given but not in.csvs, the user is prompted to select the file
 #'corresponding to each case. If both 'cases' and 'in.csvs' are NULL, then the user may select an 
 #'arbitrary number of files (one at a time), ending selection by pressing 'cancel' on the selection box'.\cr\cr
-#'Objective function component comparisons are relative to the first (base) case. Positive
+#'Objective function component comparisons are relative to the first (base) case. Negative
 #'differences indicate a better fit (smaller value for the component in the alternative model).
 #'
 #'@return vector with selected file names as elements (can be used as in.csv on another
@@ -63,7 +63,7 @@ compareModelResults.ObjFunComponents<-function(in.csvs=NULL,
     nc1<-nc-1;
     difs<-matrix(nrow=nr,ncol=nc1);
     for (ic in 1:nc1){
-        difs[,ic]<-base$objFun-dfrs[[ic+1]]$objFun;
+        difs[,ic]<-dfrs[[ic+1]]$objFun-base$objFun;
     }
     
     xlim<-range(difs,na.rm=TRUE);
