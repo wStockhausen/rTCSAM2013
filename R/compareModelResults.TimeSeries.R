@@ -35,7 +35,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
                                          pltyr=1969,    #first year for plots
                                          recLag=5,
                                          clrs=c('blue','green','cyan','red','orange','darkgrey','darkseagreen'),
-                                         pdf="ModelResultsComparisonPlots.pdf"){
+                                         pdf="ModelComparison.TimeSeries.pdf"){
     if (is.null(objs)){
         in.obj<-0;
         in.objs<-vector(mode="character",length=0)
@@ -63,15 +63,67 @@ compareModelResults.TimeSeries<-function(objs=NULL,
         }
     }
 
-    #set some constants
-    THOUSAND<-1000;
-    length.bins<- seq(27,182,length=32);
-    years<-seq(styr,endyr);
-    obsyears=seq(obsyr,endyr);
-    plotyears=seq(pltyr,endyr);
-    years.m1<-years[1:(length(years)-1)]; 
-    
     obj.rep<-objs[[1]];
+    
+    if (is.null(obj.rep$endyr)){
+        if (is.null(endyr)){
+            cat("'endyr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'endyr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        endyr<-obj.rep$endyr;
+    }
+    if (is.null(obj.rep$styr)){
+        if (is.null(styr)){
+            cat("'styr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'styr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        styr<-obj.rep$styr;
+    }
+    if (is.null(obj.rep$obsyr)){
+        if (is.null(obsyr)){
+            cat("'obsyr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'obsyr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        obsyr<-obj.rep$obsyr;
+    }
+    if (is.null(obj.rep$pltyr)){
+        if (is.null(pltyr)){
+            cat("'pltyr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'pltyr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        pltyr<-obj.rep$pltyr;
+    }
+    
+    #set some constants
+    THOUSAND <-1000;
+    years    <-seq(styr,endyr);
+    years.m1 <-seq(styr,endyr-1);
+    obsyears <-seq(obsyr,endyr);
+    plotyears<-seq(pltyr,endyr);
+    
+    length.bins<-obj.rep$length.bins;
+    if (is.null(length.bins)) length.bins<- seq(27,182,length=32);
+
+    if(!is.null(pdf)){
+        pdf(file=pdf,width=6,height=8,onefile=TRUE);
+        oldpar<-par(oma=c(0.5,1,1,0.5),mar=c(2,5,1,1)+0.2,mfrow=c(3,1));
+        on.exit(dev.off());
+    } else {
+        oldpar<-par(oma=c(0.5,1,1,0.5),mar=c(2,5,1,1)+0.2);
+    }
+    on.exit(par(oldpar),add=TRUE);
     
     #----------------------------------
     # plot observed total and mature (spawning) biomass from survey
@@ -88,14 +140,6 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     cv.m<-tanner.cv[,3];
     cv.t=sqrt((spB.m.obs*cv.m)^2 + (spB.f.obs*cv.f)^2)/(spB.tm.obs);
 
-    if(is.character(pdf)){
-        pdf(file=pdf,width=6,height=8,onefile=TRUE);
-        oldpar<-par(oma=c(0.5,1,1,0.5),mar=c(2,5,1,1)+0.2,mfrow=c(3,1));
-    } else {
-        oldpar<-par(oma=c(0.5,1,1,0.5),mar=c(2,5,1,1)+0.2);
-    }
-    on.exit(par(oldpar));
-    
     #survey-time male mature biomass
     vartype<-"Predicted.Male.survey.mature.Biomass";
     plotModelComparisons.TimeSeries(obsyears,spB.m.obs,cv.m,
@@ -276,7 +320,5 @@ compareModelResults.TimeSeries<-function(objs=NULL,
                                       yrs,vartype,objs,scaleBy=1)    
 
     
-    if(is.character(pdf)) dev.off();#close pdf file
-
     return(invisible(objs));
 }

@@ -6,6 +6,7 @@
 #'
 #'@param in.csvs - vector of paths to final likelihood components csv files for the models to be compared
 #'@param case - plot labels for model cases (same order as in.csvs)
+#'@param pdf - filename for pdf output
 #'
 #'@details If in.csvs is not given, then the user is prompted to select final likelihood files 
 #'for comparison. If cases is given but not in.csvs, the user is prompted to select the file
@@ -20,7 +21,8 @@
 #'@export
 #'
 compareModelResults.ObjFunComponents<-function(in.csvs=NULL,
-                                               cases=NULL){
+                                               cases=NULL,
+                                               pdf="ModelComparisons.ObjFunComponents.pdf"){
     if (is.null(in.csvs)){
         in.csv<-0;
         in.csvs<-vector(mode="character",length=0)
@@ -65,18 +67,49 @@ compareModelResults.ObjFunComponents<-function(in.csvs=NULL,
     for (ic in 1:nc1){
         difs[,ic]<-dfrs[[ic+1]]$objFun-base$objFun;
     }
+        
+    if (!is.null(pdf)){
+        pdf(file=pdf,width=8,height=10,onefile=TRUE);
+        cex.names<-0.8;
+        cex.main <-0.9;
+        on.exit(dev.off());
+    } else {
+        cex.names<-0.7;
+        cex.main <-0.8;
+    }
+    old.par<-par(mai=c(1,6,1,0.5));
+    on.exit(par(old.par),add=TRUE);
     
     xlim<-range(difs,na.rm=TRUE);
-    
-    old.par<-par(mai=c(1,6,1,0.5));
     barplot(t(difs[1:18,]),names.arg=lbls[1:18],xlim=xlim,
-            beside=TRUE,horiz=TRUE,las=2,cex.names=0.7,
-            legend.text=cases[2:nc],args.legend=list(cex=0.7))
-    title(main=paste("relative to",cases[1]),cex.main=0.8)
+            beside=TRUE,horiz=TRUE,las=2,cex.names=cex.names,
+            legend.text=cases[2:nc],args.legend=list(cex=cex.names))
+    title(main=paste("relative to",cases[1]),cex.main=cex.main)
     barplot(t(difs[19:nr,]),names.arg=lbls[19:nr],xlim=xlim,
-            beside=TRUE,horiz=TRUE,las=2,cex.names=0.7,
-            legend.text=cases[2:nc],args.legend=list(cex=0.7))
-    title(main=paste("relative to",cases[1]),cex.main=0.8)
+            beside=TRUE,horiz=TRUE,las=2,cex.names=cex.names,
+            legend.text=cases[2:nc],args.legend=list(cex=cex.names))
+    title(main=paste("relative to",cases[1]),cex.main=cex.main)
+    
+    idx<-1:18;
+    xlim<-range(difs[idx,],na.rm=TRUE);
+    barplot(t(difs[idx,]),names.arg=lbls[idx],xlim=xlim,
+            beside=TRUE,horiz=TRUE,las=2,cex.names=cex.names,
+            legend.text=cases[2:nc],args.legend=list(cex=cex.names))
+    title(main=paste("relative to",cases[1]),cex.main=cex.main)
+    
+    idx<-19:30;
+    xlim<-range(difs[idx,],na.rm=TRUE);
+    barplot(t(difs[idx,]),names.arg=lbls[idx],xlim=xlim,
+            beside=TRUE,horiz=TRUE,las=2,cex.names=cex.names,
+            legend.text=cases[2:nc],args.legend=list(cex=cex.names))
+    title(main=paste("relative to",cases[1]),cex.main=cex.main)
+    
+    idx<-31:nr;
+    xlim<-range(difs[idx,],na.rm=TRUE);
+    barplot(t(difs[idx,]),names.arg=lbls[idx],xlim=xlim,
+            beside=TRUE,horiz=TRUE,las=2,cex.names=cex.names,
+            legend.text=cases[2:nc],args.legend=list(cex=cex.names))
+    title(main=paste("relative to",cases[1]),cex.main=cex.main)
     
     return(in.csvs);
 }

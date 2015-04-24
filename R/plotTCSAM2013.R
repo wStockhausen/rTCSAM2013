@@ -45,19 +45,6 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
                         F35=0.73,      #F35 value
                         B35=33.54){    #B35 value
 
-    if (is.null(endyr)){
-        cat("Must set 'endyr' to assessment year.\n",
-            "Aborting...\n");
-        return(NULL);
-    }
-    #set some constants
-    THOUSAND<-1000;
-    length.bins<- seq(27,182,length=32);
-    years<-seq(styr,endyr);
-    obsyears=seq(obsyr,endyr);
-    plotyears=seq(pltyr,endyr);
-    years.m1<-years[1:(length(years)-1)]; 
-
     #----------------------------------
     # Load files
     if(!is.list(obj.rep)){
@@ -95,6 +82,57 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
         }
     }
     
+    if (is.null(obj.rep$endyr)){
+        if (is.null(endyr)){
+            cat("'endyr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'endyr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        endyr<-obj.rep$endyr;
+    }
+    if (is.null(obj.rep$styr)){
+        if (is.null(styr)){
+            cat("'styr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'styr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        styr<-obj.rep$styr;
+    }
+    if (is.null(obj.rep$obsyr)){
+        if (is.null(obsyr)){
+            cat("'obsyr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'obsyr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        obsyr<-obj.rep$obsyr;
+    }
+    if (is.null(obj.rep$pltyr)){
+        if (is.null(pltyr)){
+            cat("'pltyr' missing from rep file and not specified as an input.\n")
+            cat("Must set 'pltyr' to assessment year.\n",
+                "Aborting...\n");
+            return(NULL);
+        }
+    } else {
+        pltyr<-obj.rep$pltyr;
+    }
+    
+    #set some constants
+    THOUSAND <-1000;
+    years    <-seq(styr,endyr);
+    years.m1 <-seq(styr,endyr-1);
+    obsyears <-seq(obsyr,endyr);
+    plotyears<-seq(pltyr,endyr);
+    
+    length.bins<-obj.rep$length.bins;
+    if (is.null(length.bins)) length.bins<- seq(27,182,length=32);
+
     #----------------------------------
     # Set filename for pdf output
     filen=paste(mdl,"oldstyle.pdf",sep='.');

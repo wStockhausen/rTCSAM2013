@@ -40,12 +40,12 @@ exportModelComparisons.TimeSeries<-function(obsyrs=NULL,
         cat(cs,": lims = ",range(vals[[cs]],na.rm=TRUE,finite=TRUE),"\n");
     }
     
-    write.csv(vals,file=paste(vartype,".PRD.csv"),row.names=FALSE)
+    write.csv(vals,file=paste(vartype,".PRD.csv",sep=''),row.names=FALSE)
     if (!is.null(obs)){
         if (is.null(obscv)){
-            write.csv(as.data.frame(list(years=obsyrs,obs=obs)),file=paste(vartype,".OBS.csv"),row.names=FALSE)
+            write.csv(as.data.frame(list(years=obsyrs,obs=obs)),file=paste(vartype,".OBS.csv",sep=''),row.names=FALSE)
         } else {
-            write.csv(as.data.frame(list(years=obsyrs,obs=obs,LCI=lower,UCI=upper)),file=paste(vartype,".OBS.csv"),row.names=FALSE)
+            write.csv(as.data.frame(list(years=obsyrs,obs=obs,LCI=lower,UCI=upper)),file=paste(vartype,".OBS.csv",sep=''),row.names=FALSE)
         }
     }
 }
