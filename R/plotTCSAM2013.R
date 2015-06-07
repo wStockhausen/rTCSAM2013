@@ -3,14 +3,13 @@
 #' 
 #' @description Function to plot model results from TCSAM2013.
 #' 
-#' @param endyr - assessment year [required]
 #' @param obj.rep - report file list object or filename for R-style report
 #' @param obj.std - dataframe object with parameter std info or filename for std file
 #' @param obj.prs - dataframe object w/ parameters info or csv file with parameters info
 #' @param base.dir - path to base folder
 #' @param mdl   - model name (optional if R report file is read)
-#' @param isFRev - flag (T/F) indicating whether TCSAM2103 is FRev (TRUE) or not (FALSE)
 #' @param styr  - model start year
+#' @param endyr - assessment year
 #' @param obsyr - first year for survey observations
 #' @param pltyr - first year for some plots
 #' @param F35 - F35 value for control rule plot
@@ -25,6 +24,8 @@
 #' @import stats
 #' @import PBSmodelling
 #' @import tcltk
+#' @importFrom wtsUtilities formatZeros
+#' @importFrom wtsUtilities parseNum
 #' @importFrom wtsUtilities selectFile
 #' @importFrom wtsPlots plotErrorBars.V
 #'
@@ -32,16 +33,15 @@
 #' 
 #----------------------------------
 # Set model variables for plots
-plotTCSAM2013<-function(endyr=NULL,    #assessment year
-                        obj.rep=NULL,
+plotTCSAM2013<-function(obj.rep=NULL,
                         obj.std=NULL,
                         obj.prs=NULL,
                         base.dir='./',
-                        mdl=NULL,      #executable model name
-                        isFRev=FALSE,  #flag indicating model is FRev type
-                        styr=1949,     #model start year
-                        obsyr=1974,    #first year of survey observations
-                        pltyr=1969,    #first year for plots
+                        mdl='tcsam2013alta',#executable model name
+                        endyr=NULL,    #assessment year
+                        styr=NULL,     #model start year
+                        obsyr=NULL,    #first year of survey observations
+                        pltyr=1965,    #first year for plots
                         F35=0.73,      #F35 value
                         B35=33.54){    #B35 value
 
@@ -75,55 +75,52 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
         obj.prs<-NULL;
         if (!is.null(in.prs)){
             obj.prs<-read.csv(in.prs,stringsAsFactors=FALSE);
-        } else {
-            cat('Must specify an active parameters csv file.\n',
-                'Aborting...\n');
-            return(NULL);
-        }
+        }    
     }
     
-    if (is.null(obj.rep$endyr)){
-        if (is.null(endyr)){
+    if (is.null(endyr)){
+        if (is.null(obj.rep$endyr)){
             cat("'endyr' missing from rep file and not specified as an input.\n")
             cat("Must set 'endyr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            endyr<-obj.rep$endyr;
         }
-    } else {
-        endyr<-obj.rep$endyr;
     }
-    if (is.null(obj.rep$styr)){
-        if (is.null(styr)){
+    if (is.null(styr)){
+        if (is.null(obj.rep$styr)){
             cat("'styr' missing from rep file and not specified as an input.\n")
             cat("Must set 'styr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            styr<-obj.rep$styr;
         }
-    } else {
-        styr<-obj.rep$styr;
     }
-    if (is.null(obj.rep$obsyr)){
-        if (is.null(obsyr)){
+    if (is.null(obsyr)){
+        if (is.null(obj.rep$obsyr)){
             cat("'obsyr' missing from rep file and not specified as an input.\n")
             cat("Must set 'obsyr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            obsyr<-obj.rep$obsyr;
         }
-    } else {
-        obsyr<-obj.rep$obsyr;
     }
-    if (is.null(obj.rep$pltyr)){
-        if (is.null(pltyr)){
+    if (is.null(pltyr)){
+        if (is.null(obj.rep$pltyr)){
             cat("'pltyr' missing from rep file and not specified as an input.\n")
             cat("Must set 'pltyr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            pltyr<-obj.rep$pltyr;
         }
-    } else {
-        pltyr<-obj.rep$pltyr;
     }
     
     #set some constants
+    isGmacs   <- (obj.rep$optFM==1)
     THOUSAND <-1000;
     years    <-seq(styr,endyr);
     years.m1 <-seq(styr,endyr-1);
@@ -141,7 +138,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
 
     #----------------------------------
     # Plot parameter values w/ limits and std's
-    checkParams(obj.prs,obj.std);
+    if (!is.null(obj.prs)) checkParams(obj.prs,obj.std);
     #----------------------------------
     
     #----------------------------------
@@ -1015,19 +1012,20 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     #------------------------------------
     # Fits to retained & male discard mortalities
     #------------------------------------
-    obs.rd<-obj.rep$"observed.retained.discard.male.catch.biomass"; #total mortality for TCF
-    prd.rd<-obj.rep$"predicted.retained.discard.male.catch.biomass";#total mortality for TCF
+    obs.yd<-obj.rep$"observed.TCF.years.discard.catch"
+    obs.rd<-obj.rep$"observed.TCF.male.tot.biomass.mortality"; #total mortality for TCF
+    prd.rd<-obj.rep$"predicted.TCF.male.tot.biomass.mortality";#total mortality for TCF
+    obs.yr<-parseNum(obj.rep$"observed.TCF.years.retained.catch")
     obs.r<-obj.rep$"observed.retained.catch.biomass";
     prd.r<-obj.rep$"predicted.retained.catch.biomass";
     prd.t<-obj.rep$"predicted.total.male.catch.biomass";#total over all fisheries
-    
     plot(years.m1, prd.t,lty=3,lwd=2,col="green",
          type="l",xlab="Fishery Year",ylab="Catch (1000 t)",xlim=range(pretty(1965:endyr,h=2,n=(endyr-1965)/5)),
          ylim=c(0,max(prd.rd)));
     lines(years.m1,    prd.rd,lty=1,lwd=1)
-    points(1992:(endyr-1),obs.rd,pch=22)
+    points(obs.yd,obs.rd,pch=22)
     lines(years.m1,    prd.r, lty=2,lwd=1)
-    points(1965:(endyr-1),obs.r, pch=21)
+    points(obs.yr,obs.r, pch=21)
     mtext("Male catch mortality",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted Total","Predicted Total: TCF","Observed Total: TCF","Predicted Retained","Observed Retained"),
            lty=c( 3, 1,NA, 2,NA),
@@ -1037,7 +1035,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     plot(years.m1, prd.r,
          type="l",xlab="Fishery Year",ylab="Retained Catch (1000 t)",xlim=range(pretty(1965:endyr,h=2,n=(endyr-1965)/5)),
          ylim=c(0,max(prd.r)))
-    points(1965:(endyr-1), obs.r)
+    points(obs.yr, obs.r)
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
     mtext("Retained catch",side=3,adj=0.0,outer=FALSE);
@@ -1047,7 +1045,7 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     # Fraction of male discard mortality in directed fishery
     #-------------------------------------------------
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    frc<-obj.rep$"predicted.discard.male.catch.biomass"/obj.rep$"predicted.retained.catch.biomass";
+    frc<-obj.rep$"predicted.TCF.male.discard.mortality.biomass"/obj.rep$"predicted.retained.catch.biomass";
     plot(years.m1,frc,type='l',
          xlab="Fishery Year",ylab="ratio",
          xlim=range(years),ylim=c(0,2.0))
@@ -1055,41 +1053,29 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     #----------------------------------
 
     #-------------------------------------------------
-    #trawl bycatch
-    #-------------------------------------------------
-    prd<-obj.rep$"predicted.trawl.catch.biomass";
-    obs<-obj.rep$"observed.trawl.catch.biomass"
-    plot(years.m1,prd,type="l",
-         xlab="Fishery Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(1973:(endyr-1),obs)
-    mtext("Groundfish discard mortality",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-    #----------------------------------
-
-    #-------------------------------------------------
     # Directed fishery discards mortality
     #-------------------------------------------------
     par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
     #male discard mortality
-    obs<-obj.rep$"observed.male.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.discard.male.catch.biomass";
+    yd <-obj.rep$"observed.TCF.years.discard.catch"
+    obs<-obj.rep$"observed.TCF.male.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.TCF.male.discard.mortality.biomass";
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(1992:(endyr-1),obs)
+    points(yd,obs)
     mtext("Directed fishery, male discard mortality",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
 
     #female discard mortality
-    obs<-obj.rep$"observed.female.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.female.discard.mortality.biomass";
+    yd <-obj.rep$"observed.TCF.years.discard.catch"
+    obs<-obj.rep$"observed.TCF.female.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.TCF.female.discard.mortality.biomass";
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(1992:(endyr-1),obs)
+    points(yd,obs)
     mtext("Directed fishery, female discards",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
@@ -1100,8 +1086,9 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     #-------------------------------------------------
     par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
     #--male discard mortality
-    obs<-obj.rep$"observed.snow.male.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.snow.male.discard.mortality.biomass";
+    yd <-obj.rep$"observed.SCF.years.discard.catch"
+    obs<-obj.rep$"observed.SCF.male.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.SCF.male.discard.mortality.biomass";
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
@@ -1111,12 +1098,13 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
            lty=c(1,NA),pch=c(NA,1),cex=1)
     
     #--female discard mortality
-    obs<-obj.rep$"observed.snow.female.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.snow.female.discard.mortality.biomass";
+    yd <-obj.rep$"observed.SCF.years.discard.catch"
+    obs<-obj.rep$"observed.SCF.female.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.SCF.female.discard.mortality.biomass";
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(1992:(endyr-1),obs)
+    points(yd,obs)
     mtext("Snow crab fishery, female discards",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
@@ -1127,26 +1115,41 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     #-------------------------------------------------
     par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
     #--male discard mortality
-    yrs<-obj.rep$"years.obs.bycatch.redk.fishery";
-    if (is.null(yrs)) yrs<-1992:(endyr-1);
-    obs<-obj.rep$"observed.redk.male.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.redk.male.discard.mortality.biomass";
+    yd <-obj.rep$"observed.RKF.years.discard.catch"
+    obs<-obj.rep$"observed.RKF.male.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.RKF.male.discard.mortality.biomass";
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yrs,obs)
+    points(yd,obs)
     mtext("Red king crab fishery, male discards",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
     
     #--female discard mortality
-    obs<-obj.rep$"observed.redk.female.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.redk.female.discard.mortality.biomass";
+    yd <-obj.rep$"observed.RKF.years.discard.catch"
+    obs<-obj.rep$"observed.RKF.female.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.RKF.female.discard.mortality.biomass";
     plot(years.m1,prd,type="l",
          xlab="Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yrs,obs)
+    points(yd,obs)
     mtext("Red king crab fishery, female discards",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
+    #----------------------------------
+
+    #-------------------------------------------------
+    #trawl bycatch
+    #-------------------------------------------------
+    yd <-obj.rep$"observed.GTF.years.discard.catch"
+    prd<-obj.rep$"predicted.GTF.catch.biomass";
+    obs<-obj.rep$"observed.GTF.catch.biomass"
+    plot(years.m1,prd,type="l",
+         xlab="Fishery Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(yd,obs)
+    mtext("Groundfish discard mortality",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("Predicted","Observed"),
            lty=c(1,NA),pch=c(NA,1),cex=1)
     #----------------------------------
@@ -1163,71 +1166,213 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
            lty=c(1,2),pch=c(NA,NA),cex=1)
 
     #-------------------------------------------------
-    # Directed fishery fishing mortality
+    # Directed fishery capture rates/fishing mortality
     #-------------------------------------------------
-    par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    if (isFRev){
-        fm<-obj.rep$"estimated.annual.total.directed.fishing.capture.rate"
-        plot(years.m1, fm, type="l",
-             xlab="Year", ylab="Full Selection Total Fishery Capture Rate",
-             xlim=range(plotyears),ylim=c(0,max(fm,na.rm=TRUE)))
-        mtext("Directed fishery, males",side=3,adj=0.0,outer=FALSE);
-    }
+    par(oma=c(1,1,1,1),mar=c(1,4,1,1)+0.2,mfrow=c(2,1))
+    #--males
+    f.m<-obj.rep$"max.TCF.male.new.shell.mortality.rate"
+    f.r<-obj.rep$"max.retained.mortality.rate"
+    f.c<-obj.rep$"max.TCFM.new.shell.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,f.r,na.rm=TRUE)))
+    lines(years.m1,f.r,lty=2,col='green',lwd=3)
+    if (isGmacs) lines(years.m1,f.c,lty=3,col='cyan',lwd=3)
+    mtext("Directed fishery: males",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality","retained mortality"),pch=c(NA,NA,NA),
+           lty=c(3,1,2),lwd=c(3,3,3),col=c('cyan','blue','green'),cex=1)
     
-    fm.r<-obj.rep$"retained.fmTCFR_syz"
-    fm.m<-obj.rep$"estimated.annual.male.total.directed.fishing.mortality"
-    fm.f<-obj.rep$"estimated.annual.female.total.directed.fishing.mortality"
-    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
-         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
-         xlim=range(plotyears),ylim=c(0,max(fm.m,fm.r,na.rm=TRUE)))
-    lines(years.m1,fm.f,lty=2,col='green',lwd=3)
-    mtext("Directed fishery",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("male (total)","female","retained"),pch=c(NA,NA,NA),
-           lty=c(1,2,3),lwd=c(3,3,3),col=c('blue','green','cyan'),cex=1)
+    f.m<-obj.rep$"mean.TCF.male.new.shell.mortality.rate"
+    f.r<-obj.rep$"mean.retained.mortality.rate"
+    f.c<-obj.rep$"mean.TCFM.new.shell.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,f.r,na.rm=TRUE)))
+    lines(years.m1,f.r,lty=1,col='green',lwd=3)
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality","retained mortality"),pch=c(NA,NA,NA),
+           lty=c(1,1,1),lwd=c(3,3,3),col=c('cyan','blue','green'),cex=1)
+    
+    #--females
+    f.m<-obj.rep$"max.TCF.female.mortality.rate"
+    f.c<-obj.rep$"max.TCF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    mtext("Directed fishery: females",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    f.m<-obj.rep$"mean.TCF.female.mortality.rate"
+    f.c<-obj.rep$"mean.TCF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
     #----------------------------------
 
     #-------------------------------------------------
-    # Snow crab fishery fishing mortality
+    # Snow crab fishery capture rate/fishing mortality
     #-------------------------------------------------
-    fm.m<-obj.rep$"estimated.annual.snow.fishing.mortality"
-    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
-         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
-         xlim=range(plotyears),ylim=c(0,max(fm.m,na.rm=TRUE)))
-    mtext("Snow crab fishery",side=3,adj=0.0,outer=FALSE);
+    par(oma=c(1,1,1,1),mar=c(1,4,1,1)+0.2,mfrow=c(2,1))
+    #--males
+    f.m<-obj.rep$"max.SCF.male.mortality.rate"
+    f.c<-obj.rep$"max.SCF.male.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    mtext("Snow crab fishery: males",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    f.m<-obj.rep$"mean.SCF.male.mortality.rate"
+    f.c<-obj.rep$"mean.SCF.male.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    #--females
+    f.m<-obj.rep$"max.SCF.female.mortality.rate"
+    f.c<-obj.rep$"max.SCF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    mtext("Snow crab fishery: females",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    f.m<-obj.rep$"mean.SCF.female.mortality.rate"
+    f.c<-obj.rep$"mean.SCF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
     #----------------------------------
 
     #-------------------------------------------------
     # Red king crab fishery fishing mortality
     #-------------------------------------------------    
-    fm.m<-obj.rep$"estimated.annual.red.king.fishing.mortality"
-    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
-         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
-         xlim=range(plotyears),ylim=c(0,max(fm.m,na.rm=TRUE)))
-    mtext("BBRKC fishery",side=3,adj=0.0,outer=FALSE);
+    par(oma=c(1,1,1,1),mar=c(1,4,1,1)+0.2,mfrow=c(2,1))
+    #--males
+    f.m<-obj.rep$"max.RKF.male.mortality.rate"
+    f.c<-obj.rep$"max.RKF.male.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    mtext("BBRKC fishery: males",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    f.m<-obj.rep$"mean.RKF.male.mortality.rate"
+    f.c<-obj.rep$"mean.RKF.male.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    #--females
+    f.m<-obj.rep$"max.RKF.female.mortality.rate"
+    f.c<-obj.rep$"max.RKF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    mtext("BBRKC fishery: females",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    f.m<-obj.rep$"mean.RKF.female.mortality.rate"
+    f.c<-obj.rep$"mean.RKF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
     #----------------------------------
 
     #-------------------------------------------------
     # Groundfish fishery fishing mortality
     #-------------------------------------------------
-    fm.m<-obj.rep$"estimated.annual.fishing.mortality.trawl.bycatch"
-    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
-         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
-         xlim=range(plotyears),ylim=c(0,max(fm.m,na.rm=TRUE)))
-    mtext("Groundfish fishery",side=3,adj=0.0,outer=FALSE);
+    par(oma=c(1,1,1,1),mar=c(1,4,1,1)+0.2,mfrow=c(2,1))
+    #--males
+    f.m<-obj.rep$"max.GTF.male.mortality.rate"
+    f.c<-obj.rep$"max.GTF.male.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    mtext("Groundfish fisheries: males",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    f.m<-obj.rep$"mean.GTF.male.mortality.rate"
+    f.c<-obj.rep$"mean.GTF.male.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    #--females
+    f.m<-obj.rep$"max.GTF.female.mortality.rate"
+    f.c<-obj.rep$"max.GTF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Full-selected Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    mtext("Groundfish fisheries: females",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
+    
+    f.m<-obj.rep$"mean.GTF.female.mortality.rate"
+    f.c<-obj.rep$"mean.GTF.female.capture.rate"
+    plot(years.m1, f.m, type="l",lty=1,col='blue',lwd=3,
+         xlab="", ylab="Mean Fishery Rate",
+         xlim=range(plotyears),ylim=c(0,max(f.c,f.m,na.rm=TRUE)))
+    if (isGmacs) lines(years.m1,f.c,lty=1,col='cyan',lwd=3)
+    legend("topright",legend=c("capture rate","total mortality"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('cyan','blue'),cex=1)
     #----------------------------------
 
     #-------------------------------------------------
     # Total fishing mortality
     #-------------------------------------------------
-    fm.m<-obj.rep$"estimated.annual.max.male.total.fishing.mortality"
-    fm.f<-obj.rep$"estimated.annual.max.female.total.fishing.mortality"
+    par(oma=c(1,1,1,1),mar=c(2,4,1,1)+0.2,mfrow=c(2,1))
+    #--max mortality
+    fm.m<-obj.rep$"max.TOT.male.NS.mortality.rate"
+    fm.f<-obj.rep$"max.TOT.female.NS.mortality.rate"
     plot(years.m1, fm.m, type="l",col='blue',lwd=3,
-         xlab="Year", ylab="Full Selection Fishing Mortality Rate",
+         xlab="", ylab="Fishing Mortality Rate",
          xlim=range(plotyears),ylim=c(0,max(fm.m,fm.f,na.rm=TRUE)))
-    lines(years.m1,fm.f,lty=2,col='green',lwd=3)
-    mtext("Total (fully-selected) fishing mortality",side=3,adj=0.0,outer=FALSE);
+    lines(years.m1,fm.f,lty=1,col='green',lwd=3)
+    mtext("Max (fully-selected) fishing mortality",side=3,adj=0.0,outer=FALSE);
     legend("topright",legend=c("males","females"),pch=c(NA,NA),
-           lty=c(1,2),lwd=c(3,3),col=c('blue','green'),cex=1)
+           lty=c(1,1),lwd=c(3,3),col=c('blue','green'),cex=1)
+    #--mean mortality
+    fm.m<-obj.rep$"mean.TOT.male.NS.mortality.rate"
+    fm.f<-obj.rep$"mean.TOT.female.NS.mortality.rate"
+    plot(years.m1, fm.m, type="l",col='blue',lwd=3,
+         xlab="Year", ylab="Fishing Mortality Rate",
+         xlim=range(plotyears),ylim=c(0,max(fm.m,fm.f,na.rm=TRUE)))
+    lines(years.m1,fm.f,lty=1,col='green',lwd=3)
+    mtext("Mean fishing mortality",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("males","females"),pch=c(NA,NA),
+           lty=c(1,1),lwd=c(3,3),col=c('blue','green'),cex=1)
     #----------------------------------
     
     #-------------------------------------------------
@@ -1273,29 +1418,27 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     #------------------------------------------------------------
     if (!is.na(F35)){
         par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
+        yrs<-styr:(endyr-1)
         mmb<-obj.rep$"Mating.time.Male.Spawning.Biomass";
-        tfm<-obj.rep$"estimated.annual.max.male.total.fishing.mortality";
-        if (isFRev){tfm<-obj.rep$"estimated.annual.total.fishing.mortality.males";}            
-        yrs<-1949:(endyr-1)
-        idx<-(yrs>=1968)
-        plot(mmb[idx],tfm[idx],type='n',
+        tfm<-obj.rep$"max.TOT.male.NS.mortality.rate";
+        idx<-(yrs>=1965)&(tfm>0);
+        yrs<-yrs[idx];
+        mmb<-mmb[idx];
+        tfm<-tfm[idx];
+        plot(mmb,tfm,type='n',
              xlab=" MMB (1000 t)",ylab="Full Selection Fishing Mortality Rate",
-             xlim=c(0,1.1*max(mmb[idx])),ylim=c(0,1.1*max(tfm[idx])))
-        ctr<-0;
-        for (i in idx[1:(length(idx)-1)]){
-            if (i) {
-                ctr<-ctr+1;
-                text(mmb[ctr],tfm[ctr],as.character(yrs[ctr]),cex=0.7,adj=0)
-            }
-        }
-        text(mmb[length(mmb)],tfm[length(tfm)],as.character(endyr-1),cex=1.1,col='red',adj=0)
+             xlim=c(0,1.1*max(mmb)),ylim=c(0,1.1*max(tfm)))
+        n<-length(yrs);
+        ctr<-1:(n-1);
+        text(mmb[ctr],tfm[ctr],as.character(yrs[ctr]),cex=0.7,adj=0)
+        text(mmb[n],tfm[n],as.character(yrs[n]),cex=1.1,col='red',adj=0)
         
         alpha<-0.1 
         beta<-0.25
-        lines(rep(B35,length=20),seq(0,F35,length=20),lty=4,col="blue")
-        lines(seq(0,max(mmb),length=20),rep(F35,length=20),lty=4,col="blue")
-        text(B35,0,"B35%",cex=1,adj=0.5,col="blue")
-        text(0,F35,"F35%",cex=1,adj=0.5,col="blue")
+        lines(rep(B35,length=20),seq(0,1.1*max(tfm),length=20),lty=4,col="blue")
+        lines(seq(0,1.1*max(mmb),length=20),rep(F35,length=20),lty=4,col="blue")
+        text(B35,1.1*max(tfm),expression(bold(B[35])),cex=0.8,adj=0.5,col="blue")
+        text(1.1*max(mmb),F35,expression(bold(F[35])),cex=0.8,adj=0.5,col="blue")
         lines(rep(B35*beta,length=20),
               seq(0,F35*((((B35*beta)/B35)-alpha)/(1.-alpha)),length=20),
               type="l",lty=1,lwd=2)
@@ -1317,16 +1460,15 @@ plotTCSAM2013<-function(endyr=NULL,    #assessment year
     
     # 5 year lag, don't use last male spb that is projected to spring of year after endyr in model
     #recruits enter in spring of styr+1.  so first male spb and first rec go together
-    tmp=length(unlist((obj.rep$"Mating.time.Male.Spawning.Biomass")))
-    plot(as.numeric(unlist(obj.rep$"Mating.time.Male.Spawning.Biomass"))[21:(tmp-5)],as.numeric(unlist(obj.rep$"estimated.number.of.recruitments.female")[25:(tmp-1)]),
-    xlim=c(0,max(as.numeric(unlist(obj.rep$"Mating.time.Male.Spawning.Biomass")))),
-    ylim=c(0,max(as.numeric(unlist(obj.rep$"estimated.number.of.recruitments.female")[25:(tmp-1)]))),
-    xlab="Male Spawning Biomass(1000 t) at Feb. 15",ylab="Recruitment",type="n")
-    for(i in 1:(tmp-5-20)){
-      text(as.numeric(unlist((obj.rep$"Mating.time.Male.Spawning.Biomass")))[20+i],
-      as.numeric(unlist(obj.rep$"estimated.number.of.recruitments.female"))[24+i],
-      if((68+i)<100){as.character(68+i)}else{paste("0",as.character(i-32),sep="")},adj=0,cex=1.0)
-    }
+    lag<-5;
+    yrs<-styr:(endyr-1)
+    tmp=length(unlist((obj.rep$"Mating.time.Male.Spawning.Biomass")));
+    x<-obj.rep$"Mating.time.Male.Spawning.Biomass"[21:(tmp-lag)];
+    y<-obj.rep$"estimated.number.of.recruits.female"[(20+lag):(tmp-1)]/1000;
+    plot(x,y,xlim=c(0,1.1*max(x)),ylim=c(0,1.1*max(y)),
+         xlab="Male Spawning Biomass(1000 t) at Feb. 15",
+         ylab="Recruitment (millions)",type="n")
+    text(x,y,formatZeros(yrs[21:(tmp-lag)]%%100,width=2),adj=0,cex=1.0)
     
     dev.off()
     return(invisible(list(rep=obj.rep,std=obj.std,prs=obj.prs)));

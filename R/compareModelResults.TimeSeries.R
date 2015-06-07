@@ -65,45 +65,45 @@ compareModelResults.TimeSeries<-function(objs=NULL,
 
     obj.rep<-objs[[1]];
     
-    if (is.null(obj.rep$endyr)){
-        if (is.null(endyr)){
+    if (is.null(endyr)){
+        if (is.null(obj.rep$endyr)){
             cat("'endyr' missing from rep file and not specified as an input.\n")
             cat("Must set 'endyr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            endyr<-obj.rep$endyr;
         }
-    } else {
-        endyr<-obj.rep$endyr;
     }
-    if (is.null(obj.rep$styr)){
-        if (is.null(styr)){
+    if (is.null(styr)){
+        if (is.null(obj.rep$styr)){
             cat("'styr' missing from rep file and not specified as an input.\n")
             cat("Must set 'styr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            styr<-obj.rep$styr;
         }
-    } else {
-        styr<-obj.rep$styr;
     }
-    if (is.null(obj.rep$obsyr)){
-        if (is.null(obsyr)){
+    if (is.null(obsyr)){
+        if (is.null(obj.rep$obsyr)){
             cat("'obsyr' missing from rep file and not specified as an input.\n")
             cat("Must set 'obsyr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            obsyr<-obj.rep$obsyr;
         }
-    } else {
-        obsyr<-obj.rep$obsyr;
     }
-    if (is.null(obj.rep$pltyr)){
-        if (is.null(pltyr)){
+    if (is.null(pltyr)){
+        if (is.null(obj.rep$pltyr)){
             cat("'pltyr' missing from rep file and not specified as an input.\n")
             cat("Must set 'pltyr' to assessment year.\n",
                 "Aborting...\n");
             return(NULL);
+        } else {
+            pltyr<-obj.rep$pltyr;
         }
-    } else {
-        pltyr<-obj.rep$pltyr;
     }
     
     #set some constants
@@ -195,7 +195,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
                                      yrs,vartype,objs)    
     
     #recruitment
-    vartype<-"estimated.number.of.recruitments.male";
+    vartype<-"estimated.number.of.recruits.male";
     plotModelComparisons.TimeSeries(NULL,NULL,NULL,
                                    years,vartype,objs,
                                    clrs=clrs,
