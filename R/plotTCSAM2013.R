@@ -1143,8 +1143,8 @@ plotTCSAM2013<-function(obj.rep=NULL,
     #trawl bycatch
     #-------------------------------------------------
     yd <-obj.rep$"observed.GTF.years.discard.catch"
-    prd<-obj.rep$"predicted.GTF.catch.biomass";
-    obs<-obj.rep$"observed.GTF.catch.biomass"
+    prd<-obj.rep$"predicted.GTF.discard.mortality.biomass";
+    obs<-obj.rep$"observed.GTF.discard.mortality.biomass"
     plot(years.m1,prd,type="l",
          xlab="Fishery Year",ylab="Discard Mortality (1000 t)",
          xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))

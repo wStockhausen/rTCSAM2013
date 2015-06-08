@@ -247,10 +247,10 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     exportModelComparisons.TimeSeries(oyrs,obs,NULL,
                                       yrs,vartype,objs,scaleBy=1)    
     
-    #total catch mortality, directed fishery, males
+    #bycatch mortality for males in the snow crab fishery
     oyrs<-obj.rep$"observed.SCF.years.discard.catch"
-    obs<-obj.rep$"observed.SCF.male.disccard.biomass.mortality"
-    vartype<-"predicted.SCF.male.discard.biomass.mortality"
+    obs<-obj.rep$"observed.SCF.male.discard.mortality.biomass"
+    vartype<-"predicted.SCF.male.discard.mortality.biomass"
     yrs<-styr:(endyr-1)
     plotModelComparisons.TimeSeries(oyrs,obs,NULL,
                                    yrs,vartype,objs,
@@ -261,7 +261,7 @@ compareModelResults.TimeSeries<-function(objs=NULL,
     exportModelComparisons.TimeSeries(oyrs,obs,NULL,
                                       yrs,vartype,objs,scaleBy=1)    
     
-    #total catch mortality for females snow crab fishery bycatch
+    #bycatchcatch mortality for females in the snow crab fishery
     oyrs<-obj.rep$"observed.SCF.years.discard.catch"
     obs<-obj.rep$"observed.SCF.female.discard.mortality.biomass"
     vartype<-"predicted.SCF.female.discard.mortality.biomass" 
@@ -274,23 +274,11 @@ compareModelResults.TimeSeries<-function(objs=NULL,
                                    ylab="Discard mortality (1000's t)")    
     exportModelComparisons.TimeSeries(oyrs,obs,NULL,
                                       yrs,vartype,objs,scaleBy=1)    
-    
-    #max retained fsihing mortality rate                 
-    vartype<-"max.retained.mortality.rate"
-    yrs<-styr:(endyr-1)
-    plotModelComparisons.TimeSeries(NULL,NULL,NULL,
-                                   yrs,vartype,objs,
-                                   scaleBy=1,
-                                   clrs=clrs,
-                                   title="Males, retained fishing mortality rate",
-                                   ylab="Fully-selected Retained Mortality Rate")    
-    exportModelComparisons.TimeSeries(NULL,NULL,NULL,
-                                      yrs,vartype,objs,scaleBy=1)    
 
     #bycatch catch mortality for males in the BBRKC fishery
     oyrs<-obj.rep$"observed.RKF.years.discard.catch"
-    obs<-obj.rep$"observed.RKF.male.disccard.biomass.mortality"
-    vartype<-"predicted.SCF.male.discard.biomass.mortality"
+    obs<-obj.rep$"observed.RKF.male.discard.mortality.biomass"
+    vartype<-"predicted.SCF.male.discard.mortality.biomass"
     yrs<-styr:(endyr-1)
     plotModelComparisons.TimeSeries(oyrs,obs,NULL,
                                    yrs,vartype,objs,
