@@ -2,49 +2,48 @@
 % Please edit documentation in R/runTCSAM2013.R
 \name{runTCSAM2013}
 \alias{runTCSAM2013}
-\title{Function to run TCSAM2013 multiple times using jittered initial parameter values.}
+\title{Function to run TCSAM2013 .}
 \usage{
-runTCSAM2013(N = 5, model = "tcsam_wtsRKFon",
-  model.dir = "/Users/WilliamStockhausen/StockAssessments-Crab/AssessmentModelDevelopment/TCSAM2013/dist/Debug/GNU-MacOSX",
-  mc = "../TCSAM2013e_ModelConfig.txt", in.csv = "jitterInfo.csv",
-  out.csv = "jitterResults.csv")
+runTCSAM2013(path = "./", os = "osx", model = "tcsam2013alta",
+  path2model = "", configFile = "", pin = FALSE, hess = FALSE,
+  mcmc = FALSE, jitter = FALSE, seed = NULL)
 }
 \arguments{
-\item{N}{- number of runs to make}
+\item{path}{- path for model output}
 
-\item{model}{- filename of model executable to run}
+\item{os}{- 'win' or 'mac' or 'osx'}
 
-\item{model.dir}{- path to model executable}
+\item{model}{- TCSAM2013 model executable name}
 
-\item{mc}{- path/filename for model configuration file}
+\item{path2model}{- path to model executable}
+
+\item{pin}{- T/F to use a pin file}
+
+\item{hess}{- T/F to compute hessian (and .std file)}
+
+\item{mcmc}{- T/F to run mcmc}
+
+\item{jitter}{- T/F to jitter parameters}
+
+\item{seed}{- seed for random number generator (or NULL)}
 
 \item{in.csv}{- filename for jitter info (seed, obj fun value) from ADMB model run}
 
 \item{out.csv}{- filename for jittered results}
 }
 \value{
-- list w/ 2 elements:
- imx - index of (1st) smallest value for the objective function
- dfr - dataframe with iSeed, obj fun value for each model run
+- par file dataframe
 }
 \description{
-This functions runs a TCSAM2013 model multiple times, jittering the
-initial staarting values to assess model convergence.
+This functions runs a TCSAM2013 model once.
 }
 \details{
 
 
-For each model run, this function creates a shell script ('./tmp.sh') in the
-working directory and uses it to run the ADMB version of the TCSAM2013 model.
-Initial model parameters are jittered based on the system clock time as a seed
+This function creates a shell script ('./tmp.sh') in the
+working directory and uses it to run a version of the TCSAM2013 model.
+Initial model parameters can be jittered based on the system clock time as a seed
 to the random number generator. The seed and final objective function value are
 saved for each model run in a csv file (the value of out.csv).
-
-When all the models requested have been run,
-the function determines the seed associated with the 1st model run that yielded
-the smallest value for the objective function and re-runs the modelusing this seed
-to re-create the model run resulting in the minimum objectve function to recreate
-the model output files. The final model run is done estimating the hessian, so
-standard deviations for estimated model parameters are available in the .std file.
 }
 
