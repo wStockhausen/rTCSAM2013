@@ -37,7 +37,6 @@ getRunCommands<-function(os='osx',
                     del EchoOut.dat
                     del CheckFile.dat
                     del fmin.log
-                    del eval.csv
                     echo off';
         path2model<-gsub("/","\\",file.path(path2model,model1),fixed=TRUE);
     } else if (tolower(os)%in% c('mac','osx')){
@@ -57,7 +56,6 @@ getRunCommands<-function(os='osx',
                   rm EchoOut.dat
                   rm CheckFile.dat
                   rm fmin.log
-                  rm eval.csv
                   echo off';
         path2model<-file.path(path2model,model1);
     }

@@ -18,112 +18,83 @@
 #'the model output files. The final model run is done estimating the hessian, so 
 #'standard deviations for estimated model parameters are available in the .std file.
 #'
-#'@param N - number of runs to make
-#'@param os - 'mac', 'osx', or 'win'
-#'@param model - filename of model executable to run
-#'@param model.dir - path to model executable
-#'@param mc - path/filename for model configuration file
+#'@param os   - 'win' or 'mac' or 'osx'
+#'@param path - path for model output
+#'@param model      - TCSAM2013 model executable name
+#'@param path2model - path to model executable
+#'@param configFile - path to model configuration file
+#'@param numRuns    - number of jitter runs to make
 #'@param in.csv - filename for jitter info (seed, obj fun value) from ADMB model run
 #'@param out.csv - filename for jittered results
 #'
-#'@return - list w/ 2 elements:
-#'  imx - index of (1st) smallest value for the objective function
-#'  dfr - dataframe with iSeed, obj fun value for each model run
+#'@return - list w/ 4 elements:
+#'  imx  - index of (1st) smallest value for the objective function
+#'  seed - seed resulting in the smallest objective function
+#'  par  - dataframe with par results from run w/ smallest objective function
+#'  objFuns - vector of objective function values from all model runs
+#'  parList - list of par dataframes for each model run
 #'
 #'@export
 #'
-runJitter<-function(N=5,
-                       os='mac',
-                       model="tcsam_wtsRKFon",
-                       model.dir='/Users/WilliamStockhausen/StockAssessments-Crab/AssessmentModelDevelopment/TCSAM2013/dist/Debug/GNU-MacOSX',
-                       mc="../TCSAM2013e_ModelConfig.txt",
-                       in.csv='jitterInfo.csv',
-                       out.csv='jitterResults.csv'){
+runJitter<-function(os='osx',
+                    path=ifelse(tolower(os)=='win','.\\','./'),
+                    model='tcsam2013alta',
+                    path2model='',
+                    configFile='',
+                    numRuns=3,
+                    in.csv='jitterInfo.csv',
+                    out.csv='jitterResults.csv'){
     #start timing
     stm<-Sys.time();
     
-    #set up run command
-#     path2model<-file.path(model.dir,model)
-#     run.cmds<-'#!/bin/sh
-#             echo on
-#             DIR="$( cd "$( dirname "$0" )" && pwd )"
-#             cd ${DIR}
-#            cp &&path2model ./&&model
-#            ./&&model -rs -nox  -configFile &&mc -nohess -jitter
-#             echo off';
-#     run.cmds<-gsub("&&path2model",path2model,run.cmds);
-#     run.cmds<-gsub("&&model",model,run.cmds);
-#     run.cmds<-gsub("&&mc",mc,run.cmds)
-    run.cmds<-getRunCommands(os=os,
-                             path2model=model.dir,
-                             configFile=mc,
-                             pin=FALSE,
-                             hess=FALSE,
-                             mcmc=FALSE,
-                             jitter=TRUE,
-                             seed=NULL)
-    cat(run.cmds,file="./tmp.sh")
-    Sys.chmod("./tmp.sh",mode='7777')
-    
-    #set up copy commands
-    fn.par<-file.path(getwd(),"&&model.par");
-    fn.par<-gsub('&&model',tolower(model),fn.par)
-    
     #set up output
-    res.dir<-file.path(getwd(),'jitter.runs');
-    if (file.exists(res.dir)) {
-        fns<-list.files(res.dir);
-        if (length(fns)>0) {
-            fnsp<-file.path(res.dir,fns);
-            file.remove(fnsp);
-        }
-    } else {
-        dir.create(res.dir,recursive=TRUE);
-    }
     dfr<-as.data.frame(list(seed=NULL,objfun=NULL));
     
     #run models
-    for (i in 1:N){
-        cat("\n\n---running ADMB program for",i,"out of",N,"---\n\n");
-        system("./tmp.sh",wait=TRUE);        
-        tbl<-read.csv(in.csv);
-        if (i==1) write.table(tbl,file=out.csv,sep=",",col.names=TRUE,row.names=FALSE,append=FALSE)
-        if (i >1) write.table(tbl,file=out.csv,sep=",",col.names=FALSE,row.names=FALSE,append=TRUE)
-        dfr<-rbind(dfr,tbl);
-        #save par file
-        run.str<-formatC(i,width=4,flag='0');
-        fnp.par<-file.path(res.dir,gsub('&&model',tolower(model),paste('&&model',run.str,'par',sep='.')));
-        file.copy(fn.par,fnp.par);
+    objFuns<-vector(mode='numeric',length=numRuns);
+    parList<-list();
+    for (r in 1:numRuns){
+        cat("\n\n---running ADMB program for",r,"out of",numRuns,"---\n\n");
+        fldr<-paste('run',formatZeros(r,width=max(2,ceiling(log10(numRuns)))),sep='');
+        p2f<-file.path(path,fldr);
+        par<-runTCSAM2013(path=p2f,
+                          os=os,
+                          model=model,
+                          path2model=path2model,
+                          configFile=configFile,
+                          pin=FALSE,
+                          hess=FALSE,
+                          mcmc=FALSE,
+                          jitter=TRUE,
+                          seed=NULL);
+        objFuns[r]<-par$value[3];
+        parList[[fldr]]<-par;
+        tbl<-data.frame(idx=r,objFun=objFuns[r],seed=par$value[par$name=='seed']);
+        if (r==1) write.table(tbl,file=out.csv,sep=",",col.names=TRUE,row.names=FALSE,append=FALSE)
+        if (r>1)  write.table(tbl,file=out.csv,sep=",",col.names=FALSE,row.names=FALSE,append=TRUE)
     }
     
+    return(list(objFuns=objFuns,parList=parList))
+    
     #determine row index associated w/ minimum obj fun value
-    idx<-which.min(dfr$objfun);
+    idx<-which.min(objFuns);
+    par<-parList[[idx]];
+    seed<-par$value[par$name=='seed'];
     
-    #re-run model yielding minimum obj fun value
-#     run.cmds<-'#!/bin/sh
-#             echo on
-#             DIR="$( cd "$( dirname "$0" )" && pwd )"
-#             cd ${DIR}
-#            cp &&path2model ./&&model
-#            ./&&model -rs -nox  -configFile &&mc -jitter -iSeed &&seed
-#             echo off';
-#     run.cmds<-gsub("&&path2model",path2model,run.cmds);
-#     run.cmds<-gsub("&&model",model,run.cmds);
-#     run.cmds<-gsub("&&mc",mc,run.cmds);
-#     run.cmds<-gsub("&&seed",dfr$seed[idx],run.cmds);
-    run.cmds<-getRunCommands(os=os,
-                             path2model=model.dir,
-                             configFile=mc,
-                             pin=FALSE,
-                             hess=TRUE,
-                             mcmc=FALSE,
-                             jitter=TRUE,
-                             seed=dfr$seed[idx])
-    cat(run.cmds,file="./tmp.sh");
-    Sys.chmod("./tmp.sh",mode='7777');
-    system("./tmp.sh",wait=TRUE);
+    #re-run case associated with mininum objective function value
+    cat("\n\n---Re-running ADMB program for",idx,"out of",numRuns,"as best run---\n\n");
+    par<-runTCSAM2013(path=path,
+                      os=os,
+                      model=model,
+                      path2model=path2model,
+                      configFile=configFile,
+                      pin=FALSE,
+                      hess=TRUE,
+                      mcmc=FALSE,
+                      jitter=TRUE,
+                      seed=seed);
     
-    #print timeing-related info
+    #print timing-related info
     etm<-Sys.time();
     elt<-etm-stm;
     cat("start time: ")
@@ -134,6 +105,6 @@ runJitter<-function(N=5,
     print(elt);
     
     #return output
-    return(list(imx=idx,dfr=dfr));
+    return(list(imx=idx,seed=seed,par=par,objFuns=objFuns,parList=parList));
 }
 #res<-jitterTCSAM2013(200);

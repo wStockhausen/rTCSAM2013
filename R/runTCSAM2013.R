@@ -1,5 +1,5 @@
 #'
-#'@title Function to run TCSAM2013 .
+#'@title Function to run TCSAM2013.
 #'
 #'@description This functions runs a TCSAM2013 model once.
 #'
@@ -10,8 +10,8 @@
 #'to the random number generator. The seed and final objective function value are
 #'saved for each model run in a csv file (the value of out.csv).
 #'
-#'@param path  - path for model output
-#'@param os         - 'win' or 'mac' or 'osx'
+#'@param os   - 'win' or 'mac' or 'osx'
+#'@param path - path for model output
 #'@param model      - TCSAM2013 model executable name
 #'@param path2model - path to model executable
 #'@param pin  - T/F to use a pin file
@@ -22,12 +22,12 @@
 #'@param in.csv  - filename for jitter info (seed, obj fun value) from ADMB model run
 #'@param out.csv - filename for jittered results
 #'
-#'@return - par file dataframe
+#'@return - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info
 #'
 #'@export
 #'
-runTCSAM2013<-function(path='./',
-                       os='osx',
+runTCSAM2013<-function(os='osx',
+                       path=ifelse(tolower(os)=='win','.\\','./'),
                        model='tcsam2013alta',
                        path2model='',
                        configFile='',
@@ -81,7 +81,13 @@ runTCSAM2013<-function(path='./',
     #parse par file into dataframe
     par<-paste(model,'.par',sep='')
     dfr<-getPar(par);
+    
+    #get jitter info
+    if (jitter) {
+        tbl<-read.csv('jitterInfo.csv',header=TRUE);
+        dfr<-rbind(data.frame(name='seed',value=tbl$seed[1]),dfr);
+    }
 
     #return dataframe (and return to original folder as working directory)
-    return(dfr=dfr);
+    return(dfr);
 }

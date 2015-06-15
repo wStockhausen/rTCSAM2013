@@ -2,16 +2,17 @@
 % Please edit documentation in R/runTCSAM2013.R
 \name{runTCSAM2013}
 \alias{runTCSAM2013}
-\title{Function to run TCSAM2013 .}
+\title{Function to run TCSAM2013.}
 \usage{
-runTCSAM2013(path = "./", os = "osx", model = "tcsam2013alta",
-  path2model = "", configFile = "", pin = FALSE, hess = FALSE,
-  mcmc = FALSE, jitter = FALSE, seed = NULL)
+runTCSAM2013(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
+  model = "tcsam2013alta", path2model = "", configFile = "",
+  pin = FALSE, hess = FALSE, mcmc = FALSE, jitter = FALSE,
+  seed = NULL)
 }
 \arguments{
-\item{path}{- path for model output}
-
 \item{os}{- 'win' or 'mac' or 'osx'}
+
+\item{path}{- path for model output}
 
 \item{model}{- TCSAM2013 model executable name}
 
@@ -32,7 +33,7 @@ runTCSAM2013(path = "./", os = "osx", model = "tcsam2013alta",
 \item{out.csv}{- filename for jittered results}
 }
 \value{
-- par file dataframe
+- dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info
 }
 \description{
 This functions runs a TCSAM2013 model once.

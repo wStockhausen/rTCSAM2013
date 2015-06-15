@@ -4,30 +4,34 @@
 \alias{runJitter}
 \title{Function to run TCSAM2013 multiple times using jittered initial parameter values.}
 \usage{
-runJitter(N = 5, os = "mac", model = "tcsam_wtsRKFon",
-  model.dir = "/Users/WilliamStockhausen/StockAssessments-Crab/AssessmentModelDevelopment/TCSAM2013/dist/Debug/GNU-MacOSX",
-  mc = "../TCSAM2013e_ModelConfig.txt", in.csv = "jitterInfo.csv",
-  out.csv = "jitterResults.csv")
+runJitter(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
+  model = "tcsam2013alta", path2model = "", configFile = "",
+  numRuns = 3, in.csv = "jitterInfo.csv", out.csv = "jitterResults.csv")
 }
 \arguments{
-\item{N}{- number of runs to make}
+\item{os}{- 'win' or 'mac' or 'osx'}
 
-\item{os}{- 'mac', 'osx', or 'win'}
+\item{path}{- path for model output}
 
-\item{model}{- filename of model executable to run}
+\item{model}{- TCSAM2013 model executable name}
 
-\item{model.dir}{- path to model executable}
+\item{path2model}{- path to model executable}
 
-\item{mc}{- path/filename for model configuration file}
+\item{configFile}{- path to model configuration file}
+
+\item{numRuns}{- number of jitter runs to make}
 
 \item{in.csv}{- filename for jitter info (seed, obj fun value) from ADMB model run}
 
 \item{out.csv}{- filename for jittered results}
 }
 \value{
-- list w/ 2 elements:
- imx - index of (1st) smallest value for the objective function
- dfr - dataframe with iSeed, obj fun value for each model run
+- list w/ 4 elements:
+ imx  - index of (1st) smallest value for the objective function
+ seed - seed resulting in the smallest objective function
+ par  - dataframe with par results from run w/ smallest objective function
+ objFuns - vector of objective function values from all model runs
+ parList - list of par dataframes for each model run
 }
 \description{
 This functions runs a TCSAM2013 model multiple times, jittering the
