@@ -6,7 +6,8 @@
 \usage{
 runJitter(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
   model = "tcsam2013alta", path2model = "", configFile = "",
-  numRuns = 3, in.csv = "jitterInfo.csv", out.csv = "jitterResults.csv")
+  numRuns = 3, onlyEvalJitter = FALSE, in.csv = "jitterInfo.csv",
+  out.csv = "jitterResults.csv")
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -20,6 +21,8 @@ runJitter(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
 \item{configFile}{- path to model configuration file}
 
 \item{numRuns}{- number of jitter runs to make}
+
+\item{onlyEvalJitter}{- flag (T/F) to only evaluate a (previous) set of jitter runs, not make new runs}
 
 \item{in.csv}{- filename for jitter info (seed, obj fun value) from ADMB model run}
 
