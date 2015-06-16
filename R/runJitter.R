@@ -48,7 +48,7 @@ runJitter<-function(os='osx',
     stm<-Sys.time();
     
     #set up output
-    dfr<-as.data.frame(list(seed=NULL,objfun=NULL));
+    out.csv<-file.path(path,out.csv)
     
     #run models
     objFuns<-vector(mode='numeric',length=numRuns);
@@ -74,7 +74,7 @@ runJitter<-function(os='osx',
         if (r>1)  write.table(tbl,file=out.csv,sep=",",col.names=FALSE,row.names=FALSE,append=TRUE)
     }
     
-    return(list(objFuns=objFuns,parList=parList))
+#    return(list(objFuns=objFuns,parList=parList))
     
     #determine row index associated w/ minimum obj fun value
     idx<-which.min(objFuns);
