@@ -16,6 +16,9 @@ getRep<-function(in.rep=NULL){
     if (is.null(in.rep)){
         in.rep<-wtsUtilities::selectFile(ext="R",caption="Select Jack's R output file");
     }
-    obj.rep = readList(in.rep);
+    obj.rep<-NULLL;
+    if (!is.null(in.rep)){
+        obj.rep <- readList(in.rep);
+    }
     return(invisible(obj.rep))
 }

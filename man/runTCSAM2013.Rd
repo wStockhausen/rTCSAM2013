@@ -7,7 +7,7 @@
 runTCSAM2013(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
   model = "tcsam2013alta", path2model = "", configFile = "",
   pin = FALSE, hess = FALSE, mcmc = FALSE, jitter = FALSE,
-  seed = NULL)
+  seed = NULL, plotResults = hess)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}

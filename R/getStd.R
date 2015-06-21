@@ -15,6 +15,9 @@ getStd<-function(in.std=NULL){
     if (is.null(in.std)){
         in.std<-wtsUtilities::selectFile(ext='std',caption="Select std file");
     }
-    obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+    obj.std<-NULL;
+    if (!is.null(in.std)){
+        obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+    }
     return(invisible(obj.std))
 }

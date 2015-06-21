@@ -35,7 +35,8 @@ runTCSAM2013<-function(os='osx',
                        hess=FALSE,
                        mcmc=FALSE,
                        jitter=FALSE,
-                       seed=NULL){
+                       seed=NULL,
+                       plotResults=hess){
     #start timing
     stm<-Sys.time();
 
@@ -86,6 +87,17 @@ runTCSAM2013<-function(os='osx',
     if (jitter) {
         tbl<-read.csv('jitterInfo.csv',header=TRUE);
         dfr<-rbind(data.frame(name='seed',value=tbl$seed[1]),dfr);
+    }
+    
+    if (plotResults){
+        obj.rep<-getRep('TCSAM_WTS.oldstyle.R');
+        obj.std<-getStd(paste(model,'.std',sep=''));
+        obj.prs<-getActiveParams('TCSAM_WTS.final_params.active.csv');
+        plotTCSAM2013(obj.rep=obj.rep,
+                      obj.std=obj.std,
+                      obj.prs=obj.prs,
+                      mdl=model);
+
     }
 
     #return dataframe (and return to original folder as working directory)
