@@ -93,10 +93,10 @@ runTCSAM2013<-function(os='osx',
         obj.rep<-getRep('TCSAM_WTS.oldstyle.R');
         obj.std<-getStd(paste(model,'.std',sep=''));
         obj.prs<-getActiveParams('TCSAM_WTS.final_params.active.csv');
-        plotTCSAM2013(obj.rep=obj.rep,
-                      obj.std=obj.std,
-                      obj.prs=obj.prs,
-                      mdl=model);
+        plotTCSAM2013I(obj.rep,
+                       obj.std,
+                       obj.prs,
+                       mdl=model);
 
     }
 

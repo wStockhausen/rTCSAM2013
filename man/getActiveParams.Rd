@@ -10,7 +10,7 @@ getActiveParams(in.prs = NULL)
 \item{in.prs}{= filename of active params file}
 }
 \value{
-list object corresponding to the active params file
+list object corresponding to the active params file, or NULL if file does not exist
 }
 \description{
 Function to create a TCSAM2013 prs object from an active params file.

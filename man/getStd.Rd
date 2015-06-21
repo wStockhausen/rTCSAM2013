@@ -10,7 +10,7 @@ getStd(in.std = NULL)
 \item{in.std}{= filename of std file}
 }
 \value{
-list object corresponding to the std file
+list object corresponding to the std file, or NULL if file does not exist
 }
 \description{
 Function to create a TCSAM2013 std object from a std file.

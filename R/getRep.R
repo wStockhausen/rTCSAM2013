@@ -5,7 +5,7 @@
 #'
 #'@param in.rep = filename of rep file
 #'
-#'@return list object corresponding to the rep file
+#'@return list object corresponding to the rep file, or NULL if file does not exist
 #'
 #' @import PBSmodelling
 #' @importFrom wtsUtilities selectFile
@@ -17,7 +17,7 @@ getRep<-function(in.rep=NULL){
         in.rep<-wtsUtilities::selectFile(ext="R",caption="Select Jack's R output file");
     }
     obj.rep<-NULLL;
-    if (!is.null(in.rep)){
+    if ((!is.null(in.rep))&&file.exists(in.rep)){
         obj.rep <- readList(in.rep);
     }
     return(invisible(obj.rep))

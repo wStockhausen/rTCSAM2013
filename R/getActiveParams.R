@@ -5,7 +5,7 @@
 #'
 #'@param in.prs = filename of active params file
 #'
-#'@return list object corresponding to the active params file
+#'@return list object corresponding to the active params file, or NULL if file does not exist
 #'
 #' @importFrom wtsUtilities selectFile
 #' 
@@ -16,7 +16,7 @@ getActiveParams<-function(in.prs=NULL){
         in.prs<-wtsUtilities::selectFile(ext='csv',caption="Select active parameters info csv file");
     }
     obj.prs<-NULL;
-    if (!is.null(in.prs)){
+    if ((!is.null(in.prs))&&(file.exists(in.prs))){
         obj.prs<-read.csv(in.prs,stringsAsFactors=FALSE);
     }    
     return(invisible(obj.prs))

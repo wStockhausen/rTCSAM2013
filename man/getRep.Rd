@@ -10,7 +10,7 @@ getRep(in.rep = NULL)
 \item{in.rep}{= filename of rep file}
 }
 \value{
-list object corresponding to the rep file
+list object corresponding to the rep file, or NULL if file does not exist
 }
 \description{
 Function to create a TCSAM2013 rep object from a rep file.

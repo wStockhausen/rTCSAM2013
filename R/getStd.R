@@ -5,7 +5,7 @@
 #'
 #'@param in.std = filename of std file
 #'
-#'@return list object corresponding to the std file
+#'@return list object corresponding to the std file, or NULL if file does not exist
 #'
 #' @importFrom wtsUtilities selectFile
 #' 
@@ -16,7 +16,7 @@ getStd<-function(in.std=NULL){
         in.std<-wtsUtilities::selectFile(ext='std',caption="Select std file");
     }
     obj.std<-NULL;
-    if (!is.null(in.std)){
+    if ((!is.null(in.std))&&file.exists(in.std)){
         obj.std = read.table(in.std,as.is=T,header=F,skip=1);
     }
     return(invisible(obj.std))
