@@ -16,7 +16,7 @@
 #'@param path2model - path to model executable
 #'@param configFile  - path to model configuration file template
 #'@param controlFile - path to model control file template
-#'@param profiles    - list of lists of variables to profile on
+#'@param profiles    - dataframe with variables to profile on in each row
 #'@param runSeqs     - TRUE to run sequences, FALSE to jitter
 #'@param numRuns     - number of sequences or jitters to run
 #'
@@ -28,53 +28,62 @@ runProfiles<-function(os='osx',
                       path=ifelse(tolower(os)=='win','.\\','./'),
                       model='tcsam2013alta',
                       path2model='',
-                      configFile=NULL,
-                      controlFile=NULL,
+                      configFileTemplate=NULL,
+                      controlFileTemplate=NULL,
                       profiles=NULL,
                       runSeqs=TRUE,
-                      numRuns=4){
+                      numRuns=4,
+                      showPlot=TRUE){
     #read template files
-    cfgt<-readLines(con=file.path(path,configFile));
-    ctlt<-readLines(con=file.path(path,controlFile));
+    cfgt<-readLines(con=file.path(path,configFileTemplate));
+    ctlt<-readLines(con=file.path(path,controlFileTemplate));
     
     #create string representation of configuration file
-    cfgFile<-gsub("&&ctlFile","ModelControl.txt",cfgt,fixed=TRUE)
+    cfgFile<-gsub("&&ControlFile","ModelControl.txt",cfgt,fixed=TRUE)
 
     #create profiles to run
-    nms<-names(profiles);
+    nprf<-nrow(profiles);
     prfList<-list();
-    for (nm in nms){
-        vals<-profiles[[nm]];
-        for (val in vals){
-            nmp<-paste(nm,'=',val,sep='');
-            prfList[[nmp]]<-gsub(paste('&&',nmp,sep=''),val,ctlt,fixed=TRUE)
+    for (iprf in 1:nprf){
+        #create one profile
+        vals<-profiles[iprf,,drop=FALSE];#need drop=FALSE to keep column names for 1-column dataframes
+        prfDir<-'prof.';
+        prfCtl<-ctlt;
+        for (nm in names(vals)){
+            prfDir<-paste(prfDir,"_",nm,"=",vals[1,nm],sep='');
+            prfCtl<-gsub(paste('&&',nm,sep=''),vals[1,nm],prfCtl,fixed=TRUE)
         }
+        prfDir<-file.path(path,prfDir);
+        if (!dir.exists(prfDir)) dir.create(prfDir,recursive=TRUE); #create folder for profile, if necessary
+        writeLines(cfgFile,file.path(prfDir,'ModelConfig.txt'))
+        writeLines(prfCtl,file.path(prfDir,'ModelControl.txt'))
+        #run profile
     }
     
-    #run profiles
-    np<-length(prfList);
-    parList<-vector(mode='list',length=np);
-    names(parList)<-names(prfList);
-    for (p in names(prfList)){
-        p2f<-file.path(path,p);#path to output folder
-        writeLines(cfgFile,con=file.path(p2f,'ModelConfiguration.txt'));#write configuration file
-        writeLines(ctlFile,con=file.path(p2f,'ModelControl.txt'));      #write control file
-        if (runSeqs){
-            par<-runSequence(path=p2f,
-                              os=os,
-                              model=model,
-                              path2model=path2model,
-                              configFile='ModelConfiguration.txt',
-                              numRuns=numRuns);
-        } else {
-            par<-runJitter(path=p2f,
-                              os=os,
-                              model=model,
-                              path2model=path2model,
-                              configFile='ModelConfiguration.txt',
-                              numRuns=numRuns);
-        }
-        parList[[p]]<-par;
-    }
-    return(parList);
+#     #run profiles
+#     np<-length(prfList);
+#     parList<-vector(mode='list',length=np);
+#     names(parList)<-names(prfList);
+#     for (p in names(prfList)){
+#         p2f<-file.path(path,p);#path to output folder
+#         writeLines(cfgFile,con=file.path(p2f,'ModelConfiguration.txt'));#write configuration file
+#         writeLines(ctlFile,con=file.path(p2f,'ModelControl.txt'));      #write control file
+#         if (runSeqs){
+#             par<-runSequence(path=p2f,
+#                               os=os,
+#                               model=model,
+#                               path2model=path2model,
+#                               configFile='ModelConfiguration.txt',
+#                               numRuns=numRuns);
+#         } else {
+#             par<-runJitter(path=p2f,
+#                               os=os,
+#                               model=model,
+#                               path2model=path2model,
+#                               configFile='ModelConfiguration.txt',
+#                               numRuns=numRuns);
+#         }
+#         parList[[p]]<-par;
+#     }
+#     return(parList);
 }
