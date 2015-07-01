@@ -5,8 +5,9 @@
 \title{Function to run profiles on a TCSAM2013 model.}
 \usage{
 runProfiles(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
-  model = "tcsam2013alta", path2model = "", configFile = NULL,
-  controlFile = NULL, profiles = NULL, runSeqs = TRUE, numRuns = 4)
+  model = "tcsam2013alta", path2model = "", configFileTemplate = NULL,
+  controlFileTemplate = NULL, profiles = NULL, runSeqs = TRUE,
+  numRuns = 4, showPlot = TRUE)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -17,15 +18,15 @@ runProfiles(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
 
 \item{path2model}{- path to model executable}
 
-\item{configFile}{- path to model configuration file template}
-
-\item{controlFile}{- path to model control file template}
-
-\item{profiles}{- list of lists of variables to profile on}
+\item{profiles}{- dataframe with variables to profile on in each row}
 
 \item{runSeqs}{- TRUE to run sequences, FALSE to jitter}
 
 \item{numRuns}{- number of sequences or jitters to run}
+
+\item{configFile}{- path to model configuration file template}
+
+\item{controlFile}{- path to model control file template}
 }
 \value{
 - par file dataframe
