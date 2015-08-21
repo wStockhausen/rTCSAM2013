@@ -4,10 +4,9 @@
 \alias{runProfiles}
 \title{Function to run profiles on a TCSAM2013 model.}
 \usage{
-runProfiles(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
-  model = "tcsam2013alta", path2model = "", configFileTemplate = NULL,
-  controlFileTemplate = NULL, profiles = NULL, runSeqs = TRUE,
-  numRuns = 4, showPlot = TRUE)
+runProfiles(os = "osx", path = ".", model = "tcsam2013alta",
+  path2model = "", configFileTemplate = NULL, controlFileTemplate = NULL,
+  profiles = NULL, runSeqs = TRUE, numRuns = 4, plotResults = TRUE)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -23,6 +22,8 @@ runProfiles(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
 \item{runSeqs}{- TRUE to run sequences, FALSE to jitter}
 
 \item{numRuns}{- number of sequences or jitters to run}
+
+\item{plotResults}{- T/F to plot final results within each profile using \code{plotTCSAM2013I}}
 
 \item{configFile}{- path to model configuration file template}
 

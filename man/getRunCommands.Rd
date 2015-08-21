@@ -9,21 +9,23 @@ getRunCommands(os = "osx", model = "tcsam2013alta", path2model = "",
   jitter = FALSE, seed = NULL)
 }
 \arguments{
-\item{os}{- 'win' or 'mac'}
+\item{os}{- 'win', 'mac' or 'osx'}
 
-\item{model}{-}
+\item{model}{- admb model name}
 
-\item{path2model}{-}
+\item{path2model}{- path to model}
 
-\item{pin}{-}
+\item{configFile}{- filename (including path) to model configuration file}
 
-\item{hess}{-}
+\item{pin}{- flag (T/F) to use a pin file}
 
-\item{mcmc}{-}
+\item{hess}{- flag (T/F) to calculate the hessian}
 
-\item{jitter}{-}
+\item{mcmc}{- flag (T/F) to do mcmc calculations}
 
-\item{seed}{-}
+\item{jitter}{- flag (T/F) to use jitter initial values}
+
+\item{seed}{- value for random number seed to generate jitter}
 }
 \description{
 Function to generate a script to make a tcsam2013 model run

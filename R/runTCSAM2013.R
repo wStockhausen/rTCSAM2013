@@ -14,20 +14,23 @@
 #'@param path - path for model output
 #'@param model      - TCSAM2013 model executable name
 #'@param path2model - path to model executable
+#'@param configFile - filename (including path) to model configuration file
 #'@param pin  - T/F to use a pin file
 #'@param hess - T/F to compute hessian (and .std file)
 #'@param mcmc - T/F to run mcmc
 #'@param jitter  - T/F to jitter parameters
 #'@param seed    - seed for random number generator (or NULL)
-#'@param in.csv  - filename for jitter info (seed, obj fun value) from ADMB model run
-#'@param out.csv - filename for jittered results
+#'@param plotResults - T/F to plot results using \code{plotTCSAM2013I}
 #'
 #'@return - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info
+#'
+#'@details If the path associated with \code{configFile} is a relative one, it should
+#'be relative to the \code{path} variable.
 #'
 #'@export
 #'
 runTCSAM2013<-function(os='osx',
-                       path=ifelse(tolower(os)=='win','.\\','./'),
+                       path='.',
                        model='tcsam2013alta',
                        path2model='',
                        configFile='',
@@ -43,7 +46,7 @@ runTCSAM2013<-function(os='osx',
     #switch to run folder (create if necessary)
     currdir<-getwd();
     on.exit(setwd(currdir));
-    if (!dir.exists(path)) dir.create(path,recursive=TRUE)
+    if (!file.exists(path)) dir.create(path,recursive=TRUE)
     setwd(path);
     cat("Running tcsam2013 model at '",path,"'.\n");
 
@@ -52,6 +55,7 @@ runTCSAM2013<-function(os='osx',
     fn.par<-gsub('&&model',tolower(model),fn.par)
 
     run.cmds<-getRunCommands(os=os,
+                             model=model,
                              path2model=path2model,
                              configFile=configFile,
                              pin=pin,

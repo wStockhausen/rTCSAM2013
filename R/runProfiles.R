@@ -19,13 +19,14 @@
 #'@param profiles    - dataframe with variables to profile on in each row
 #'@param runSeqs     - TRUE to run sequences, FALSE to jitter
 #'@param numRuns     - number of sequences or jitters to run
+#'@param plotResults - T/F to plot final results within each profile using \code{plotTCSAM2013I}
 #'
 #'@return - par file dataframe
 #'
 #'@export
 #'
 runProfiles<-function(os='osx',
-                      path=ifelse(tolower(os)=='win','.\\','./'),
+                      path='.',
                       model='tcsam2013alta',
                       path2model='',
                       configFileTemplate=NULL,
@@ -33,7 +34,7 @@ runProfiles<-function(os='osx',
                       profiles=NULL,
                       runSeqs=TRUE,
                       numRuns=4,
-                      showPlot=TRUE){
+                      plotResults=TRUE){
     #read template files
     cfgt<-readLines(con=file.path(path,configFileTemplate));
     ctlt<-readLines(con=file.path(path,controlFileTemplate));
@@ -54,10 +55,31 @@ runProfiles<-function(os='osx',
             prfCtl<-gsub(paste('&&',nm,sep=''),vals[1,nm],prfCtl,fixed=TRUE)
         }
         prfDir<-file.path(path,prfDir);
-        if (!dir.exists(prfDir)) dir.create(prfDir,recursive=TRUE); #create folder for profile, if necessary
+        if (!file.exists(prfDir)) dir.create(prfDir,recursive=TRUE); #create folder for profile, if necessary
         writeLines(cfgFile,file.path(prfDir,'ModelConfig.txt'))
         writeLines(prfCtl,file.path(prfDir,'ModelControl.txt'))
         #run profile
+        xprfDir<-normalizePath(prfDir);
+        cfgFN<-file.path(xprfDir,'ModelConfig.txt');##best to specify absolute path here
+        cat('##Running profile ',xprfDir,'\n')
+        if (runSeqs){
+            par<-runSequence(path=xprfDir,
+                             os=os,
+                             model=model,
+                             path2model=path2model,
+                             configFile=cfgFN,
+                             numRuns=numRuns,
+                             plotResults=plotResults);
+        } else {
+            par<-runJitter(path=xprfDir,
+                           os=os,
+                           model=model,
+                           path2model=path2model,
+                           configFile=cfgFN,
+                           numRuns=numRuns,
+                           plotResults=plotResults);
+        }
+        prfList[[prfDir]]<-par;
     }
     
 #     #run profiles
@@ -85,5 +107,5 @@ runProfiles<-function(os='osx',
 #         }
 #         parList[[p]]<-par;
 #     }
-#     return(parList);
+    return(prfList);
 }

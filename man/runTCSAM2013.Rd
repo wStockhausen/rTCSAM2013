@@ -4,10 +4,9 @@
 \alias{runTCSAM2013}
 \title{Function to run TCSAM2013.}
 \usage{
-runTCSAM2013(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
-  model = "tcsam2013alta", path2model = "", configFile = "",
-  pin = FALSE, hess = FALSE, mcmc = FALSE, jitter = FALSE,
-  seed = NULL, plotResults = hess)
+runTCSAM2013(os = "osx", path = ".", model = "tcsam2013alta",
+  path2model = "", configFile = "", pin = FALSE, hess = FALSE,
+  mcmc = FALSE, jitter = FALSE, seed = NULL, plotResults = hess)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -17,6 +16,8 @@ runTCSAM2013(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
 \item{model}{- TCSAM2013 model executable name}
 
 \item{path2model}{- path to model executable}
+
+\item{configFile}{- filename (including path) to model configuration file}
 
 \item{pin}{- T/F to use a pin file}
 
@@ -28,9 +29,7 @@ runTCSAM2013(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
 
 \item{seed}{- seed for random number generator (or NULL)}
 
-\item{in.csv}{- filename for jitter info (seed, obj fun value) from ADMB model run}
-
-\item{out.csv}{- filename for jittered results}
+\item{plotResults}{- T/F to plot results using \code{plotTCSAM2013I}}
 }
 \value{
 - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info

@@ -3,14 +3,15 @@
 #'
 #'@description Function to generate a script to make a tcsam2013 model run
 #'
-#'@param os - 'win' or 'mac'
-#'@param model -
-#'@param path2model -
-#'@param pin -
-#'@param hess -
-#'@param mcmc -
-#'@param jitter -
-#'@param seed -
+#'@param os - 'win', 'mac' or 'osx'
+#'@param model - admb model name
+#'@param path2model - path to model
+#'@param configFile - filename (including path) to model configuration file
+#'@param pin - flag (T/F) to use a pin file
+#'@param hess - flag (T/F) to calculate the hessian
+#'@param mcmc - flag (T/F) to do mcmc calculations
+#'@param jitter - flag (T/F) to use jitter initial values
+#'@param seed - value for random number seed to generate jitter
 #'
 #'@export
 #'

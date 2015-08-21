@@ -4,10 +4,10 @@
 \alias{runJitter}
 \title{Function to run TCSAM2013 multiple times using jittered initial parameter values.}
 \usage{
-runJitter(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
-  model = "tcsam2013alta", path2model = "", configFile = "",
-  numRuns = 3, onlyEvalJitter = FALSE, in.csv = "jitterInfo.csv",
-  out.csv = "jitterResults.csv")
+runJitter(os = "osx", path = ".", model = "tcsam2013alta",
+  path2model = "", configFile = "", numRuns = 3, onlyEvalJitter = FALSE,
+  in.csv = "jitterInfo.csv", out.csv = "jitterResults.csv",
+  plotResults = FALSE)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -27,6 +27,8 @@ runJitter(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
 \item{in.csv}{- filename for jitter info (seed, obj fun value) from ADMB model run}
 
 \item{out.csv}{- filename for jittered results}
+
+\item{plotResults}{- T/F to plot final results using \code{plotTCSAM2013I}}
 }
 \value{
 - list w/ 4 elements:

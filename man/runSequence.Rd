@@ -4,9 +4,8 @@
 \alias{runSequence}
 \title{Function to run a sequence of TCSAM2013 models.}
 \usage{
-runSequence(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
-  model = "tcsam2013alta", path2model = "", configFile = "",
-  numRuns = 4)
+runSequence(os = "osx", path = ".", model = "tcsam2013alta",
+  path2model = "", configFile = "", numRuns = 4, plotResults = FALSE)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -17,9 +16,11 @@ runSequence(os = "osx", path = ifelse(tolower(os) == "win", ".\\\\", "./"),
 
 \item{path2model}{- path to model executable}
 
-\item{configFile}{- path to model configuration file}
+\item{configFile}{- full (absolute) path to model configuration file}
 
 \item{numRuns}{- number of runs in sequence to make}
+
+\item{plotResults}{- T/F to plot final results using \code{plotTCSAM2013I}}
 }
 \value{
 - par file dataframe

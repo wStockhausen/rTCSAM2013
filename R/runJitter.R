@@ -27,6 +27,7 @@
 #'@param onlyEvalJitter - flag (T/F) to only evaluate a (previous) set of jitter runs, not make new runs
 #'@param in.csv - filename for jitter info (seed, obj fun value) from ADMB model run
 #'@param out.csv - filename for jittered results
+#'@param plotResults - T/F to plot final results using \code{plotTCSAM2013I}
 #'
 #'@return - list w/ 4 elements:
 #'  imx  - index of (1st) smallest value for the objective function
@@ -38,14 +39,15 @@
 #'@export
 #'
 runJitter<-function(os='osx',
-                    path=ifelse(tolower(os)=='win','.\\','./'),
+                    path='.',
                     model='tcsam2013alta',
                     path2model='',
                     configFile='',
                     numRuns=3,
                     onlyEvalJitter=FALSE,
                     in.csv='jitterInfo.csv',
-                    out.csv='jitterResults.csv'){
+                    out.csv='jitterResults.csv',
+                    plotResults=FALSE){
     #start timing
     stm<-Sys.time();
 
@@ -69,7 +71,8 @@ runJitter<-function(os='osx',
                               hess=FALSE,
                               mcmc=FALSE,
                               jitter=TRUE,
-                              seed=NULL);
+                              seed=NULL,
+                              plotResults=FALSE);
             objFuns[r]<-par$value[3];
             parList[[fldr]]<-par;
             tbl<-data.frame(idx=r,objFun=objFuns[r],seed=par$value[par$name=='seed']);
@@ -108,7 +111,8 @@ runJitter<-function(os='osx',
                       hess=TRUE,
                       mcmc=FALSE,
                       jitter=TRUE,
-                      seed=seed);
+                      seed=seed,
+                      plotResults=plotResults);
 
     #print timing-related info
     etm<-Sys.time();

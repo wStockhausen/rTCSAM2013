@@ -13,8 +13,9 @@
 #'@param path - path for model output
 #'@param model      - TCSAM2013 model executable name
 #'@param path2model - path to model executable
-#'@param configFile - path to model configuration file
+#'@param configFile - full (absolute) path to model configuration file
 #'@param numRuns    - number of runs in sequence to make
+#'@param plotResults - T/F to plot final results using \code{plotTCSAM2013I}
 #'
 #'@return - par file dataframe
 #'
@@ -23,11 +24,12 @@
 #'@export
 #'
 runSequence<-function(os='osx',
-                      path=ifelse(tolower(os)=='win','.\\','./'),
+                      path='.',
                       model='tcsam2013alta',
                       path2model='',
                       configFile='',
-                      numRuns=4){
+                      numRuns=4,
+                      plotResults=FALSE){
     #run sequence
     objFuns<-vector(mode='numeric',length=numRuns);
     parList<-list();
@@ -36,7 +38,7 @@ runSequence<-function(os='osx',
         if (pin){par<-readLines(file.path(p2f,paste(model,'.par',sep='')));}
         fldr<-paste('run',formatZeros(r,width=max(2,ceiling(log10(numRuns)))),sep='');
         p2f<-file.path(path,fldr);
-        if (!dir.exists(p2f)) dir.create(p2f,recursive=TRUE);
+        if (!file.exists(p2f)) dir.create(p2f,recursive=TRUE);
         if (pin) {writeLines(par,file.path(p2f,paste(model,'.pin',sep='')));}
         par<-runTCSAM2013(path=p2f,
                           os=os,
@@ -47,7 +49,8 @@ runSequence<-function(os='osx',
                           hess=FALSE,
                           mcmc=FALSE,
                           jitter=FALSE,
-                          seed=NULL);
+                          seed=NULL,
+                          plotResults=FALSE);
         objFuns[r]<-par[2,'value'];
         parList[[fldr]]<-par;
     }
@@ -69,6 +72,7 @@ runSequence<-function(os='osx',
                       hess=TRUE,
                       mcmc=FALSE,
                       jitter=FALSE,
-                      seed=NULL);
+                      seed=NULL,
+                      plotResults=plotResults);
     return(list(idx=idx,best=bst,parList=parList));
 }
