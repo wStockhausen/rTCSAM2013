@@ -7,7 +7,9 @@
 #'This function creates a shell script ('./tmp.sh') in the
 #'working directory and uses it to run a version of the TCSAM2013 model. Pin files
 #'are copied from the previous run's par file. The file 'best.txt' identifies the run
-#'with the best objective function value.
+#'with the best objective function value. The "best" sub-folder contains results from
+#'re-running the best run, this time estimating the hessian and obtaining the std file
+#'(if the hessian is invertible).
 #'
 #'@param os   - 'win' or 'mac' or 'osx'
 #'@param path - path for model output
@@ -17,7 +19,8 @@
 #'@param numRuns    - number of runs in sequence to make
 #'@param plotResults - T/F to plot final results using \code{plotTCSAM2013I}
 #'
-#'@return - par file dataframe
+#'@return - list indicatng index of best run, the folder with the best run, and a list of results 
+#'from the parameter files for each model run.
 #'
 #'@importFrom wtsUtilities formatZeros
 #'
@@ -62,13 +65,25 @@ runSequence<-function(os='osx',
     cat("best = ",bst,file=file.path(path,"best.txt"))
     
     #re-run best model
-    p2f<-file.path(path,bst);
+    p2fb<-file.path(path,bst);                          #folder w/ best run
+    pinFile<-file.path(p2fb,paste(model,'.pin',sep=''));#pin file used to achieve run
+    p2f<-file.path(path,"best");                           #"best" folder to re-run model in
+    if (!file.exists(p2f)) dir.create(p2f,recursive=TRUE); #ceate "best" folder, if necessary
+    if (file.exists(pinFile)){
+        #pin file exists in folder w/ best run, so copy it to "best" folder to use
+        pin<-readLines(pinFile);                                  #read pin file from best
+        writeLines(pin,file.path(p2f,paste(model,'.pin',sep='')));#write pin file to "best"
+        pin<-TRUE;
+    } else {
+        #pin file doesn't exist (best run was first one)
+        pin<-FALSE;
+    }
     par<-runTCSAM2013(path=p2f,
                       os=os,
                       model=model,
                       path2model=path2model,
                       configFile=configFile,
-                      pin=TRUE,
+                      pin=pin,
                       hess=TRUE,
                       mcmc=FALSE,
                       jitter=FALSE,

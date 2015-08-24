@@ -23,7 +23,8 @@ runSequence(os = "osx", path = ".", model = "tcsam2013alta",
 \item{plotResults}{- T/F to plot final results using \code{plotTCSAM2013I}}
 }
 \value{
-- par file dataframe
+- list indicatng index of best run, the folder with the best run, and a list of results
+from the parameter files for each model run.
 }
 \description{
 This functions runs a sequence of TCSAM2013 model.
@@ -34,6 +35,8 @@ This functions runs a sequence of TCSAM2013 model.
 This function creates a shell script ('./tmp.sh') in the
 working directory and uses it to run a version of the TCSAM2013 model. Pin files
 are copied from the previous run's par file. The file 'best.txt' identifies the run
-with the best objective function value.
+with the best objective function value. The "best" sub-folder contains results from
+re-running the best run, this time estimating the hessian and obtaining the std file
+(if the hessian is invertible).
 }
 

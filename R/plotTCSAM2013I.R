@@ -222,7 +222,7 @@ plotTCSAM2013I<-function(obj.rep,
     st.devs.f<-(log(spB.f.obs[idx])-log(spB.f.prd[idx]))/sqrt(log(1+cv.f^2));
     st.devs.m<-(log(spB.m.obs[idx])-log(spB.m.prd[idx]))/sqrt(log(1+cv.m^2));
     #--plot of standardized devs
-    ymx<-max(abs(st.devs.f),abs(st.devs.m))
+    ymx<-max(range(abs(st.devs.f),abs(st.devs.m),na.rm=TRUE,finite=TRUE));
     plot(c(0,1),c(0,1),type="n",xlim=range(obsyears),ylim=ymx*c(-1.05,1.05),
          ylab="Ln-scale Standardized Residuals",xlab='');
     abline(h=0,lty=2)
