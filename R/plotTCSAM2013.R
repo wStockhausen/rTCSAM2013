@@ -64,7 +64,10 @@ plotTCSAM2013<-function(obj.rep=NULL,
             in.std<-obj.std;
         }
         obj.std<-NULL;
-        if (!is.null(in.std)) obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+        if (!is.null(in.std)) {
+            obj.std<-NULL;
+            if (file.exists(in.std)) obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+        }
     }
     if (!is.data.frame(obj.prs)){
         if (!is.character(obj.prs)){
