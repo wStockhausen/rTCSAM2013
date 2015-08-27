@@ -112,12 +112,12 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male (total) selectivity")
-#    p <- p + facet_wrap(~y,ncol=3)
-    print(p)
+    p <- p + facet_wrap(~y,ncol=4)
+    print(p);
     
     #----------------------------------------------
     # TCF retained selectivity for males
@@ -140,12 +140,12 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male retained selectivity")
-#    p <- p + facet_wrap(~y,ncol=3)
-    print(p)
+    p <- p + facet_wrap(~y,ncol=4)
+    print(p);
     
     #----------------------------------------------
     # TCF retention for males
@@ -169,12 +169,12 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male retention functions")
-#    p <- p + facet_wrap(~y,ncol=5)
-    print(p)
+    p <- p + facet_wrap(~y,ncol=2)
+    print(p);
     
     #----------------------------------------------
     # TCF total selectivity for females
@@ -191,11 +191,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.85)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: female selectivity")
-#    p <- p + facet_wrap(~y,ncol=1)
+    p <- p + facet_wrap(~y,ncol=1)
     print(p)
     
     #----------------------------------------------
@@ -214,11 +214,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="SCF: male selectivity")
-#    p <- p + facet_wrap(~y,nrow=3)
+    p <- p + facet_wrap(~y,ncol=2)
     print(p)
         
     #----------------------------------------------
@@ -237,12 +237,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="SCF: female selectivity")
-#    p <- p + facet_wrap(~y,nrow=3)
-    print(p)
+    p <- p + facet_wrap(~y,ncol=2)
     
     #----------------------------------------------
     # RKF selectivity for males
@@ -259,11 +258,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    p <- ggplot(data=mdfr,aes_string('z','val',colour='case',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.7)
-#    p <- p + geom_point(size=3,alpha=0.7)
+    p <- ggplot(data=mdfr,aes_string('z','val',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="RKF: male selectivity")
-    p <- p + facet_wrap(~y,nrow=3)
+    p <- p + facet_wrap(~y,ncol=2)
     print(p)
         
     #----------------------------------------------
@@ -282,11 +281,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="RKF: female selectivity")
-#    p <- p + facet_wrap(~y,nrow=3)
+    p <- p + facet_wrap(~y,ncol=2)
     print(p)
     
     #----------------------------------------------
@@ -305,11 +304,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="GTF: male selectivity")
-#    p <- p + facet_wrap(~y,nrow=3)
+    p <- p + facet_wrap(~y,ncol=2)
     print(p)
         
     #----------------------------------------------
@@ -328,11 +327,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="GTF: female selectivity")
-#    p <- p + facet_wrap(~y,nrow=3)
+    p <- p + facet_wrap(~y,ncol=2)
     print(p)
     
     #----------------------------------------------
@@ -364,11 +363,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="NMFS traw survey: male selectivity")
-#    p <- p + facet_wrap(~y,ncol=1)
+    p <- p + facet_wrap(~y,ncol=2)
     print(p)
     
     #----------------------------------------------
@@ -400,11 +399,11 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfr<-rbind(mdfr,mdfrp);
     }
     mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
-    p <- ggplot(data=mdfr,aes_string('z','.',colour='y',linetype='case',shape='case'))
-    p <- p + geom_line(size=1.5,alpha=0.5)
-    p <- p + geom_point(size=3,alpha=0.5)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1)
+#    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="NMFS traw survey: female selectivity")
-#    p <- p + facet_wrap(~y,ncol=1)
+    p <- p + facet_wrap(~y,ncol=2)
     print(p)
     
 }
