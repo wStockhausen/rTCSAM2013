@@ -65,8 +65,12 @@ plotTCSAM2013<-function(obj.rep=NULL,
         }
         obj.std<-NULL;
         if (!is.null(in.std)) {
-            obj.std<-NULL;
-            if (file.exists(in.std)) obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+            if (file.exists(in.std)) {
+                cat("Reading file",in.std,'\n');
+                obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+            } else {
+                cat('File',in.std,'does not exist.\n');
+            }
         }
     }
     if (!is.data.frame(obj.prs)){
