@@ -27,9 +27,9 @@
 #'
 compareModelResults.SelFcns<-function(objs=NULL,
                                       cases=NULL,
-                                      pdf="ModelComparisons.SelFcns.pdf",
-                                      width=14,
-                                      height=8){
+                                      dodge_width=NULL,
+                                      dodge_height=NULL,
+                                      pdf="ModelComparisons.SelFcns"){
     if (is.null(objs)){
         in.obj<-0;
         in.objs<-vector(mode="character",length=0)
@@ -62,7 +62,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
     }
 
     if(!is.null(pdf)){
-        pdf(file=pdf,width=width,height=height,onefile=TRUE);
+        pdf(file=paste(pdf,'TCFMales','pdf',sep='.'),width=8,height=11,onefile=TRUE);
         on.exit(dev.off());
     }
 
@@ -116,7 +116,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male (total) selectivity")
-    p <- p + facet_wrap(~y,ncol=4)
+    p <- p + facet_wrap(~y,ncol=3)
+    print(p);
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male (total) selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=3)
     print(p);
     
     #----------------------------------------------
@@ -144,8 +150,21 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male retained selectivity")
-    p <- p + facet_wrap(~y,ncol=4)
+    p <- p + facet_wrap(~y,ncol=3)
     print(p);
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male retained selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=3)
+    print(p);
+
+    if (!is.null(pdf)) dev.off();
+    if(!is.null(pdf)){
+        pdf(file=paste(pdf,'TheRest','pdf',sep='.'),width=6,height=8,onefile=TRUE);
+        on.exit(dev.off());
+    }
+
     
     #----------------------------------------------
     # TCF retention for males
@@ -173,7 +192,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male retention functions")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1)
+    print(p);
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: male retention functions (dodged)")
+    p <- p + facet_wrap(~y,nrow=3)
     print(p);
     
     #----------------------------------------------
@@ -195,7 +220,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.85)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: female selectivity")
-    p <- p + facet_wrap(~y,ncol=1)
+    p <- p + facet_wrap(~y,nrow=3)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.85)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="TCF: female selectivity (dodged)")
+    p <- p + facet_wrap(~y,nrow=3)
     print(p)
     
     #----------------------------------------------
@@ -218,7 +249,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="SCF: male selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="SCF: male selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
     print(p)
         
     #----------------------------------------------
@@ -241,7 +278,14 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="SCF: female selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=3);
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="SCF: female selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3);
+    print(p)
     
     #----------------------------------------------
     # RKF selectivity for males
@@ -262,7 +306,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="RKF: male selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','val',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="RKF: male selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
     print(p)
         
     #----------------------------------------------
@@ -285,7 +335,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="RKF: female selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width),height=dodge_height)
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="RKF: female selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
     print(p)
     
     #----------------------------------------------
@@ -308,7 +364,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="GTF: male selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="GTF: male selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
     print(p)
         
     #----------------------------------------------
@@ -331,7 +393,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="GTF: female selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=32)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="GTF: female selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
     print(p)
     
     #----------------------------------------------
@@ -367,7 +435,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="NMFS traw survey: male selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="NMFS traw survey: male selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
     print(p)
     
     #----------------------------------------------
@@ -403,7 +477,13 @@ compareModelResults.SelFcns<-function(objs=NULL,
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
     p <- p + labs(x="size (mm CW)",y="selectivity",title="NMFS traw survey: female selectivity")
-    p <- p + facet_wrap(~y,ncol=2)
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
+    print(p)
+    p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
+    p <- p + geom_line(size=0.5,alpha=1,position=position_dodge(width=dodge_width,height=dodge_height))
+#    p <- p + geom_point(size=3,alpha=0.8)
+    p <- p + labs(x="size (mm CW)",y="selectivity",title="NMFS traw survey: female selectivity (dodged)")
+    p <- p + facet_wrap(~y,ncol=1,nrow=3)
     print(p)
     
 }

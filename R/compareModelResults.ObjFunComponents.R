@@ -12,10 +12,10 @@
 #'for comparison. If cases is given but not in.csvs, the user is prompted to select the file
 #'corresponding to each case. If both 'cases' and 'in.csvs' are NULL, then the user may select an 
 #'arbitrary number of files (one at a time), ending selection by pressing 'cancel' on the selection box'.\cr\cr
-#'Objective function component comparisons are relative to the first (base) case. Negative
+#'Objective function component comparisons are relative to the first (base) case. NEGATIVE
 #'differences indicate a better fit (smaller value for the component in the alternative model).
 #'
-#'@return vector with selected file names as elements (can be used as in.csv on another
+#'@return vector with selected file names as elements (can be used as in.csvs on another
 #'call to the function)
 #'
 #'@export
@@ -61,6 +61,7 @@ compareModelResults.ObjFunComponents<-function(in.csvs=NULL,
             cases[cs]<-strs[[1]][ns-1];
         }
     }
+    names(dfrs)<-cases;
     
     nc1<-nc-1;
     difs<-matrix(nrow=nr,ncol=nc1);
@@ -111,5 +112,16 @@ compareModelResults.ObjFunComponents<-function(in.csvs=NULL,
             legend.text=cases[2:nc],args.legend=list(cex=cex.names))
     title(main=paste("relative to",cases[1]),cex.main=cex.main)
     
-    return(in.csvs);
+    dfrp<-NULL;
+    for (case in cases){
+        dfr<-dfrs[[case]];
+        cols<-colnames(dfr);
+        dfr$case<-case;
+        dfr<-dfr[,c('case',cols)];#rearrange columns
+        dfrp<-rbind(dfrp,dfr);
+    }
+    
+    write.csv(dfrp,'ModelComparisons.ObjFunComponents.csv',row.names=FALSE);
+    
+    return(invisible(list(csvs=in.csvs,dfr=dfrp)));
 }
