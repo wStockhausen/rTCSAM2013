@@ -13,7 +13,7 @@
 #'
 #'@export
 #'
-plotABC<-function(x,OFL,ABC.pstar,ABC.buff,buffer=0.1,title=NULL,xlim=c(22.5,42.5)){
+plotABC<-function(x,OFL,ABC.pstar,ABC.buff,buffer=0.2,title=NULL,xlim=c(17.5,37.5)){
     plot(x,xlab="estimated OFL",ylab="empirical cdf",main="",lwd=2,xlim=xlim);
     abline(v=OFL,col="red",lwd=3)
     text(1.01*OFL,0.95,"OFL",col='red',adj=0)

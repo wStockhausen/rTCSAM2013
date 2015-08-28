@@ -6,7 +6,7 @@
 #'@param res - r list from TCSAM2013 projection model run
 #'@param fn - filename of TCSAM2013 projection model run r file
 #'@param pstar - 
-#'@param buffer - 
+#'@param buffer - buffer for ABC as fraction (i.e., 0.20 = 20% yields ABC = 0.8*OFL)
 #'@param title - title for plot
 #'
 #'@import stats
@@ -45,12 +45,12 @@ calcABC<-function(res=NULL,
     dev.off();
     
     strl<-paste("avg.rec","B","Fmsy","Bmsy","B/Bmsy","OFL","ABC.pstar","ABC.buffer",sep="\t");
-    strv<-paste(res$avg.rec,res$B.curr,res$FXX,res$BXX, res$B.curr/res$BXX,OFL,ABC.pstar,ABC.buff,sep="\t")
+    strv<-paste(res$avg.rec,res$nextMMB,res$FXX,res$BXX, res$nextMMB/res$BXX,OFL,ABC.pstar,ABC.buff,sep="\t")
     cat(strl,strv,sep="\n");
     
     tfn<-file.path(fldr,"OFL_results.csv");
     strl<-paste("avg.rec","B","Fmsy","Bmsy","B/Bmsy","OFL","ABC.pstar","ABC.buffer",sep=",");
-    strv<-paste(res$avg.rec,res$B.curr,res$FXX,res$BXX, res$B.curr/res$BXX,OFL,ABC.pstar,ABC.buff,sep=",")
+    strv<-paste(res$avg.rec,res$nextMMB,res$FXX,res$BXX, res$nextMMB/res$BXX,OFL,ABC.pstar,ABC.buff,sep=",")
     cat(strl,strv,sep="\n",file=tfn);
     
     return(invisible(res))

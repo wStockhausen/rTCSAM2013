@@ -4,8 +4,8 @@
 \alias{plotABC}
 \title{Function to plot ABC and OFL calculations from calcABC(...)}
 \usage{
-plotABC(x, OFL, ABC.pstar, ABC.buff, buffer = 0.1, title = NULL,
-  xlim = c(22.5, 42.5))
+plotABC(x, OFL, ABC.pstar, ABC.buff, buffer = 0.2, title = NULL,
+  xlim = c(17.5, 37.5))
 }
 \arguments{
 \item{x}{- empirical cdf of OFL}
