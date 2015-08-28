@@ -12,7 +12,8 @@ extractModelResults.StdDevs(objs, fac = 3)
 \item{fac}{- number of std devs to extend uncertainty plots}
 }
 \value{
-- dataframe with uncertainty info
+- list with elements vfr (dataframe with uncertainty info for plots) and
+sfr (dataframe with stdv info for combining w/ parameter estimates info)
 }
 \description{
 This function extracts the posterior distributions of parameters and

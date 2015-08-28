@@ -15,7 +15,7 @@ compareModelResults.ObjFunComponents(in.csvs = NULL, cases = NULL,
 \item{case}{- plot labels for model cases (same order as in.csvs)}
 }
 \value{
-vector with selected file names as elements (can be used as in.csv on another
+vector with selected file names as elements (can be used as in.csvs on another
 call to the function)
 }
 \description{
@@ -29,7 +29,7 @@ If in.csvs is not given, then the user is prompted to select final likelihood fi
 for comparison. If cases is given but not in.csvs, the user is prompted to select the file
 corresponding to each case. If both 'cases' and 'in.csvs' are NULL, then the user may select an
 arbitrary number of files (one at a time), ending selection by pressing 'cancel' on the selection box'.\cr\cr
-Objective function component comparisons are relative to the first (base) case. Negative
+Objective function component comparisons are relative to the first (base) case. NEGATIVE
 differences indicate a better fit (smaller value for the component in the alternative model).
 }
 

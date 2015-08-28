@@ -15,6 +15,8 @@
 #'
 #'@return - list with dfr, vfr, and plots as elements
 #'
+#'@import reshape2
+#'
 #'@export
 #'
 compareModelResults.Params<-function(objs,dp=0.01,fac=3,
@@ -25,12 +27,17 @@ compareModelResults.Params<-function(objs,dp=0.01,fac=3,
     dfr<-extractModelResults.Params(objs,dp=dp);
     #extract dataframe with parameter uncertainty info
     cat("Extracting uncertainty info\n")
-    vfr<-extractModelResults.StdDevs(objs,fac=fac);
+    lst<-extractModelResults.StdDevs(objs,fac=fac);
     #plot parameters as scalar values
     cat("Plotting parameter results\n")
-    plots<-plotModelResults.ScalarParams(dfr,vfr=vfr,nc=nc,nr=nr,showPlot=showPlot,pdf=pdf)
+    plots<-plotModelResults.ScalarParams(dfr,vfr=lst$vfr,nc=nc,nr=nr,showPlot=showPlot,pdf=pdf)
     
-    return(invisible(list(dfr=dfr,vfr=vfr,plots=plots)))
+    #combine dfr and lst$sfr
+    mdfr<-melt(dfr,id.vars=c('case','type','par','param'),variable.name='variable',factorsAsStrings=TRUE);
+    sdfr<-rbind(mdfr,lst$sfr);
+    write.csv(sdfr,'ModelComparisons.ParameterEstimates.csv',row.names=FALSE);
+    
+    return(invisible(list(sdfr=sdfr,vfr=lst$vfr,plots=plots)));
 }
 
 #'
@@ -94,13 +101,15 @@ extractModelResults.Params<-function(objs,dp=0.01){
 #'@param objs - model results objects (each is a list with elements 'std')
 #'@param fac - number of std devs to extend uncertainty plots
 #'
-#'@return - dataframe with uncertainty info
+#'@return - list with elements vfr (dataframe with uncertainty info for plots) and 
+#'sfr (dataframe with stdv info for combining w/ parameter estimates info)
 #'
 #'@importFrom wtsUtilities formatZeros
 #'
 #'@export
 #'
 extractModelResults.StdDevs<-function(objs,fac=3){
+    sfr<-NULL;
     vfr<-NULL;
     cases<-names(objs);
     for (case in cases){   
@@ -116,8 +125,8 @@ extractModelResults.StdDevs<-function(objs,fac=3){
                 type<-'scalar';
                 paramp<-param;
                 for (r in 1:nr){
-                    par   <-stdp[r,2];#param name
-                    estp  <-stdp[r,3];#model estimate
+                    par  <-stdp[r,2];#param name
+                    estp <-stdp[r,3];#model estimate
                     stdv <-stdp[r,4];#standard dev
                     if (stdv>0) {
                         x<-seq(from=estp-fac*stdv,to=estp+fac*stdv,length.out=51);
@@ -128,12 +137,14 @@ extractModelResults.StdDevs<-function(objs,fac=3){
                         }
                         vri<-list(case=case,type=type,par=par,param=paramp,x=x,y=y);
                         vfr<-rbind(vfr,as.data.frame(vri,stringsAsFactors=FALSE));
+                        vri<-list(case=case,type=type,par=par,param=paramp,variable='stdv',value=stdv);
+                        sfr<-rbind(sfr,as.data.frame(vri,stringsAsFactors=FALSE));
                     }#stdv>0
                 }#r
             }#nr>0
         }#params
     }#case
-    return(invisible(vfr));
+    return(invisible(list(vfr=vfr,sfr=sfr)));
 }
 
 #'

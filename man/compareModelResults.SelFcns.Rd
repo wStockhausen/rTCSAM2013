@@ -4,8 +4,8 @@
 \alias{compareModelResults.SelFcns}
 \title{Compare selectivity functions among several model runs.}
 \usage{
-compareModelResults.SelFcns(objs = NULL, cases = NULL,
-  pdf = "ModelComparisons.SelFcns.pdf", width = 14, height = 8)
+compareModelResults.SelFcns(objs = NULL, cases = NULL, dodge_width = NULL,
+  dodge_height = NULL, pdf = "ModelComparisons.SelFcns")
 }
 \arguments{
 \item{objs}{- list of objects derived from Jack's R files for the models to be compared}
