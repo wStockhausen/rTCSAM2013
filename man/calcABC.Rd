@@ -14,7 +14,7 @@ calcABC(res = NULL, fn = NULL, pstar = 0.49, buffer = 0.1,
 
 \item{pstar}{-}
 
-\item{buffer}{- buffer for ABC as fraction (i.e., 0.20 = 20% yields ABC = 0.8*OFL)}
+\item{buffer}{- buffer for ABC as fraction (i.e., 0.20 = 20 \% yields ABC = 0.8*OFL)}
 
 \item{title}{- title for plot}
 }

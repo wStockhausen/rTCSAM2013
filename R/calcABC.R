@@ -6,7 +6,7 @@
 #'@param res - r list from TCSAM2013 projection model run
 #'@param fn - filename of TCSAM2013 projection model run r file
 #'@param pstar - 
-#'@param buffer - buffer for ABC as fraction (i.e., 0.20 = 20% yields ABC = 0.8*OFL)
+#'@param buffer - buffer for ABC as fraction (i.e., 0.20 = 20 \% yields ABC = 0.8*OFL)
 #'@param title - title for plot
 #'
 #'@import stats
