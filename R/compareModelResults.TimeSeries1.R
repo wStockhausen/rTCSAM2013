@@ -491,7 +491,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="Females, snow crab fishery bycatch mortality";
     ylab="Discard mortality (1000's t)";
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     otypes<-c(obstype);
     mtypes<-c(vartype);
     for (t in 1:length(types)){
@@ -577,7 +577,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="Females, BBRKC fishery bycatch mortality";
     ylab="Discard mortality (1000's t)"; 
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     otypes<-c(obstype);
     mtypes<-c(vartype);
     for (t in 1:length(types)){
@@ -620,7 +620,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="Groundfish fisheries bycatch mortality";
     ylab="Discard mortality (1000's t)";
     dfr<-NULL;
-    types<-c('male');
+    types<-c('all');
     otypes<-c(obstype);
     mtypes<-c(vartype);
     for (t in 1:length(types)){
@@ -805,7 +805,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="Females, directed fishery bycatch mortality rate";
     ylab="Fully-selected Fishing Mortality Rate";
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     mtypes<-c(vartype);
     for (t in 1:length(types)){
         dfrp<-NULL;
@@ -841,7 +841,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="Females, directed fishery bycatch mortality rate";
     ylab="Mean Fishing Mortality Rate";
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     mtypes<-c(vartype);
     for (t in 1:length(types)){
         dfrp<-NULL;
@@ -949,7 +949,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="Snow crab bycatch mortality rate on females";
     ylab="Fully-selected Fishing Mortality Rate";   
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     mtypes<-c(vartype);
     for (t in 1:length(types)){
         dfrp<-NULL;
@@ -985,7 +985,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="Snow crab bycatch mortality rate on females";
     ylab="Mean Fishing Mortality Rate";   
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     mtypes<-c(vartype);
     for (t in 1:length(types)){
         dfrp<-NULL;
@@ -1093,7 +1093,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="BBRKC bycatch mortality rate on females";
     ylab="Fully-selected Fishing Mortality Rate";
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     mtypes<-c(vartype);
     for (t in 1:length(types)){
         dfrp<-NULL;
@@ -1129,7 +1129,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     title="BBRKC bycatch mortality rate on females";
     ylab="Mean Fishing Mortality Rate";
     dfr<-NULL;
-    types<-c('male');
+    types<-c('female');
     mtypes<-c(vartype);
     for (t in 1:length(types)){
         dfrp<-NULL;
