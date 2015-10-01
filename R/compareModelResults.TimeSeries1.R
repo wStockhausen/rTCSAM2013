@@ -530,7 +530,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     #---------------------------------
     obsyrs <-"observed.RKF.years.discard.catch";
     obstype<-"observed.RKF.male.discard.mortality.biomass";
-    vartype<-"predicted.SCF.male.discard.mortality.biomass";
+    vartype<-"predicted.RKF.male.discard.mortality.biomass";
     title="Males, BBRKC crab fishery bycatch mortality";
     ylab="Discard mortality (1000's t)";
     dfr<-NULL;

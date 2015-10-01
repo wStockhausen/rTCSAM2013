@@ -4,12 +4,15 @@
 \alias{calcCIs}
 \title{Compute confidence intervals from cvs.}
 \usage{
-calcCIs(vals, cvs, pdfType = "lognormal", ci = 0.95, verbose = FALSE)
+calcCIs(vals, cvs = NULL, sdvs = NULL, pdfType = "lognormal", ci = 0.95,
+  verbose = FALSE)
 }
 \arguments{
 \item{vals}{- vector of values}
 
 \item{cvs}{- vector of cvs}
+
+\item{sdvs}{- vector of arithmetic-scale standard deviations}
 
 \item{pdfType}{- probability distribution for error bars}
 

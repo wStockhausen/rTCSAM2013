@@ -599,7 +599,7 @@ plotTCSAM2013I<-function(obj.rep,
     years.ret=obs[,1];
     
     #size comps
-    plotSizeCompsComparisons(obs, prd, nr = 5, nc = 4, nplot = length(years.ret), yearlb=years.ret)
+    plotSizeCompsComparisons(obs, prd, nr = 6, nc = 4, nplot = length(years.ret), yearlb=years.ret)
     mtext("directed fishery, all retained males",side=3,adj=0.0,outer=TRUE);
     
     #bubble plot
@@ -632,7 +632,7 @@ plotTCSAM2013I<-function(obj.rep,
     
     #size comps
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
-    plotSizeCompsComparisons(obs,prd, nr = 4, nc = 3, nplot=nrow(obs), yearlb=obs[,1]);
+    plotSizeCompsComparisons(obs,prd, nr = 6, nc = 4, nplot=nrow(obs), yearlb=obs[,1]);
     mtext("directed fishery, all males",side=3,adj=0.0,outer=TRUE);
     
     #bubble plot
@@ -659,7 +659,7 @@ plotTCSAM2013I<-function(obj.rep,
     
     #size comps
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
-    plotSizeCompsComparisons(obs,prd,nr = 4,nc =3, nplot = nrow(obs), yearlb=obs[,1])
+    plotSizeCompsComparisons(obs,prd,nr = 6,nc = 4, nplot = nrow(obs), yearlb=obs[,1])
     mtext("directed fishery, all females",side=3,adj=0.0,outer=TRUE);
     
     #bubble plot
@@ -699,7 +699,7 @@ plotTCSAM2013I<-function(obj.rep,
     
     #female size comps
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
-    plotSizeCompsComparisons(obs.f,prd.f,nr=6, nc=4,nplot=nrow(obs.f),yearlb=yrs.scf)
+    plotSizeCompsComparisons(obs.f,prd.f,nr=6,nc=4,nplot=nrow(obs.f),yearlb=yrs.scf)
     mtext("snow crab fishery discards, all females",side=3,adj=0.0,outer=TRUE);
     
     #summed proportions
@@ -729,12 +729,12 @@ plotTCSAM2013I<-function(obj.rep,
     
     #female size comps
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
-    plotSizeCompsComparisons(obs.f,prd.f,nr=5,nc=4,nplot=nrow(obs.f),yearlb=yrs.rkf)
+    plotSizeCompsComparisons(obs.f,prd.f,nr=6,nc=4,nplot=nrow(obs.f),yearlb=yrs.rkf)
     mtext("BBRKC fishery discards, all females",side=3,adj=0.0,outer=TRUE);
     
     #male size comps
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
-    plotSizeCompsComparisons(obs.m,prd.m,nr=5,nc=4,nplot=nrow(obs.m),yearlb=yrs.rkf)
+    plotSizeCompsComparisons(obs.m,prd.m,nr=6,nc=4,nplot=nrow(obs.m),yearlb=yrs.rkf)
     mtext("BBRKC fishery discards, all males",side=3,adj=0.0,outer=TRUE);
     
     #summed size frequency plots
@@ -763,12 +763,12 @@ plotTCSAM2013I<-function(obj.rep,
     
     #female size comps
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
-    plotSizeCompsComparisons(obs.f,prd.f,nr=7,nc=6,nplot=nrow(obs.f),yearlb=yrs.gtf)
+    plotSizeCompsComparisons(obs.f,prd.f,nr=8,nc=6,nplot=nrow(obs.f),yearlb=yrs.gtf)
     mtext("groundfish fishery: females",side=3,adj=0.0,outer=TRUE);
     
     #male size comps
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
-    plotSizeCompsComparisons(obs.m,prd.m,nr=7,nc=6,nplot=nrow(obs.m),yearlb=yrs.gtf)
+    plotSizeCompsComparisons(obs.m,prd.m,nr=8,nc=6,nplot=nrow(obs.m),yearlb=yrs.gtf)
     mtext("groundfish fishery: males",side=3,adj=0.0,outer=TRUE);
     
     #summed proportions
