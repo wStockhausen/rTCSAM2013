@@ -6,7 +6,7 @@
 \usage{
 getRunCommands(os = "osx", model = "tcsam2013alta", path2model = "",
   configFile = "", pin = FALSE, hess = FALSE, mcmc = FALSE,
-  jitter = FALSE, seed = NULL)
+  jitter = FALSE, seed = NULL, cleanup = TRUE)
 }
 \arguments{
 \item{os}{- 'win', 'mac' or 'osx'}
@@ -26,8 +26,16 @@ getRunCommands(os = "osx", model = "tcsam2013alta", path2model = "",
 \item{jitter}{- flag (T/F) to use jitter initial values}
 
 \item{seed}{- value for random number seed to generate jitter}
+
+\item{cleanup}{- flag (T/F) to clean up unnecessary files}
 }
 \description{
 Function to generate a script to make a tcsam2013 model run
+}
+\details{
+. If \code{cleanup} is TRUE, then the executable, .bar, .b0*, .p0*, .r0*, variance, 
+EchoOut.dat, CheckFile.dat, and fimn.log files are deleted.\cr
+If the path associated with \code{configFile} is a relative one, it should
+be relative to the \code{path} variable.
 }
 

@@ -12,6 +12,12 @@
 #'@param mcmc - flag (T/F) to do mcmc calculations
 #'@param jitter - flag (T/F) to use jitter initial values
 #'@param seed - value for random number seed to generate jitter
+#'@param cleanup - flag (T/F) to clean up unnecessary files
+#'
+#'@details. If \code{cleanup} is TRUE, then the executable, .bar, .b0*, .p0*, .r0*, variance, 
+#'EchoOut.dat, CheckFile.dat, and fimn.log files are deleted.\cr
+#'If the path associated with \code{configFile} is a relative one, it should
+#'be relative to the \code{path} variable.
 #'
 #'@export
 #'
@@ -23,41 +29,59 @@ getRunCommands<-function(os='osx',
                          hess=FALSE,
                          mcmc=FALSE,
                          jitter=FALSE,
-                         seed=NULL){
+                         seed=NULL,
+                         cleanup=TRUE){
     if (tolower(os)=='win'){
         model1<-paste(model,'exe',sep='.');
-        run.cmds<-'echo on
-                    copy &&path2model &&model1
-                    &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
-                    del &&model1
-                    del &&model.bar
-                    del &&model.b0*
-                    del &&model.p0*
-                    del &&model.r0*
-                    del variance
-                    del EchoOut.dat
-                    del CheckFile.dat
-                    del fmin.log
-                    echo off';
+        if (cleanup){
+            run.cmds<-'echo on
+                        copy &&path2model &&model1
+                        &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+                        del &&model1
+                        del &&model.bar
+                        del &&model.b0*
+                        del &&model.p0*
+                        del &&model.r0*
+                        del variance
+                        del EchoOut.dat
+                        del CheckFile.dat
+                        del fmin.log
+                        echo off';
+        } else {
+            run.cmds<-'echo on
+                        copy &&path2model &&model1
+                        &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+                        echo off';
+        }
         path2model<-gsub("/","\\",file.path(path2model,model1),fixed=TRUE);
     } else if (tolower(os)%in% c('mac','osx')){
         model1<-model;
-        run.cmds<-'#!/bin/sh
-                  echo on
-                  DIR="$( cd "$( dirname "$0" )" && pwd )"
-                  cd ${DIR}
-                  cp &&path2model ./&&model
-                  ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
-                  rm &&model
-                  rm &&model.bar
-                  rm &&model.b0*
-                  rm &&model.p0*
-                  rm &&model.r0*
-                  rm variance
-                  rm EchoOut.dat
-                  rm CheckFile.dat
-                  rm fmin.log
-                  echo off';
+        if (cleanup){
+            run.cmds<-'#!/bin/sh
+                      echo on
+                      DIR="$( cd "$( dirname "$0" )" && pwd )"
+                      cd ${DIR}
+                      cp &&path2model ./&&model
+                      ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+                      rm &&model
+                      rm &&model.bar
+                      rm &&model.b0*
+                      rm &&model.p0*
+                      rm &&model.r0*
+                      rm variance
+                      rm EchoOut.dat
+                      rm CheckFile.dat
+                      rm fmin.log
+                      echo off';
+        } else {
+            run.cmds<-'#!/bin/sh
+                      echo on
+                      DIR="$( cd "$( dirname "$0" )" && pwd )"
+                      cd ${DIR}
+                      cp &&path2model ./&&model
+                      ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+                      echo off';
+        }
         path2model<-file.path(path2model,model1);
     }
     run.cmds<-gsub("&&path2model",  path2model,  run.cmds,fixed=TRUE);

@@ -21,6 +21,7 @@
 #'@param jitter  - T/F to jitter parameters
 #'@param seed    - seed for random number generator (or NULL)
 #'@param plotResults - T/F to plot results using \code{plotTCSAM2013I}
+#'@param cleanup - flag (T/F) to clean up unnecessary files
 #'
 #'@return - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info
 #'
@@ -39,7 +40,8 @@ runTCSAM2013<-function(os='osx',
                        mcmc=FALSE,
                        jitter=FALSE,
                        seed=NULL,
-                       plotResults=hess){
+                       plotResults=hess,
+                       cleanup=TRUE){
     #start timing
     stm<-Sys.time();
 
@@ -62,7 +64,8 @@ runTCSAM2013<-function(os='osx',
                              hess=hess,
                              mcmc=mcmc,
                              jitter=jitter,
-                             seed=seed)
+                             seed=seed,
+                             cleanup=cleanup)
     if (tolower(os)=='win'){
         cat(run.cmds,file="tmp.bat")
         Sys.chmod("tmp.bat",mode='7777')

@@ -6,7 +6,8 @@
 \usage{
 runTCSAM2013(os = "osx", path = ".", model = "tcsam2013alta",
   path2model = "", configFile = "", pin = FALSE, hess = FALSE,
-  mcmc = FALSE, jitter = FALSE, seed = NULL, plotResults = hess)
+  mcmc = FALSE, jitter = FALSE, seed = NULL, plotResults = hess,
+  cleanup = TRUE)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -30,6 +31,8 @@ runTCSAM2013(os = "osx", path = ".", model = "tcsam2013alta",
 \item{seed}{- seed for random number generator (or NULL)}
 
 \item{plotResults}{- T/F to plot results using \code{plotTCSAM2013I}}
+
+\item{cleanup}{- flag (T/F) to clean up unnecessary files}
 }
 \value{
 - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info
