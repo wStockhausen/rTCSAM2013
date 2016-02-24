@@ -5,7 +5,7 @@
 #'
 #'@details
 #'This function creates a shell script ('./tmp.sh') in the
-#'working directory and uses it to run a version of the TCSAM2013 model.
+#'working directory and uses it to run a version of the TCSAM2013 model.\cr
 #'Initial model parameters can be jittered based on the system clock time as a seed
 #'to the random number generator. The seed and final objective function value are
 #'saved for each model run in a csv file (the value of out.csv).

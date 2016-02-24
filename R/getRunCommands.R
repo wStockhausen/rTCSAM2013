@@ -15,7 +15,8 @@
 #'@param cleanup - flag (T/F) to clean up unnecessary files
 #'
 #'@details. If \code{cleanup} is TRUE, then the executable, .bar, .b0*, .p0*, .r0*, variance, 
-#'EchoOut.dat, CheckFile.dat, and fimn.log files are deleted.\cr
+#'EchoOut.dat, CheckFile.dat, and fimn.log files are deleted. If not, then only the executable
+#'is deleted.\cr
 #'If the path associated with \code{configFile} is a relative one, it should
 #'be relative to the \code{path} variable.
 #'
@@ -51,6 +52,7 @@ getRunCommands<-function(os='osx',
             run.cmds<-'echo on
                         copy &&path2model &&model1
                         &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+                        del &&model1
                         echo off';
         }
         path2model<-gsub("/","\\",file.path(path2model,model1),fixed=TRUE);
@@ -80,6 +82,7 @@ getRunCommands<-function(os='osx',
                       cd ${DIR}
                       cp &&path2model ./&&model
                       ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+                      rm &&model
                       echo off';
         }
         path2model<-file.path(path2model,model1);

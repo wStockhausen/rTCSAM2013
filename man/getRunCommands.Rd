@@ -34,7 +34,8 @@ Function to generate a script to make a tcsam2013 model run
 }
 \details{
 . If \code{cleanup} is TRUE, then the executable, .bar, .b0*, .p0*, .r0*, variance, 
-EchoOut.dat, CheckFile.dat, and fimn.log files are deleted.\cr
+EchoOut.dat, CheckFile.dat, and fimn.log files are deleted. If not, then only the executable
+is deleted.\cr
 If the path associated with \code{configFile} is a relative one, it should
 be relative to the \code{path} variable.
 }
