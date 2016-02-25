@@ -32,62 +32,99 @@ getRunCommands<-function(os='osx',
                          jitter=FALSE,
                          seed=NULL,
                          cleanup=TRUE){
+    nopath<-FALSE;
+    if ((path2model=='.')||(path2model=='./')||(path2model=="")) nopath=TRUE;
+    echo.on <-"echo on";
+    echo.off<-"echo off";
     if (tolower(os)=='win'){
         model1<-paste(model,'exe',sep='.');
-        if (cleanup){
-            run.cmds<-'echo on
-                        copy &&path2model &&model1
-                        &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
-                        del &&model1
-                        del &&model.bar
-                        del &&model.b0*
-                        del &&model.p0*
-                        del &&model.r0*
-                        del variance
-                        del EchoOut.dat
-                        del CheckFile.dat
-                        del fmin.log
-                        echo off';
-        } else {
-            run.cmds<-'echo on
-                        copy &&path2model &&model1
-                        &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
-                        del &&model1
-                        echo off';
+        cpy<-""; 
+        if (!nopath) cpy<-"copy &&path2model &&model1";
+        rnm<-"&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin";
+        cln<-"";
+        if (cleanup) {
+            cln<-"del &&model1
+                del &&model.bar
+                del &&model.b0*
+                del &&model.p0*
+                del &&model.r0*
+                del variance
+                del EchoOut.dat
+                del CheckFile.dat
+                del fmin.log";
         }
+        run.cmds<-paste(echo.on,cpy,rnm,cln,sep="\n");
+        # if (cleanup){
+        #     run.cmds<-'echo on
+        #                 copy &&path2model &&model1
+        #                 &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+        #                 del &&model1
+        #                 del &&model.bar
+        #                 del &&model.b0*
+        #                 del &&model.p0*
+        #                 del &&model.r0*
+        #                 del variance
+        #                 del EchoOut.dat
+        #                 del CheckFile.dat
+        #                 del fmin.log
+        #                 echo off';
+        # } else {
+        #     run.cmds<-'echo on
+        #                 copy &&path2model &&model1
+        #                 &&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+        #                 del &&model1
+        #                 echo off';
+        # }
         path2model<-gsub("/","\\",file.path(path2model,model1),fixed=TRUE);
     } else if (tolower(os)%in% c('mac','osx')){
         model1<-model;
-        if (cleanup){
-            run.cmds<-'#!/bin/sh
-                      echo on
-                      DIR="$( cd "$( dirname "$0" )" && pwd )"
-                      cd ${DIR}
-                      cp &&path2model ./&&model
-                      ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
-                      rm &&model
-                      rm &&model.bar
-                      rm &&model.b0*
-                      rm &&model.p0*
-                      rm &&model.r0*
-                      rm variance
-                      rm EchoOut.dat
-                      rm CheckFile.dat
-                      rm fmin.log
-                      echo off';
-        } else {
-            run.cmds<-'#!/bin/sh
-                      echo on
-                      DIR="$( cd "$( dirname "$0" )" && pwd )"
-                      cd ${DIR}
-                      cp &&path2model ./&&model
-                      ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
-                      rm &&model
-                      echo off';
+        cpy<-""; 
+        if (!nopath) cpy<-"copy &&path2model &&model1";
+        rnm<-"&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin";
+        cln<-"";
+        if (cleanup) {
+            cln<-"rm &&model1
+                    rm &&model.bar
+                    rm &&model.b0*
+                    rm &&model.p0*
+                    rm &&model.r0*
+                    rm variance
+                    rm EchoOut.dat
+                    rm CheckFile.dat
+                    rm fmin.log";
         }
+        cdr<-paste('DIR="$( cd "$( dirname "$0" )" && pwd )"','cd ${DIR}',sep='\n');
+        run.cmds<-paste("#!/bin/sh",echo.on,cdr,cpy,rnm,cln,sep="\n");
+        # if (cleanup){
+        #     run.cmds<-'#!/bin/sh
+        #               echo on
+        #               DIR="$( cd "$( dirname "$0" )" && pwd )"
+        #               cd ${DIR}
+        #               cp &&path2model ./&&model
+        #               ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+        #               rm &&model
+        #               rm &&model.bar
+        #               rm &&model.b0*
+        #               rm &&model.p0*
+        #               rm &&model.r0*
+        #               rm variance
+        #               rm EchoOut.dat
+        #               rm CheckFile.dat
+        #               rm fmin.log
+        #               echo off';
+        # } else {
+        #     run.cmds<-'#!/bin/sh
+        #               echo on
+        #               DIR="$( cd "$( dirname "$0" )" && pwd )"
+        #               cd ${DIR}
+        #               cp &&path2model ./&&model
+        #               ./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin
+        #               rm &&model
+        #               echo off';
+        # }
         path2model<-file.path(path2model,model1);
     }
-    run.cmds<-gsub("&&path2model",  path2model,  run.cmds,fixed=TRUE);
+    if (!nopath) run.cmds<-gsub("&&path2model",  path2model,  run.cmds,fixed=TRUE);
     run.cmds<-gsub("&&model1",      model1,      run.cmds,fixed=TRUE);
     run.cmds<-gsub("&&model",       model,       run.cmds,fixed=TRUE);
     run.cmds<-gsub("&&configFile",  configFile,  run.cmds,fixed=TRUE)
