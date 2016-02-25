@@ -79,8 +79,8 @@ getRunCommands<-function(os='osx',
     } else if (tolower(os)%in% c('mac','osx')){
         model1<-model;
         cpy<-""; 
-        if (!nopath) cpy<-"copy &&path2model &&model1";
-        rnm<-"&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin";
+        if (!nopath) cpy<-"cp &&path2model ./&&model";
+        rnm<-"./&&model -rs -nox  -configFile &&configFile &&mcmc &&nohess &&jitter &&seed &&pin";
         cln<-"";
         if (cleanup) {
             cln<-"rm &&model1
@@ -138,5 +138,8 @@ getRunCommands<-function(os='osx',
     run.cmds<-gsub("&&jitter",str,run.cmds,fixed=TRUE)
     str<-''; if (is.numeric(seed)) str<-paste("-iSeed",seed)
     run.cmds<-gsub("&&seed",str,run.cmds,fixed=TRUE)
+    
+    cat("Run commands:\n",run.cmds,"\n\n");
+    
     return(run.cmds);
 }
