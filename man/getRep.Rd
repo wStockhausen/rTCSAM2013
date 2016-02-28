@@ -15,4 +15,7 @@ list object corresponding to the rep file, or NULL if file does not exist
 \description{
 Function to create a TCSAM2013 rep object from a rep file.
 }
+\details{
+Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
+}
 

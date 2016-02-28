@@ -20,13 +20,14 @@
 #' std - obj.std
 #' prs - obj.prs
 #' 
+#' @details Returns NULL if obj.rep is NULL.
+#' 
 #' @import graphics
 #' @import stats
 #' @import PBSmodelling
 #' @import tcltk
 #' @importFrom wtsUtilities formatZeros
 #' @importFrom wtsUtilities parseNum
-#' @importFrom wtsUtilities selectFile
 #' @importFrom wtsPlots plotErrorBars.V
 #'
 #----------------------------------
@@ -42,7 +43,11 @@ plotTCSAM2013I<-function(obj.rep,
                          pltyr=1965,    #first year for plots
                          F35=0.73,      #F35 value
                          B35=33.54){    #B35 value
-
+    if (is.null(obj.rep)){
+        cat("obj.rep file is NULL.\n")
+        cat("Aborting...\n");
+        return(NULL);
+    }
     #------------    
     if (is.null(endyr)){
         if (is.null(obj.rep$endyr)){

@@ -15,4 +15,7 @@ list object corresponding to the std file, or NULL if file does not exist
 \description{
 Function to create a TCSAM2013 std object from a std file.
 }
+\details{
+Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
+}
 

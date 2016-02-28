@@ -54,7 +54,9 @@ runSequence<-function(os='osx',
                           jitter=FALSE,
                           seed=NULL,
                           plotResults=FALSE);
-        objFuns[r]<-par[2,'value'];
+        if (!is.null(par)){
+            objFuns[r]<-par[2,'value'];
+        }
         parList[[fldr]]<-par;
     }
     

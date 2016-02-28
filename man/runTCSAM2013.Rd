@@ -35,7 +35,7 @@ runTCSAM2013(os = "osx", path = ".", model = "tcsam2013alta",
 \item{cleanup}{- flag (T/F) to clean up unnecessary files}
 }
 \value{
-- dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info
+- dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info, or NULL if par file does not exist
 }
 \description{
 This functions runs a TCSAM2013 model once.

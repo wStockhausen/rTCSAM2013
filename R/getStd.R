@@ -7,9 +7,9 @@
 #'
 #'@return list object corresponding to the std file, or NULL if file does not exist
 #'
-#' @importFrom wtsUtilities selectFile
-#' 
-#' @export
+#'@details Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
+#'
+#'@export
 #' 
 getStd<-function(in.std=NULL){
     if (is.null(in.std)){

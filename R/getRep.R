@@ -7,10 +7,11 @@
 #'
 #'@return list object corresponding to the rep file, or NULL if file does not exist
 #'
-#' @import PBSmodelling
-#' @importFrom wtsUtilities selectFile
+#'@details Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
+#'
+#'@import PBSmodelling
 #' 
-#' @export
+#'@export
 #' 
 getRep<-function(in.rep=NULL){
     if (is.null(in.rep)){

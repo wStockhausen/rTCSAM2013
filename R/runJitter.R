@@ -56,7 +56,8 @@ runJitter<-function(os='osx',
 
     #run models
     if (!onlyEvalJitter){
-        objFuns<-vector(mode='numeric',length=numRuns);
+        objFuns<-vector(mode='numeric',length=numRuns)+NA;
+        rc<-0;
         parList<-list();
         for (r in 1:numRuns){
             cat("\n\n---running ADMB program for",r,"out of",numRuns,"---\n\n");
@@ -73,11 +74,14 @@ runJitter<-function(os='osx',
                               jitter=TRUE,
                               seed=NULL,
                               plotResults=FALSE);
-            objFuns[r]<-par$value[3];
+            if (!is.null(par)){
+                rc<-rc+1;
+                objFuns[r]<-par$value[3];
+                tbl<-data.frame(idx=r,objFun=objFuns[r],seed=par$value[par$name=='seed']);
+                if (r==1) write.table(tbl,file=out.csv,sep=",",col.names=TRUE,row.names=FALSE,append=FALSE)
+                if (r>1)  write.table(tbl,file=out.csv,sep=",",col.names=FALSE,row.names=FALSE,append=TRUE)
+            }
             parList[[fldr]]<-par;
-            tbl<-data.frame(idx=r,objFun=objFuns[r],seed=par$value[par$name=='seed']);
-            if (r==1) write.table(tbl,file=out.csv,sep=",",col.names=TRUE,row.names=FALSE,append=FALSE)
-            if (r>1)  write.table(tbl,file=out.csv,sep=",",col.names=FALSE,row.names=FALSE,append=TRUE)
         }
     }
 

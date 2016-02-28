@@ -23,7 +23,7 @@
 #'@param plotResults - T/F to plot results using \code{plotTCSAM2013I}
 #'@param cleanup - flag (T/F) to clean up unnecessary files
 #'
-#'@return - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info
+#'@return - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info, or NULL if par file does not exist
 #'
 #'@details If the path associated with \code{configFile} is a relative one, it should
 #'be relative to the \code{path} variable.
@@ -91,7 +91,7 @@ runTCSAM2013<-function(os='osx',
     dfr<-getPar(par);
     
     #get jitter info
-    if (jitter) {
+    if (jitter&(!is.null(dfr))) {
         tbl<-read.csv('jitterInfo.csv',header=TRUE);
         dfr<-rbind(data.frame(name='seed',value=tbl$seed[1]),dfr);
     }

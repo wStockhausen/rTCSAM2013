@@ -40,4 +40,7 @@ prs - obj.prs
 \description{
 Function to plot model results from TCSAM2013.
 }
+\details{
+Returns NULL if obj.rep is NULL.
+}
 
