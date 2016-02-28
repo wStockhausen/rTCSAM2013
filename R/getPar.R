@@ -5,16 +5,18 @@
 #'
 #'@param in.par = filename of par file
 #'
-#'@return list object corresponding to the par file
+#'@return list object corresponding to the par file (or NULL if file does not exist)
 #'
-#' @importFrom wtsUtilities selectFile
+#'@details Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
 #' 
-#' @export
+#'@export
 #' 
 getPar<-function(in.par=NULL){
     if (is.null(in.par)){
         in.par<-wtsUtilities::selectFile(ext='par',caption="Select par file");
     }
+    if (!file.exists(in.par)) return(NULL);
+    
     r1<-readLines(con=in.par);
     
     #parse first line

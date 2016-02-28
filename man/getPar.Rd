@@ -10,9 +10,12 @@ getPar(in.par = NULL)
 \item{in.par}{= filename of par file}
 }
 \value{
-list object corresponding to the par file
+list object corresponding to the par file (or NULL if file does not exist)
 }
 \description{
 Function to create a TCSAM2013 par object from a par file.
+}
+\details{
+Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
 }
 
