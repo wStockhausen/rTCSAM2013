@@ -29,6 +29,8 @@
 #' @importFrom wtsUtilities formatZeros
 #' @importFrom wtsUtilities parseNum
 #' @importFrom wtsPlots plotErrorBars.V
+#' 
+#' @export
 #'
 #----------------------------------
 # Set model variables for plots

@@ -104,7 +104,6 @@ runTCSAM2013<-function(os='osx',
                        obj.std,
                        obj.prs,
                        mdl=model);
-
     }
 
     #return dataframe (and return to original folder as working directory)
