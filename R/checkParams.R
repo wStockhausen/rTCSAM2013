@@ -36,16 +36,22 @@ checkParams<-function(obj.prs=NULL,
         if (!is.null(in.std)) obj.std = read.table(in.std,as.is=T,header=F,skip=1);
     }
     
+    ##strip whitespace from obj.prs$names
+    obj.prs$name<-gsub(" ","",obj.prs$name,fixed=TRUE);
+    
+    ##loop over parameters
     nr<-nrow(obj.prs);
     old.par<-par(mfcol=c(10,5),mai=c(0,0,0,0),omi=c(0.5,0.5,0.5,0.5));
     on.exit(par(old.par));
+    k<-1;##counter for std table
     res<-NULL;
     for (r in 1:nr){
         pmn<-obj.prs$min[r];
         pmx<-obj.prs$max[r];
         pvl<-obj.prs$value[r];
         pnm<-obj.prs$name[r];
-        if (is.finite(pmn)){
+        cat(r,pnm,"\n")
+        if (is.finite(pmn*pmx)&&(pmn!=pmx)){
             plot(c(pmn,pmx),c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n',ylim=c(0,1));
             clr<-'green';
             if (abs(pvl-pmn)/(pmx-pmn)<dp/100) {
@@ -64,22 +70,39 @@ checkParams<-function(obj.prs=NULL,
                     res<-rbind(res,list(name=pnm,type='high',idx=obj.prs$index[r],min=pmn,max=pmx,value=pvl));
                 }
             }
+            if (obj.prs$phase[r]<1) clr<-grey(0.9);
             adj=0.01;
-            if ((pvl-pmn<0.5)/(pmx-pmn)) adj<-0.99
+            if ((pvl-pmn)/(pmx-pmn)<0.5) adj<-0.99;
             rect(pmn,0,pmx,0.8,col=clr);
             lines(c(pvl,pvl),c(0,1),lwd=3,col='black');
             if (!is.null(obj.std)){
-                stdv<-obj.std[r,4];
-                x<-seq(from=pmn,to=pmx,length.out=31);
-                y<-0.9*exp(-0.5*((pvl-x)/stdv)^2);
-                polygon(c(pmn,x,pmx),c(0,y,0),col=grey(0.5,alpha=0.5));
+                ##cat("--'",obj.std[k,2],"' =? '",pnm,"'\n",sep='');
+                if (obj.std[k,2]==pnm){
+                    stdv<-obj.std[k,4];
+                    x<-seq(from=pmn,to=pmx,length.out=31);
+                    y<-0.9*exp(-0.5*((pvl-x)/stdv)^2);
+                    polygon(c(pmn,x,pmx),c(0,y,0),col=grey(0.5,alpha=0.5));
+                    k<-k+1;
+                }
             }
             mtext(pnm,side=3,line=-1,cex=0.6,adj=adj);
         } else {
-            plot(0.9*pvl,1.1*pvl,c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n');
+            clr<-'white';
+            if (obj.prs$phase[r]<1) clr<-grey(0.9);
+            plot(c(0.9,1.1)*pvl,c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n');
+            rect(0.9*pvl,0,1.1*pvl,0.8,col=clr);
             lines(c(pvl,pvl),c(0,1),lwd=3,col='black');
             mtext(pnm,side=3,line=-1,cex=0.6,adj=0.01);
-            mtext("no limits",side=1,line=-1,cex=0.6,adj=0.01,col='green');
+            if ((pmn==pmx)){
+                mtext("min=max",side=1,line=-1,cex=0.6,adj=0.01,col='green');
+            } else {
+                mtext("no limits",side=1,line=-1,cex=0.6,adj=0.01,col='green');
+            }
+            ##check to advance obj.std counter
+            if (!is.null(obj.std)){
+                ##cat("--'",obj.std[k,2],"' =? '",pnm,"'\n",sep='');
+                if (obj.std[k,2]==pnm) k<-k+1;
+            }
         }
     }
     return(invisible(res));
