@@ -50,7 +50,7 @@ checkParams<-function(obj.prs=NULL,
         pmx<-obj.prs$max[r];
         pvl<-obj.prs$value[r];
         pnm<-obj.prs$name[r];
-        cat(r,pnm,"\n")
+        ##cat(r,pnm,"\n")
         if (is.finite(pmn*pmx)&&(pmn!=pmx)){
             plot(c(pmn,pmx),c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n',ylim=c(0,1));
             clr<-'green';
