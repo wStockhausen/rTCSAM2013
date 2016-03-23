@@ -7,7 +7,12 @@
 #'@param zscores.facet.scales - flag to control zscore scales for bycatch fisheries ('fixed','free_y')
 #'@param showPlot - flag (T/F) to show plots immediately
 #'
-#'@return list of listsnwith ggplot2 objects as elements.
+#'@return list of lists with ggplot2 objects as elements:
+#'\itemize{
+#'  \item zscores - srv, fsh plots
+#'}
+#'
+#'@details None.
 #'
 #'@export
 #'
@@ -17,21 +22,14 @@ plotTCSAM_WTS<-function(res=NULL,
     #----------------------------------
     # Load files, if necessary
     if(!is.list(res)){
-        if (!is.character(res)){
-            inp<-wtsUtilities::selectFile(ext="R",caption="Select TCSAM_WTS...R output file");
-            base.dir=dirname(inp);
-            if (is.null(mdl)) {mdl<-strsplit(basename(inp),".",fixed=TRUE)[[1]][1];}
-        } else {
-            inp<-res;
-        }
-        source(file=inp,local=TRUE,echo=FALSE);##create 'res' list object
+        res<-getWTS(res);
     }
     
     ##plot z-scores
-    zscores<-plotTCSAM_WTS.ZScores(res,
+    pZscores<-plotTCSAM_WTS.ZScores(res,
                                    facet.scales=zscores.facet.scales,
                                    showPlot=showPlot);
     
-    return(list(zscores=zscores));
+    return(list(zscores=pZscores));
 }
 

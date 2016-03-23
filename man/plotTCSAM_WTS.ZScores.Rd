@@ -18,8 +18,7 @@ plotTCSAM_WTS.ZScores(res = NULL, facet.scales = "fixed",
 list with ggplot2 objects as elements:
 \itemize{
  \item srv - plot for survey
- \item tcf - plot for directed (Tanner crab) fishery
- \item byc - plot for bycatch fisheries
+ \item fsh - plot for fisheries
 }
 }
 \description{

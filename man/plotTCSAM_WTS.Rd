@@ -15,9 +15,15 @@ plotTCSAM_WTS(res = NULL, zscores.facet.scales = "fixed",
 \item{showPlot}{- flag (T/F) to show plots immediately}
 }
 \value{
-list of listsnwith ggplot2 objects as elements.
+list of lists with ggplot2 objects as elements:
+\itemize{
+ \item zscores - srv, fsh plots
+}
 }
 \description{
 Function plot TCSAM_WTS...R output from a TCSAM2013 model run.
+}
+\details{
+None.
 }
 
