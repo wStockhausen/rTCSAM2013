@@ -18,9 +18,7 @@
 #'@param bar.width - 
 #'@param addToPlot - 
 #'
-#'@import stats
-#'
-#'@importFrom wtsPlots plotErrorBars.V
+#'@details Uses \code{wtsPlots::plotErrorBars.V}.
 #'
 #'@export
 #'
@@ -56,12 +54,12 @@ plotMeanSizeComps<-function(size.bins,
              ylim=c(0,ymx),
              xlab=xlab,ylab=ylab);
     }
-    plotErrorBars.V(size.bins,
-                    mns.obs,
-                    sigma=std.obs,
-                    CI=CI,
-                    width=bar.width,
-                    pch=pch,col=clr)
+    wtsPlots::plotErrorBars.V(size.bins,
+                              mns.obs,
+                              sigma=std.obs,
+                              CI=CI,
+                              width=bar.width,
+                              pch=pch,col=clr)
     points(size.bins,mns.obs,pch=pch,col=clr)
     lines(size.bins,mns.prd,lty=lty,lwd=lwd,col=clr)
 }

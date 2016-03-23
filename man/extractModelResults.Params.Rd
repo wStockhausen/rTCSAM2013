@@ -18,4 +18,7 @@ extractModelResults.Params(objs, dp = 0.01)
 This function extracts parameters values, together with their limits
 (if any) from several models.
 }
+\details{
+Uses \code{wtsUtilities::formatZeros()}.
+}
 

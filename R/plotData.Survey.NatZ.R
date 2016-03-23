@@ -8,7 +8,9 @@
 #               '(sex, shell condition, maturity state, year, size).
 #'@param label - label for plot
 #'
-#'@importFrom wtsPlots plotCompsAsCircles
+#'@details Uses \code{wtsPlots::plotCompsAsCircles}.
+#'
+#'@export
 #'
 plotData.Survey.NatZ<-function(nAtZ,
                                label="trawl survey"){
@@ -26,11 +28,11 @@ plotData.Survey.NatZ<-function(nAtZ,
                 as.matrix(nAtZ[sex,"OLD_SHELL","MATURE",,]);
         
         zscl<-max(n.imm,n.mat)
-        plotCompsAsCircles(z=t(n.imm),x=yrs,y=zs,overplot=FALSE,bg='blue',
-                           xlab='',ylab='mm CW',
-                           scale=zscl,maxRadius=0.8)
-        plotCompsAsCircles(z=t(n.mat),x=yrs,y=zs,overplot=TRUE,
-                           bg='green',scale=zscl,maxRadius=0.8)
+        wtsPlots::plotCompsAsCircles(z=t(n.imm),x=yrs,y=zs,overplot=FALSE,bg='blue',
+                                     xlab='',ylab='mm CW',
+                                     scale=zscl,maxRadius=0.8)
+        wtsPlots::plotCompsAsCircles(z=t(n.mat),x=yrs,y=zs,overplot=TRUE,
+                                     bg='green',scale=zscl,maxRadius=0.8)
         mtext(paste(label,": ",tolower(sex),'s',sep=''),side=3,adj=0.05)
     }
 }

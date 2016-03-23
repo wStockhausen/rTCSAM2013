@@ -3,9 +3,10 @@
 #' 
 #' @description Function to plot model results from TCSAM2013.
 #' 
-#' @param obj.rep - report file list object or filename for R-style report
-#' @param obj.std - dataframe object with parameter std info or filename for std file
-#' @param obj.prs - dataframe object w/ parameters info or csv file with parameters info
+#' @param obj.rep - report file list object
+#' @param obj.std - dataframe object with parameter std info
+#' @param obj.prs - dataframe object w/ parameters info
+#' @param obj.wts - TCSAM_WTS-type list object
 #' @param base.dir - path to base folder
 #' @param mdl   - model name (optional if R report file is read)
 #' @param styr  - model start year
@@ -15,28 +16,19 @@
 #' @param F35 - F35 value for control rule plot
 #' @param B35 - B35 value for control rule plot
 #' 
-#' @return list with elements: \cr
-#' rep - obj.rep
-#' std - obj.std
-#' prs - obj.prs
+#' @return nothing.
 #' 
-#' @details Returns NULL if obj.rep is NULL.
-#' 
-#' @import graphics
-#' @import stats
-#' @import PBSmodelling
-#' @import tcltk
-#' @importFrom wtsUtilities formatZeros
-#' @importFrom wtsUtilities parseNum
-#' @importFrom wtsPlots plotErrorBars.V
+#' @details Uses \code{wtsPlots::plotErrorBars.V()}, 
+#' \code{wtsUtilities::formatZeros} and \code{wtsUtilities::parseNum}.
 #' 
 #' @export
 #'
 #----------------------------------
 # Set model variables for plots
-plotTCSAM2013I<-function(obj.rep,
-                         obj.std,
-                         obj.prs,
+plotTCSAM2013I<-function(obj.rep=NULL,
+                         obj.std=NULL,
+                         obj.prs=NULL,
+                         obj.wts=NULL,
                          base.dir='./',
                          mdl='tcsam2013alta',#executable model name
                          endyr=NULL,    #assessment year
@@ -123,70 +115,9 @@ plotTCSAM2013I<-function(obj.rep,
     #----------------------------------
 
     #----------------------------------
-    # plot observed total and mature (spawning) biomass from survey
-    #----------------------------------
-    #observed spawning biomass
-    spB.m.obs <-obj.rep$"Observed.survey.male.spawning.biomass"
-    spB.f.obs <-obj.rep$"Observed.survey.female.spawning.biomass"
-    spB.t.obs <-obj.rep$"Observed.survey.biomass"
-    spB.tm.obs<-spB.m.obs+spB.f.obs;#total observed survey MATURE biomass
-    #cv's    
-    idx<-(1:length(years))[years==min(obsyears)]:length(years)  
-    cv.f<-tanner.cv[,2];
-    cv.m<-tanner.cv[,3];
-    cv.t=sqrt((spB.m.obs[idx]*cv.m)^2 + (spB.f.obs[idx]*cv.f)^2)/(spB.tm.obs[idx]);
-
-
-    par(oma=c(0.5,1,1,0.5),mar=c(2,5,2,1)+0.2,mfrow=c(2,1))
-    #total survey biomass
-    plot(c(0,1),c(0,1),type="l",lty=2,
-         ylim=c(0,400),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
-    #CV's assumed same as for total SPAWNING biomass in survey
-    lower= (spB.t.obs)*(exp(-1.96*sqrt(log(1+cv.t^2)))-1);#lower error bar
-    upper= (spB.t.obs)*(exp( 1.96*sqrt(log(1+cv.t^2)))-1);#upper error bar
-    plotErrorBars.V(obsyears,spB.t.obs,upper=upper,lower=lower);
-    points(obsyears,spB.t.obs,pch=21);
-    mtext("Observed total survey biomass", side=3, adj=0.05)
-
-    #total mature survey biomass
-    plot(c(0,1),c(0,1),type="l",lty=2,
-         ylim=c(0,400),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
-    lower= (spB.tm.obs)[idx]*(exp(-1.96*sqrt(log(1+cv.t^2)))-1);#lower error bar
-    upper= (spB.tm.obs)[idx]*(exp( 1.96*sqrt(log(1+cv.t^2)))-1);#upper error bar
-    plotErrorBars.V(obsyears,spB.tm.obs[idx],upper=upper,lower=lower);
-    points(obsyears,spB.tm.obs[idx],pch=21);
-    mtext("Observed total mature survey biomass", side=3, adj=0.05)
-
-    par(oma=c(0.5,1,1,0.5),mar=c(2,5,2,1)+0.2,mfrow=c(2,1))
-    #mature survey biomass by sex
-    plot(c(0,1),c(0,1),type="l",lty=2,
-         ylim=c(0,400),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
-    lower= (spB.f.obs)[idx]*(exp(-1.96*sqrt(log(1+cv.f^2)))-1);#lower error bar
-    upper= (spB.f.obs)[idx]*(exp( 1.96*sqrt(log(1+cv.f^2)))-1);#upper error bar
-    plotErrorBars.V(obsyears,spB.f.obs[idx],upper=upper,lower=lower,col='green');
-    points(obsyears,spB.f.obs[idx],pch=21,col='green');
-    lower= (spB.m.obs)[idx]*(exp(-1.96*sqrt(log(1+cv.m^2)))-1);#lower error bar
-    upper= (spB.m.obs)[idx]*(exp( 1.96*sqrt(log(1+cv.m^2)))-1);#upper error bar
-    plotErrorBars.V(obsyears+0.2,spB.m.obs[idx],upper=upper,lower=lower,col='blue');
-    points(obsyears+0.2,spB.m.obs[idx],pch=23,col='blue');
-    mtext("Observed mature survey biomass", side=3, adj=0.05)
-    legend("topright",
-           c("females", "males"),
-           pch=c(21,23),col=c('green','blue')) 
-    #----------------------------------
-
-    #----------------------------------
-    # plot natural mortality estimates
-    #----------------------------------
-    if (!is.null(obj.std)){
-        par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
-        plotNatMort(obj.std,min.yr=1970);
-    }
-    #----------------------------------
-
-    #----------------------------------
     # plot observed and predicted mature biomass by sex
     #----------------------------------
+    idx<-(1:length(years))[years==min(obsyears)]:length(years)  
     #observed spawning biomass
     spB.f.obs <-obj.rep$"Observed.survey.female.spawning.biomass"
     spB.m.obs <-obj.rep$"Observed.survey.male.spawning.biomass"
@@ -203,7 +134,7 @@ plotTCSAM2013I<-function(obj.rep,
     plot(c(0,1),c(0,1),type="n",
          ylim=c(0,300),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
     lines(years,spB.f.prd,lty=1,lwd=2,col='black')
-    plotErrorBars.V(obsyears,spB.f.obs[idx],upper=upper,lower=lower,col='green');
+    wtsPlots::plotErrorBars.V(obsyears,spB.f.obs[idx],upper=upper,lower=lower,col='green');
     points(obsyears,spB.f.obs[idx],pch=21,col='green',bg='green');
     mtext("Mature female survey biomass", side=3, adj=0.05,cex=0.9)
     legend("topright",
@@ -216,40 +147,25 @@ plotTCSAM2013I<-function(obj.rep,
     plot(c(0,1),c(0,1),type="n",
          ylim=c(0,300),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
     lines(years,spB.m.prd,lty=1,lwd=2,col='black')
-    plotErrorBars.V(obsyears,spB.m.obs[idx],upper=upper,lower=lower,col='blue');
+    wtsPlots::plotErrorBars.V(obsyears,spB.m.obs[idx],upper=upper,lower=lower,col='blue');
     points(obsyears,spB.m.obs[idx],pch=23,col='blue',bg='blue');
     mtext("Mature male survey biomass", side=3, adj=0.05,cex=0.9)
     legend("topright",
            c("observed", "predicted"),
            pch=c(21,NA),col=c('blue','black'),pt.bg=c('blue',NA),
            lty=c(NA,1)) 
-
-    # Standardize survey biomass residuals and plot them
-    idx<-(obsyears[1]-years[1]+1):(length(years))
-    st.devs.f<-(log(spB.f.obs[idx])-log(spB.f.prd[idx]))/sqrt(log(1+cv.f^2));
-    st.devs.m<-(log(spB.m.obs[idx])-log(spB.m.prd[idx]))/sqrt(log(1+cv.m^2));
-    #--plot of standardized devs
-    ymx<-max(range(abs(st.devs.f),abs(st.devs.m),na.rm=TRUE,finite=TRUE));
-    plot(c(0,1),c(0,1),type="n",xlim=range(obsyears),ylim=ymx*c(-1.05,1.05),
-         ylab="Ln-scale Standardized Residuals",xlab='');
-    abline(h=0,lty=2)
-    points(obsyears,st.devs.f,pch=21,col='green',bg='green')
-    points(obsyears,st.devs.m,pch=23,col='blue',bg='blue')
-    mtext("Fits to mature survey biomass", side=3, adj=0.05)
-    legend("topright",
-           c("females", "males"),
-           pch=c(21,23),col=c('green','blue'),pt.bg=c('green','blue')) 
     #----------------------------------
 
     #----------------------------------
     # total spawning biomass
     #----------------------------------
+    spB.tm.obs<-spB.m.obs+spB.f.obs;#total observed survey MATURE biomass
     spB.t.prd<-obj.rep$"Total.Spawning.Biomass";
     plot(years,spB.t.prd,type="l",lty=2,lwd=1,
          ylim=c(0,500),xlim=c(min(obsyears),max(obsyears)),
          ylab="Mature Biomass (1000 t)",xlab="Year");
 
-    plotErrorBars.V(obsyears,spB.tm.obs[idx],upper=upper,lower=lower);
+    wtsPlots::plotErrorBars.V(obsyears,spB.tm.obs[idx],upper=upper,lower=lower);
     points(obsyears,spB.tm.obs[idx],pch=21);
     
     spB.m.prd<-obj.rep$"Predicted.Male.survey.mature.Biomass"
@@ -261,136 +177,166 @@ plotTCSAM2013I<-function(obj.rep,
            c("predicted in population","predicted in survey", "observed in survey"),
            lty=c(2,1,NA),pch=c(NA,NA,21))
     #----------------------------------
-
-    #----------------------------------
-    # spawning biomass by sex
-    #----------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
-    prd.MMB<-obj.rep$"Mating.time.Male.Spawning.Biomass";
-    prd.MFB<-obj.rep$"Mating.time.Female.Spawning.Biomass";
-    plot(years.m1,prd.MMB+prd.MFB,type="l",lty=2,lwd=1,
-         ylab="Mature Biomass (1000 t)",xlab="Year");
-    lines(years.m1,prd.MMB,lty=1,lwd=2,col='blue')
-    lines(years.m1,prd.MFB,lty=1,lwd=2,col='green')
-    mtext("Spawning biomass at mating time", side=3, adj=0.05)
-    legend("topright",
-           c("males (MMB)","females", "total"),
-           lty=c(1,1,2),col=c('blue','green','black'))
-    #----------------------------------
-
-    #--------------------------------------------
-    #Legal males.
-    #--------------------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
-    plot(obsyears, obj.rep$"observed.number.of.males.greater.than.101.mm"/THOUSAND,type="p",
-        xlab="Year",ylab="Number (millions)",ylim=c(0,200))
-    lines(obsyears,obj.rep$"estimated.survey.numbers.of.males.101"[(1:length(years))[years==min(obsyears)]:length(years)]/THOUSAND,
-          lty=1,lwd=1)
-    lines(obsyears,obj.rep$"pop.estimate.numbers.of.males.101"[(1:length(years))[years==min(obsyears)]:length(years)]/THOUSAND,
-          lty=2)
-    legend("topright",
-           c("predicted total numbers","predicted survey numbers", "observed survey numbers"),
-           lty=c(2,1,NA),pch=c(NA,NA,21))
-    mtext("Legal males (>= 138 mm CW)", side=3, adj=0.05)
-    #----------------------------------
-
-    #----------------------------------
-    # Plot survey numbers
-    #----------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
-    plot(years,obj.rep$"predicted.survey.numbers.female"/THOUSAND,type="l",
-         ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years, obj.rep$"Observed.survey.numbers.female"/THOUSAND,pch=21);
-    mtext("Females",side=3,adj=0.1,cex=1)
-    legend("topright",
-           c("predicted","observed"),
-           lty=c(1,NA),pch=c(NA,21))
     
-    plot(years,obj.rep$"predicted.survey.numbers.male"/THOUSAND,type="l",
-      ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years, obj.rep$"Observed.survey.numbers.male"/THOUSAND);
-    mtext("Males",side=3,adj=0.1,cex=1)
+    #------------------------------------
+    # Fits to retained & male discard mortalities
+    #------------------------------------
+    par(oma=c(0.5,1,1,0.5),mar=c(2,5,1,1)+0.2,mfrow=c(3,1))
+    #total, retained, and total male mortality in TCF
+    obs.yd<-obj.rep$"observed.TCF.years.discard.catch"
+    obs.rd<-obj.rep$"observed.TCF.male.tot.biomass.mortality"; #total mortality for TCF
+    prd.rd<-obj.rep$"predicted.TCF.male.tot.biomass.mortality";#total mortality for TCF
+    obs.yr<-wtsUtilities::parseNum(obj.rep$"observed.TCF.years.retained.catch")
+    obs.r<-obj.rep$"observed.retained.catch.biomass";
+    prd.r<-obj.rep$"predicted.retained.catch.biomass";
+    prd.t<-obj.rep$"predicted.total.male.catch.biomass";#total over all fisheries
+    plot(years.m1, prd.t,lty=3,lwd=2,col="green",
+         type="l",xlab="Fishery Year",ylab="Catch (1000 t)",
+         xlim=range(pretty(1965:endyr,h=2,n=(endyr-1965)/5)),
+         ylim=c(0,max(prd.rd)));
+    lines(years.m1,    prd.rd,lty=1,lwd=1)
+    points(obs.yd,obs.rd,pch=22)
+    lines(years.m1,    prd.r, lty=2,lwd=1)
+    points(obs.yr,obs.r, pch=21)
+    mtext("Male catch mortality",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted Total","Predicted Total: TCF","Observed Total: TCF","Predicted Retained","Observed Retained"),
+           lty=c( 3, 1,NA, 2,NA),
+           pch=c(NA,NA,22,NA,21),
+           col=c('green','black','black','black','black'),cex=1)
+    #retained catch only
+    plot(years.m1, prd.r,
+         type="l",xlab="Fishery Year",ylab="Retained Catch (1000 t)",
+         xlim=range(pretty(1965:endyr,h=2,n=(endyr-1965)/5)),
+         ylim=c(0,max(prd.r)))
+    points(obs.yr, obs.r)
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
+    mtext("Retained catch",side=3,adj=0.0,outer=FALSE);
+    #male discard mortality
+    yd <-obj.rep$"observed.TCF.years.discard.catch"
+    obs<-obj.rep$"observed.TCF.male.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.TCF.male.discard.mortality.biomass";
+    plot(years.m1,prd,type="l",
+         xlab="Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(pretty(1965:endyr,h=2,n=(endyr-1965)/5)),
+         ylim=c(0,max(prd.r)))
+    points(yd,obs)
+    mtext("Directed fishery, male discard mortality",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
     #----------------------------------
 
-    #----------------------------------
-    # Plot mature new/old shell survey numbers (female)
-    #----------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(3,1))
-    
-    plot(years,obj.rep$"Predicted.Female.survey.new.mature.numbers"/THOUSAND,type="l",
-         ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years,obj.rep$"Observed.survey.female.new.spawning.numbers"/THOUSAND);
-    mtext("Mature new shell female",side=3,adj=0.1)
-    legend("topright",
-           c("predicted","observed"),
-           lty=c(1,NA),pch=c(NA,21))
-    
-    plot(years,obj.rep$"Predicted.Female.survey.old.mature.numbers"/THOUSAND,type="l",
-      ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years,obj.rep$"Observed.survey.female.old.spawning.numbers"/THOUSAND);
-    mtext("Mature old shell female",side=3,adj=0.1)
-    
-    tot.p.f<-obj.rep$"Predicted.Female.survey.new.mature.numbers"+
-             obj.rep$"Predicted.Female.survey.old.mature.numbers";
-    tot.o.f<-obj.rep$"Observed.survey.female.old.spawning.numbers"+
-             obj.rep$"Observed.survey.female.new.spawning.numbers";
-    plot(years,tot.p.f/THOUSAND,type="l",
-      ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years,tot.o.f/THOUSAND);
-    mtext("All mature female",side=3,adj=0.1)
+    #-------------------------------------------------
+    # Directed fishery discards mortality
+    #-------------------------------------------------
+    par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
+    #male discard mortality (again)
+    yd <-obj.rep$"observed.TCF.years.discard.catch"
+    obs<-obj.rep$"observed.TCF.male.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.TCF.male.discard.mortality.biomass";
+    plot(years.m1,prd,type="l",
+         xlab="Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(yd,obs)
+    mtext("Directed fishery, male discard mortality",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
+
+    #female discard mortality
+    yd <-obj.rep$"observed.TCF.years.discard.catch"
+    obs<-obj.rep$"observed.TCF.female.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.TCF.female.discard.mortality.biomass";
+    plot(years.m1,prd,type="l",
+         xlab="Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(yd,obs)
+    mtext("Directed fishery, female discards",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
     #----------------------------------
 
-    #----------------------------------
-    # Plot mature new/old shell survey numbers (male)
-    #----------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(3,1))
+    #-------------------------------------------------
+    #Snow crab fishery discard mortality
+    #-------------------------------------------------
+    par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
+    #--male discard mortality
+    yd <-obj.rep$"observed.SCF.years.discard.catch"
+    obs<-obj.rep$"observed.SCF.male.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.SCF.male.discard.mortality.biomass";
+    plot(years.m1,prd,type="l",
+         xlab="Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(1992:(endyr-1),obs)
+    mtext("Snow crab fishery, male discards",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
     
-    plot(years,obj.rep$"Predicted.Male.survey.new.mature.numbers"/THOUSAND,type="l",
-      ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years,obj.rep$"Observed.survey.male.new.spawning.numbers"/THOUSAND);
-    mtext("Mature new shell male",side=3,adj=0.1)
-    legend("topright",
-           c("predicted","observed"),
-           lty=c(1,NA),pch=c(NA,21))
-    
-    plot(years,obj.rep$"Predicted.Male.survey.old.mature.numbers"/THOUSAND,type="l",
-      ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years,obj.rep$"Observed.survey.male.old.spawning.numbers"/THOUSAND);
-    mtext("Mature old shell male",side=3,adj=0.1)
-    
-    tot.p.m<-obj.rep$"Predicted.Male.survey.new.mature.numbers"+
-             obj.rep$"Predicted.Male.survey.old.mature.numbers";
-    tot.o.m<-obj.rep$"Observed.survey.male.old.spawning.numbers"+
-             obj.rep$"Observed.survey.male.new.spawning.numbers";
-    plot(years,tot.p.m/THOUSAND,type="l",
-      ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
-    points(years,tot.o.m/THOUSAND);
-    mtext("All mature male",side=3,adj=0.1)
+    #--female discard mortality
+    yd <-obj.rep$"observed.SCF.years.discard.catch"
+    obs<-obj.rep$"observed.SCF.female.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.SCF.female.discard.mortality.biomass";
+    plot(years.m1,prd,type="l",
+         xlab="Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(yd,obs)
+    mtext("Snow crab fishery, female discards",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
     #----------------------------------
 
-    #----------------------------------
-    # fraction mature by size
-    #----------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
+    #-------------------------------------------------
+    #predicted red king crab fishery discard catch biomass
+    #-------------------------------------------------
+    par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
+    #--male discard mortality
+    yd <-obj.rep$"observed.RKF.years.discard.catch"
+    obs<-obj.rep$"observed.RKF.male.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.RKF.male.discard.mortality.biomass";
+    plot(years.m1,prd,type="l",
+         xlab="Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(yd,obs)
+    mtext("Red king crab fishery, male discards",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
     
-    frac.p.f<-tot.p.f/obj.rep$"predicted.survey.numbers.female";
-    frac.o.f<-tot.o.f/obj.rep$"Observed.survey.numbers.female";
-    plot(years,frac.p.f,type="l",
-      ylim=c(0,1.0),xlim=range(obsyears),ylab="fraction mature",xlab="Year");
-    points(years,frac.o.f);
-    mtext("Female",side=3,adj=0.1)
-    legend("topright",
-           c("predicted","observed"),
-           lty=c(1,NA),pch=c(NA,21))
-    
-    frac.p.m<-tot.p.m/obj.rep$"predicted.survey.numbers.male";
-    frac.o.m<-tot.o.m/obj.rep$"Observed.survey.numbers.male";
-    plot(years,frac.p.m,type="l",
-      ylim=c(0,1.0),xlim=range(obsyears),ylab="fraction mature",xlab="Year");
-    points(years,frac.o.m);
-    mtext("Male",side=3,adj=0.1)
+    #--female discard mortality
+    yd <-obj.rep$"observed.RKF.years.discard.catch"
+    obs<-obj.rep$"observed.RKF.female.discard.mortality.biomass"
+    prd<-obj.rep$"predicted.RKF.female.discard.mortality.biomass";
+    plot(years.m1,prd,type="l",
+         xlab="Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(yd,obs)
+    mtext("Red king crab fishery, female discards",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
+    #----------------------------------
+
+    #-------------------------------------------------
+    #groundfish trawl bycatch
+    #-------------------------------------------------
+    yd <-obj.rep$"observed.GTF.years.discard.catch"
+    prd<-obj.rep$"predicted.GTF.discard.mortality.biomass";
+    obs<-obj.rep$"observed.GTF.discard.mortality.biomass"
+    plot(years.m1,prd,type="l",
+         xlab="Fishery Year",ylab="Discard Mortality (1000 t)",
+         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
+    points(yd,obs)
+    mtext("Groundfish discard mortality",side=3,adj=0.0,outer=FALSE);
+    legend("topright",legend=c("Predicted","Observed"),
+           lty=c(1,NA),pch=c(NA,1),cex=1)
     #----------------------------------
     
+    #----------------------------------
+    #Z-scores
+    #----------------------------------
+    if (!is.null(obj.wts)){
+        plts.zscrs<-plotTCSAM_WTS.ZScores(obj.wts,
+                                          facet.scales='free_y',
+                                          showPlot=TRUE);
+    }
+
     #--------------------------------------------
     #Survey size comps: numbers at size
     #--------------------------------------------
@@ -436,106 +382,6 @@ plotTCSAM2013I<-function(obj.rep,
                    datap=obj.rep$"Predicted.length.prop.survey.all.males",
                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.all.males.sampsize");
     mtext("Survey proportions, males",side=3,adj=0.0);
-    
-    #--immature, new shell females-------
-    par(col=1);
-    colnames(obj.rep$"Observed.Length.Prop.survey.immature.new.females")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.immature.new.females", 
-            obj.rep$"Predicted.length.prop.survey.immature.new.females", nr = 7, nc = 6, 
-            nplot = length(obsyears),maxy=.19)
-    mtext("Survey proportions, immature new shell females",side=3,adj=0.0,outer=TRUE);
-    
-    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.females",
-                    datap=obj.rep$"Predicted.length.prop.survey.immature.new.females",
-                    nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.immature.new.females.sampsize"[1:15]);
-    mtext("Survey proportions, immature new shell females",side=3,adj=0.0);
-    
-    #--mature, new shell females---------
-    colnames(obj.rep$"Observed.Length.Prop.survey.mature.new.females")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.new.females", 
-                      obj.rep$"Predicted.length.prop.survey.mature.new.females", nr = 7, nc = 6, 
-                      nplot = length(obsyears),maxy=.1)
-    mtext("Survey proportions, mature new shell females",side=3,adj=0.0,outer=TRUE);
-    
-    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.females",
-                    datap=obj.rep$"Predicted.length.prop.survey.mature.new.females",
-                    nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.females.sampsize"[1:15]);
-    mtext("Survey proportions, mature new shell females",side=3,adj=0.0);
-    
-    #--mature, old shell females----------
-    par(col=1);
-    colnames(obj.rep$"Observed.Length.Prop.survey.mature.old.females")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.old.females", 
-                      obj.rep$"Predicted.length.prop.survey.mature.old.females", nr = 7, nc = 6, 
-                      nplot = length(obsyears),maxy=.19)
-    mtext("Survey proportions, mature old shell females",side=3,adj=0.0,outer=TRUE);
-    
-    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.females",
-                    datap=obj.rep$"Predicted.length.prop.survey.mature.old.females",
-                    nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.old.females.sampsize"[1:15]);
-    mtext("Survey proportions, mature old shell females",side=3,adj=0.0);
-    
-    #--immature, new shell males-----------
-    par(col=1);
-    colnames(obj.rep$"Observed.Length.Prop.survey.immature.new.males")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.immature.new.males", 
-            obj.rep$"Predicted.length.prop.survey.immature.new.males", nr = 7, nc = 6, 
-            nplot = length(obsyears),maxy=.08)
-    mtext("Survey proportions, immature new shell males",side=3,adj=0.0,outer=TRUE);
-    
-    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.males",
-                    datap=obj.rep$"Predicted.length.prop.survey.immature.new.males",
-                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.immature.new.males.sampsize");
-    mtext("Survey proportions, immature new shell males",side=3,adj=0.0);
-    
-    #--mature, new shell males-----------------
-    par(col=1);
-    colnames(obj.rep$"Observed.Length.Prop.survey.mature.new.males")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.new.males", 
-                      obj.rep$"Predicted.length.prop.survey.mature.new.males", 
-                      nr = 7, nc = 6, 
-                      nplot = length(obsyears),maxy=.025)
-    mtext("Survey proportions, mature new shell males",side=3,adj=0.0,outer=TRUE);
-    
-    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.males",
-                    datap=obj.rep$"Predicted.length.prop.survey.mature.new.males",
-                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.males.sampsize");
-    mtext("Survey proportions, mature new shell males",side=3,adj=0.0);
-    
-    #--mature, old shell males----------------
-    colnames(obj.rep$"Observed.Length.Prop.survey.mature.old.males")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.old.males", 
-                      obj.rep$"Predicted.length.prop.survey.mature.old.males", 
-                      nr = 7, nc = 6, 
-                      nplot = length(obsyears),maxy=.025)
-    mtext("Survey proportions, mature old shell males",side=3,adj=0.0,outer=TRUE);
-    
-    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.males",
-                    datap=obj.rep$"Predicted.length.prop.survey.mature.old.males",
-                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.old.males.sampsize");
-    mtext("Survey proportions, mature old shell males",side=3,adj=0.0);
-    
-    #--mature males---------------
-    tmpobs=obj.rep$"Observed.Length.Prop.survey.mature.new.males"+obj.rep$"Observed.Length.Prop.survey.mature.old.males"
-    colnames(tmpobs)=c("year",as.character(length.bins))
-    tmpobs[,1]=obj.rep$"Observed.Length.Prop.survey.mature.new.males"[,1]
-    plotSizeCompsComparisons(tmpobs, 
-                      obj.rep$"Predicted.length.prop.survey.mature.new.males"+obj.rep$"Predicted.length.prop.survey.mature.old.males", 
-                      nr = 7, nc = 6, 
-                      nplot = length(obsyears),maxy=.05)
-    mtext("Survey proportions, mature males",side=3,adj=0.0,outer=TRUE);
-    
-    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
-    plotBubbles(datao=tmpobs,
-                    datap=(obj.rep$"Predicted.length.prop.survey.mature.old.males"+obj.rep$"Predicted.length.prop.survey.mature.new.males"),
-                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.males.sampsize");
-    mtext("Survey proportions, mature males",side=3,adj=0.0);
      
     #--sum of survey length proportions: all males, all females
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
@@ -780,8 +626,13 @@ plotTCSAM2013I<-function(obj.rep,
     
     #summed proportions
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
+    cols<-2:33;
+    ymx<-max(colMeans(obs.f,na.rm=TRUE)[cols],
+             colMeans(prd.f,na.rm=TRUE)[cols],
+             colMeans(obs.m,na.rm=TRUE)[cols],
+             colMeans(prd.m,na.rm=TRUE)[cols]);
     plotMeanSizeComps(length.bins,obs.f,prd.f,cols=2:33,CI=0.95,addToPlot=FALSE,pch=21,lty=1,clr='black',
-                      xlab="Carapace Width(mm)",ylab="Mean of Size Proportions")
+                      xlab="Carapace Width(mm)",ylab="Mean of Size Proportions",ymx=1.1*ymx);
     plotMeanSizeComps(length.bins+1,obs.m,prd.m,cols=2:33,CI=0.95,addToPlot=TRUE,pch=22,lty=2,clr='blue')
     mtext("Mean proportions in the groundfish fisheries, all individuals",side=3,adj=0.0);
     legend("topright",
@@ -789,8 +640,17 @@ plotTCSAM2013I<-function(obj.rep,
            lty=c(NA,1,NA,2),pch=c(21,NA,22,NA),col=c('black','black','blue','blue'))
     #----------------------------------
 
+    #----------------------------------
+    # natural mortality estimates
+    #----------------------------------
+    if (!is.null(obj.std)){
+        par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
+        plotNatMort(obj.std,min.yr=1970);
+    }
+    #----------------------------------
+
     #------------------------------------------
-    # Predicted growth
+    # growth estimates
     #------------------------------------------
     par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
     plot(length.bins[1:24],
@@ -980,151 +840,6 @@ plotTCSAM2013I<-function(obj.rep,
     legend("bottomright",
            c("females, era 1","females, era 2","females, era 3","males, era 1","males, era 2","males, era 3"),
            lty=c(2,2,2,1,1,1),col=rep(c("black","green","blue"),times=2),lwd=2,cex=0.7)
-    #----------------------------------
-    
-    #------------------------------------
-    # Fits to retained & male discard mortalities
-    #------------------------------------
-    obs.yd<-obj.rep$"observed.TCF.years.discard.catch"
-    obs.rd<-obj.rep$"observed.TCF.male.tot.biomass.mortality"; #total mortality for TCF
-    prd.rd<-obj.rep$"predicted.TCF.male.tot.biomass.mortality";#total mortality for TCF
-    obs.yr<-parseNum(obj.rep$"observed.TCF.years.retained.catch")
-    obs.r<-obj.rep$"observed.retained.catch.biomass";
-    prd.r<-obj.rep$"predicted.retained.catch.biomass";
-    prd.t<-obj.rep$"predicted.total.male.catch.biomass";#total over all fisheries
-    plot(years.m1, prd.t,lty=3,lwd=2,col="green",
-         type="l",xlab="Fishery Year",ylab="Catch (1000 t)",xlim=range(pretty(1965:endyr,h=2,n=(endyr-1965)/5)),
-         ylim=c(0,max(prd.rd)));
-    lines(years.m1,    prd.rd,lty=1,lwd=1)
-    points(obs.yd,obs.rd,pch=22)
-    lines(years.m1,    prd.r, lty=2,lwd=1)
-    points(obs.yr,obs.r, pch=21)
-    mtext("Male catch mortality",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted Total","Predicted Total: TCF","Observed Total: TCF","Predicted Retained","Observed Retained"),
-           lty=c( 3, 1,NA, 2,NA),
-           pch=c(NA,NA,22,NA,21),
-           col=c('green','black','black','black','black'),cex=1)
-
-    plot(years.m1, prd.r,
-         type="l",xlab="Fishery Year",ylab="Retained Catch (1000 t)",xlim=range(pretty(1965:endyr,h=2,n=(endyr-1965)/5)),
-         ylim=c(0,max(prd.r)))
-    points(obs.yr, obs.r)
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-    mtext("Retained catch",side=3,adj=0.0,outer=FALSE);
-    #----------------------------------
-
-    #-------------------------------------------------
-    # Fraction of male discard mortality in directed fishery
-    #-------------------------------------------------
-    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    frc<-obj.rep$"predicted.TCF.male.discard.mortality.biomass"/obj.rep$"predicted.retained.catch.biomass";
-    plot(years.m1,frc,type='l',
-         xlab="Fishery Year",ylab="ratio",
-         xlim=range(years),ylim=c(0,2.0))
-    mtext("Directed fishery male discard mortality biomass relative to retained catch biomass",side=3,adj=0.0,outer=FALSE);
-    #----------------------------------
-
-    #-------------------------------------------------
-    # Directed fishery discards mortality
-    #-------------------------------------------------
-    par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    #male discard mortality
-    yd <-obj.rep$"observed.TCF.years.discard.catch"
-    obs<-obj.rep$"observed.TCF.male.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.TCF.male.discard.mortality.biomass";
-    plot(years.m1,prd,type="l",
-         xlab="Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yd,obs)
-    mtext("Directed fishery, male discard mortality",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-
-    #female discard mortality
-    yd <-obj.rep$"observed.TCF.years.discard.catch"
-    obs<-obj.rep$"observed.TCF.female.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.TCF.female.discard.mortality.biomass";
-    plot(years.m1,prd,type="l",
-         xlab="Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yd,obs)
-    mtext("Directed fishery, female discards",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-    #----------------------------------
-
-    #-------------------------------------------------
-    #Snow crab fishery discard mortality
-    #-------------------------------------------------
-    par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    #--male discard mortality
-    yd <-obj.rep$"observed.SCF.years.discard.catch"
-    obs<-obj.rep$"observed.SCF.male.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.SCF.male.discard.mortality.biomass";
-    plot(years.m1,prd,type="l",
-         xlab="Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(1992:(endyr-1),obs)
-    mtext("Snow crab fishery, male discards",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-    
-    #--female discard mortality
-    yd <-obj.rep$"observed.SCF.years.discard.catch"
-    obs<-obj.rep$"observed.SCF.female.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.SCF.female.discard.mortality.biomass";
-    plot(years.m1,prd,type="l",
-         xlab="Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yd,obs)
-    mtext("Snow crab fishery, female discards",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-    #----------------------------------
-
-    #-------------------------------------------------
-    #predicted red king crab fishery discard catch biomass
-    #-------------------------------------------------
-    par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    #--male discard mortality
-    yd <-obj.rep$"observed.RKF.years.discard.catch"
-    obs<-obj.rep$"observed.RKF.male.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.RKF.male.discard.mortality.biomass";
-    plot(years.m1,prd,type="l",
-         xlab="Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yd,obs)
-    mtext("Red king crab fishery, male discards",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-    
-    #--female discard mortality
-    yd <-obj.rep$"observed.RKF.years.discard.catch"
-    obs<-obj.rep$"observed.RKF.female.discard.mortality.biomass"
-    prd<-obj.rep$"predicted.RKF.female.discard.mortality.biomass";
-    plot(years.m1,prd,type="l",
-         xlab="Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yd,obs)
-    mtext("Red king crab fishery, female discards",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
-    #----------------------------------
-
-    #-------------------------------------------------
-    #trawl bycatch
-    #-------------------------------------------------
-    yd <-obj.rep$"observed.GTF.years.discard.catch"
-    prd<-obj.rep$"predicted.GTF.discard.mortality.biomass";
-    obs<-obj.rep$"observed.GTF.discard.mortality.biomass"
-    plot(years.m1,prd,type="l",
-         xlab="Fishery Year",ylab="Discard Mortality (1000 t)",
-         xlim=range(years),ylim=c(0,max(prd,obs,na.rm=TRUE)))
-    points(yd,obs)
-    mtext("Groundfish discard mortality",side=3,adj=0.0,outer=FALSE);
-    legend("topright",legend=c("Predicted","Observed"),
-           lty=c(1,NA),pch=c(NA,1),cex=1)
     #----------------------------------
 
     #-------------------------------------------------
@@ -1360,7 +1075,7 @@ plotTCSAM2013I<-function(obj.rep,
              xlab="Year",ylab="Biomass (1000's t)",
              ylim=c(0,1.2*max(mmb.mn+mmb.sd,na.rm=TRUE)))
         points(years[2:(length(years)-1)],mmb.mn,pch=1)
-        plotErrorBars.V(years[2:(length(years)-1)],mmb.mn,
+        wtsPlots::plotErrorBars.V(years[2:(length(years)-1)],mmb.mn,
                         sigma=mmb.sd,CI=0.8)
         mtext("MMB at Mating",side=3,adj=0.0);
     }
@@ -1379,13 +1094,56 @@ plotTCSAM2013I<-function(obj.rep,
              xlab="Fertilization Year",ylab="numbers (millions)",
              ylim=c(0,1.2*max(R.mn+R.sd,na.rm=TRUE)))
         points(yrs.R,R.mn,pch=1)
-        plotErrorBars.V(yrs.R,R.mn,sigma=R.sd,CI=0.8,lognormal=TRUE)
+        wtsPlots::plotErrorBars.V(yrs.R,R.mn,sigma=R.sd,CI=0.8,lognormal=TRUE)
         mtext("Total recruitment",side=3,adj=0.0);
         rec.mn.1982<-mean(R.mn[(1982-recLag-1950):length(R.mn)]);
         lines((1982:endyr)-recLag,rec.mn.1982+0*((1982:endyr)-recLag),lty=2,lwd=2)
     }
     #----------------------------------
               
+    #----------------------------------
+    # spawning biomass by sex
+    #----------------------------------
+    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
+    prd.MMB<-obj.rep$"Mating.time.Male.Spawning.Biomass";
+    prd.MFB<-obj.rep$"Mating.time.Female.Spawning.Biomass";
+    plot(years.m1,prd.MMB+prd.MFB,type="l",lty=2,lwd=1,
+         ylab="Mature Biomass (1000 t)",xlab="Year");
+    lines(years.m1,prd.MMB,lty=1,lwd=2,col='blue')
+    lines(years.m1,prd.MFB,lty=1,lwd=2,col='green')
+    mtext("Spawning biomass at mating time", side=3, adj=0.05)
+    legend("topright",
+           c("males (MMB)","females", "total"),
+           lty=c(1,1,2),col=c('blue','green','black'))
+    #----------------------------------
+
+    #--------------------------------------------
+    #Legal males.
+    #--------------------------------------------
+    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
+    plot(obsyears, obj.rep$"observed.number.of.males.greater.than.101.mm"/THOUSAND,type="p",
+        xlab="Year",ylab="Number (millions)",ylim=c(0,200))
+    lines(obsyears,obj.rep$"estimated.survey.numbers.of.males.101"[(1:length(years))[years==min(obsyears)]:length(years)]/THOUSAND,
+          lty=1,lwd=1)
+    lines(obsyears,obj.rep$"pop.estimate.numbers.of.males.101"[(1:length(years))[years==min(obsyears)]:length(years)]/THOUSAND,
+          lty=2)
+    legend("topright",
+           c("predicted total numbers","predicted survey numbers", "observed survey numbers"),
+           lty=c(2,1,NA),pch=c(NA,NA,21))
+    mtext("Legal males (>= 138 mm CW)", side=3, adj=0.05)
+    #----------------------------------
+
+    #-------------------------------------------------
+    # Fraction of male discard mortality in directed fishery
+    #-------------------------------------------------
+    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
+    frc<-obj.rep$"predicted.TCF.male.discard.mortality.biomass"/obj.rep$"predicted.retained.catch.biomass";
+    plot(years.m1,frc,type='l',
+         xlab="Fishery Year",ylab="ratio",
+         xlim=range(years),ylim=c(0,2.0))
+    mtext("Directed fishery male discard mortality biomass relative to retained catch biomass",side=3,adj=0.0,outer=FALSE);
+    #----------------------------------
+
     #------------------------------------------------------------
     # Harvest control rule and fishing mortality
     #------------------------------------------------------------
@@ -1441,7 +1199,262 @@ plotTCSAM2013I<-function(obj.rep,
     plot(x,y,xlim=c(0,1.1*max(x)),ylim=c(0,1.1*max(y)),
          xlab="Male Spawning Biomass(1000 t) at Feb. 15",
          ylab="Recruitment (millions)",type="n")
-    text(x,y,formatZeros(yrs[21:(tmp-lag)]%%100,width=2),adj=0,cex=1.0)
+    text(x,y,wtsUtilities::formatZeros(yrs[21:(tmp-lag)]%%100,width=2),adj=0,cex=1.0)
+    
+    #----------------------------------
+    # plot observed total and mature (spawning) biomass from survey
+    #----------------------------------
+    #observed spawning biomass
+    spB.m.obs <-obj.rep$"Observed.survey.male.spawning.biomass"
+    spB.f.obs <-obj.rep$"Observed.survey.female.spawning.biomass"
+    spB.t.obs <-obj.rep$"Observed.survey.biomass"
+    spB.tm.obs<-spB.m.obs+spB.f.obs;#total observed survey MATURE biomass
+    #cv's    
+    idx<-(1:length(years))[years==min(obsyears)]:length(years)  
+    cv.f<-tanner.cv[,2];
+    cv.m<-tanner.cv[,3];
+    cv.t=sqrt((spB.m.obs[idx]*cv.m)^2 + (spB.f.obs[idx]*cv.f)^2)/(spB.tm.obs[idx]);
+
+
+    par(oma=c(0.5,1,1,0.5),mar=c(2,5,2,1)+0.2,mfrow=c(2,1))
+    #total survey biomass
+    plot(c(0,1),c(0,1),type="l",lty=2,
+         ylim=c(0,400),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
+    #CV's assumed same as for total SPAWNING biomass in survey
+    lower= (spB.t.obs)*(exp(-1.96*sqrt(log(1+cv.t^2)))-1);#lower error bar
+    upper= (spB.t.obs)*(exp( 1.96*sqrt(log(1+cv.t^2)))-1);#upper error bar
+    wtsPlots::plotErrorBars.V(obsyears,spB.t.obs,upper=upper,lower=lower);
+    points(obsyears,spB.t.obs,pch=21);
+    mtext("Observed total survey biomass", side=3, adj=0.05)
+
+    #total mature survey biomass
+    plot(c(0,1),c(0,1),type="l",lty=2,
+         ylim=c(0,400),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
+    lower= (spB.tm.obs)[idx]*(exp(-1.96*sqrt(log(1+cv.t^2)))-1);#lower error bar
+    upper= (spB.tm.obs)[idx]*(exp( 1.96*sqrt(log(1+cv.t^2)))-1);#upper error bar
+    wtsPlots::plotErrorBars.V(obsyears,spB.tm.obs[idx],upper=upper,lower=lower);
+    points(obsyears,spB.tm.obs[idx],pch=21);
+    mtext("Observed total mature survey biomass", side=3, adj=0.05)
+
+    par(oma=c(0.5,1,1,0.5),mar=c(2,5,2,1)+0.2,mfrow=c(2,1))
+    #mature survey biomass by sex
+    plot(c(0,1),c(0,1),type="l",lty=2,
+         ylim=c(0,400),xlim=c(min(obsyears),max(obsyears)),ylab="Biomass (1000's t)",xlab='');
+    lower= (spB.f.obs)[idx]*(exp(-1.96*sqrt(log(1+cv.f^2)))-1);#lower error bar
+    upper= (spB.f.obs)[idx]*(exp( 1.96*sqrt(log(1+cv.f^2)))-1);#upper error bar
+    wtsPlots::plotErrorBars.V(obsyears,spB.f.obs[idx],upper=upper,lower=lower,col='green');
+    points(obsyears,spB.f.obs[idx],pch=21,col='green');
+    lower= (spB.m.obs)[idx]*(exp(-1.96*sqrt(log(1+cv.m^2)))-1);#lower error bar
+    upper= (spB.m.obs)[idx]*(exp( 1.96*sqrt(log(1+cv.m^2)))-1);#upper error bar
+    wtsPlots::plotErrorBars.V(obsyears+0.2,spB.m.obs[idx],upper=upper,lower=lower,col='blue');
+    points(obsyears+0.2,spB.m.obs[idx],pch=23,col='blue');
+    mtext("Observed mature survey biomass", side=3, adj=0.05)
+    legend("topright",
+           c("females", "males"),
+           pch=c(21,23),col=c('green','blue')) 
+    #----------------------------------
+
+    #----------------------------------
+    # Plot survey numbers
+    #----------------------------------
+    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
+    plot(years,obj.rep$"predicted.survey.numbers.female"/THOUSAND,type="l",
+         ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years, obj.rep$"Observed.survey.numbers.female"/THOUSAND,pch=21);
+    mtext("Females",side=3,adj=0.1,cex=1)
+    legend("topright",
+           c("predicted","observed"),
+           lty=c(1,NA),pch=c(NA,21))
+    
+    plot(years,obj.rep$"predicted.survey.numbers.male"/THOUSAND,type="l",
+      ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years, obj.rep$"Observed.survey.numbers.male"/THOUSAND);
+    mtext("Males",side=3,adj=0.1,cex=1)
+    #----------------------------------
+
+    #----------------------------------
+    # Plot mature new/old shell survey numbers (female)
+    #----------------------------------
+    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(3,1))
+    
+    plot(years,obj.rep$"Predicted.Female.survey.new.mature.numbers"/THOUSAND,type="l",
+         ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years,obj.rep$"Observed.survey.female.new.spawning.numbers"/THOUSAND);
+    mtext("Mature new shell female",side=3,adj=0.1)
+    legend("topright",
+           c("predicted","observed"),
+           lty=c(1,NA),pch=c(NA,21))
+    
+    plot(years,obj.rep$"Predicted.Female.survey.old.mature.numbers"/THOUSAND,type="l",
+      ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years,obj.rep$"Observed.survey.female.old.spawning.numbers"/THOUSAND);
+    mtext("Mature old shell female",side=3,adj=0.1)
+    
+    tot.p.f<-obj.rep$"Predicted.Female.survey.new.mature.numbers"+
+             obj.rep$"Predicted.Female.survey.old.mature.numbers";
+    tot.o.f<-obj.rep$"Observed.survey.female.old.spawning.numbers"+
+             obj.rep$"Observed.survey.female.new.spawning.numbers";
+    plot(years,tot.p.f/THOUSAND,type="l",
+      ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years,tot.o.f/THOUSAND);
+    mtext("All mature female",side=3,adj=0.1)
+    #----------------------------------
+
+    #----------------------------------
+    # Plot mature new/old shell survey numbers (male)
+    #----------------------------------
+    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(3,1))
+    
+    plot(years,obj.rep$"Predicted.Male.survey.new.mature.numbers"/THOUSAND,type="l",
+      ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years,obj.rep$"Observed.survey.male.new.spawning.numbers"/THOUSAND);
+    mtext("Mature new shell male",side=3,adj=0.1)
+    legend("topright",
+           c("predicted","observed"),
+           lty=c(1,NA),pch=c(NA,21))
+    
+    plot(years,obj.rep$"Predicted.Male.survey.old.mature.numbers"/THOUSAND,type="l",
+      ylim=c(0,500),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years,obj.rep$"Observed.survey.male.old.spawning.numbers"/THOUSAND);
+    mtext("Mature old shell male",side=3,adj=0.1)
+    
+    tot.p.m<-obj.rep$"Predicted.Male.survey.new.mature.numbers"+
+             obj.rep$"Predicted.Male.survey.old.mature.numbers";
+    tot.o.m<-obj.rep$"Observed.survey.male.old.spawning.numbers"+
+             obj.rep$"Observed.survey.male.new.spawning.numbers";
+    plot(years,tot.p.m/THOUSAND,type="l",
+      ylim=c(0,1000),xlim=range(obsyears),ylab="Survey Numbers (millions)",xlab="Year");
+    points(years,tot.o.m/THOUSAND);
+    mtext("All mature male",side=3,adj=0.1)
+    #----------------------------------
+
+    #----------------------------------
+    # fraction mature by size
+    #----------------------------------
+    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
+    
+    frac.p.f<-tot.p.f/obj.rep$"predicted.survey.numbers.female";
+    frac.o.f<-tot.o.f/obj.rep$"Observed.survey.numbers.female";
+    plot(years,frac.p.f,type="l",
+      ylim=c(0,1.0),xlim=range(obsyears),ylab="fraction mature",xlab="Year");
+    points(years,frac.o.f);
+    mtext("Female",side=3,adj=0.1)
+    legend("topright",
+           c("predicted","observed"),
+           lty=c(1,NA),pch=c(NA,21))
+    
+    frac.p.m<-tot.p.m/obj.rep$"predicted.survey.numbers.male";
+    frac.o.m<-tot.o.m/obj.rep$"Observed.survey.numbers.male";
+    plot(years,frac.p.m,type="l",
+      ylim=c(0,1.0),xlim=range(obsyears),ylab="fraction mature",xlab="Year");
+    points(years,frac.o.m);
+    mtext("Male",side=3,adj=0.1)
+    #----------------------------------
+    
+    #----------------------------------
+    # plot fits to components of survey size comps
+    #----------------------------------
+    #--immature, new shell females-------
+    par(col=1);
+    colnames(obj.rep$"Observed.Length.Prop.survey.immature.new.females")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.immature.new.females", 
+            obj.rep$"Predicted.length.prop.survey.immature.new.females", nr = 7, nc = 6, 
+            nplot = length(obsyears),maxy=.19)
+    mtext("Survey proportions, immature new shell females",side=3,adj=0.0,outer=TRUE);
+    
+    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.females",
+                    datap=obj.rep$"Predicted.length.prop.survey.immature.new.females",
+                    nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.immature.new.females.sampsize"[1:15]);
+    mtext("Survey proportions, immature new shell females",side=3,adj=0.0);
+    
+    #--mature, new shell females---------
+    colnames(obj.rep$"Observed.Length.Prop.survey.mature.new.females")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.new.females", 
+                      obj.rep$"Predicted.length.prop.survey.mature.new.females", nr = 7, nc = 6, 
+                      nplot = length(obsyears),maxy=.1)
+    mtext("Survey proportions, mature new shell females",side=3,adj=0.0,outer=TRUE);
+    
+    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.females",
+                    datap=obj.rep$"Predicted.length.prop.survey.mature.new.females",
+                    nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.females.sampsize"[1:15]);
+    mtext("Survey proportions, mature new shell females",side=3,adj=0.0);
+    
+    #--mature, old shell females----------
+    par(col=1);
+    colnames(obj.rep$"Observed.Length.Prop.survey.mature.old.females")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.old.females", 
+                      obj.rep$"Predicted.length.prop.survey.mature.old.females", nr = 7, nc = 6, 
+                      nplot = length(obsyears),maxy=.19)
+    mtext("Survey proportions, mature old shell females",side=3,adj=0.0,outer=TRUE);
+    
+    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.females",
+                    datap=obj.rep$"Predicted.length.prop.survey.mature.old.females",
+                    nlen=15,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.old.females.sampsize"[1:15]);
+    mtext("Survey proportions, mature old shell females",side=3,adj=0.0);
+    
+    #--immature, new shell males-----------
+    par(col=1);
+    colnames(obj.rep$"Observed.Length.Prop.survey.immature.new.males")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.immature.new.males", 
+            obj.rep$"Predicted.length.prop.survey.immature.new.males", nr = 7, nc = 6, 
+            nplot = length(obsyears),maxy=.08)
+    mtext("Survey proportions, immature new shell males",side=3,adj=0.0,outer=TRUE);
+    
+    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.immature.new.males",
+                    datap=obj.rep$"Predicted.length.prop.survey.immature.new.males",
+                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.immature.new.males.sampsize");
+    mtext("Survey proportions, immature new shell males",side=3,adj=0.0);
+    
+    #--mature, new shell males-----------------
+    par(col=1);
+    colnames(obj.rep$"Observed.Length.Prop.survey.mature.new.males")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.new.males", 
+                      obj.rep$"Predicted.length.prop.survey.mature.new.males", 
+                      nr = 7, nc = 6, 
+                      nplot = length(obsyears),maxy=.025)
+    mtext("Survey proportions, mature new shell males",side=3,adj=0.0,outer=TRUE);
+    
+    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.new.males",
+                    datap=obj.rep$"Predicted.length.prop.survey.mature.new.males",
+                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.males.sampsize");
+    mtext("Survey proportions, mature new shell males",side=3,adj=0.0);
+    
+    #--mature, old shell males----------------
+    colnames(obj.rep$"Observed.Length.Prop.survey.mature.old.males")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Length.Prop.survey.mature.old.males", 
+                      obj.rep$"Predicted.length.prop.survey.mature.old.males", 
+                      nr = 7, nc = 6, 
+                      nplot = length(obsyears),maxy=.025)
+    mtext("Survey proportions, mature old shell males",side=3,adj=0.0,outer=TRUE);
+    
+    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
+    plotBubbles(datao=obj.rep$"Observed.Length.Prop.survey.mature.old.males",
+                    datap=obj.rep$"Predicted.length.prop.survey.mature.old.males",
+                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.old.males.sampsize");
+    mtext("Survey proportions, mature old shell males",side=3,adj=0.0);
+    
+    #--mature males---------------
+    tmpobs=obj.rep$"Observed.Length.Prop.survey.mature.new.males"+obj.rep$"Observed.Length.Prop.survey.mature.old.males"
+    colnames(tmpobs)=c("year",as.character(length.bins))
+    tmpobs[,1]=obj.rep$"Observed.Length.Prop.survey.mature.new.males"[,1]
+    plotSizeCompsComparisons(tmpobs, 
+                      obj.rep$"Predicted.length.prop.survey.mature.new.males"+obj.rep$"Predicted.length.prop.survey.mature.old.males", 
+                      nr = 7, nc = 6, 
+                      nplot = length(obsyears),maxy=.05)
+    mtext("Survey proportions, mature males",side=3,adj=0.0,outer=TRUE);
+    
+    par(oma=c(2,2,2,2),mar=c(7,4,2,1)+0.2,mfrow=c(1,1))
+    plotBubbles(datao=tmpobs,
+                    datap=(obj.rep$"Predicted.length.prop.survey.mature.old.males"+obj.rep$"Predicted.length.prop.survey.mature.new.males"),
+                    nlen=32,sampsize=obj.rep$"Observed.Length.Prop.survey.mature.new.males.sampsize");
+    mtext("Survey proportions, mature males",side=3,adj=0.0);
+    #----------------------
     
     dev.off()
 }
+

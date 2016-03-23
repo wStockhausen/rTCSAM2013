@@ -55,5 +55,7 @@ the smallest value for the objective function and re-runs the modelusing this se
 to re-create the model run resulting in the minimum objectve function to recreate
 the model output files. The final model run is done estimating the hessian, so
 standard deviations for estimated model parameters are available in the .std file.
+
+Uses \code{wtsUtilities::formatZeros()}.
 }
 

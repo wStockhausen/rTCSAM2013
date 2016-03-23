@@ -13,7 +13,7 @@
 #'@param pchs - point types to use
 #'@param ltys - line types to use
 #'
-#'@importFrom wtsPlots plotErrorBars.V
+#'@details Uses \code{wtsPlots::plotCompsAsCircles}.
 #'
 #'@export
 #'
@@ -46,17 +46,17 @@ plotNatMort<-function(sdobj,
     
     plt<-1
     lines(yrs+0.15*(plt-2),M.imm.est[,x],col=clrs[plt],lty=ltys[plt])
-    plotErrorBars.V(yrs+0.15*(plt-2),M.imm.est[,x],sigma=M.imm.std[,x],CI=0.8,width=0.2,col=clrs[plt]);
+    wtsPlots::plotErrorBars.V(yrs+0.15*(plt-2),M.imm.est[,x],sigma=M.imm.std[,x],CI=0.8,width=0.2,col=clrs[plt]);
     points(yrs+0.15*(plt-2),M.imm.est[,x],col=clrs[plt],pch=pchs[plt])
     
     plt<-2
     lines(yrs+0.15*(plt-2),M.NS.est[,x],col=clrs[plt],lty=ltys[plt])
-    plotErrorBars.V(yrs+0.15*(plt-2),M.NS.est[,x],sigma=M.NS.std[,x],CI=0.8,width=0.2,col=clrs[plt]);
+    wtsPlots::plotErrorBars.V(yrs+0.15*(plt-2),M.NS.est[,x],sigma=M.NS.std[,x],CI=0.8,width=0.2,col=clrs[plt]);
     points(yrs+0.15*(plt-2),M.NS.est[,x],col=clrs[plt],pch=pchs[plt])
     
     plt<-3
     lines(yrs+0.15*(plt-2),M.OS.est[,x],col=clrs[plt],lty=ltys[plt])
-    plotErrorBars.V(yrs+0.15*(plt-2),M.OS.est[,x],sigma=M.OS.std[,x],CI=0.8,width=0.2,col=clrs[plt]);
+    wtsPlots::plotErrorBars.V(yrs+0.15*(plt-2),M.OS.est[,x],sigma=M.OS.std[,x],CI=0.8,width=0.2,col=clrs[plt]);
     points(yrs+0.15*(plt-2),M.OS.est[,x],col=clrs[plt],pch=pchs[plt])
     
     legend("topright",cex=0.8,

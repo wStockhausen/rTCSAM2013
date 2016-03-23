@@ -18,6 +18,8 @@
 #'the model output files. The final model run is done estimating the hessian, so
 #'standard deviations for estimated model parameters are available in the .std file.
 #'
+#'Uses \code{wtsUtilities::formatZeros()}.
+#'
 #'@param os   - 'win' or 'mac' or 'osx'
 #'@param path - path for model output
 #'@param model      - TCSAM2013 model executable name
@@ -61,7 +63,7 @@ runJitter<-function(os='osx',
         parList<-list();
         for (r in 1:numRuns){
             cat("\n\n---running ADMB program for",r,"out of",numRuns,"---\n\n");
-            fldr<-paste('run',formatZeros(r,width=max(2,ceiling(log10(numRuns)))),sep='');
+            fldr<-paste('run',wtsUtilities::formatZeros(r,width=max(2,ceiling(log10(numRuns)))),sep='');
             p2f<-file.path(path,fldr);
             par<-runTCSAM2013(path=p2f,
                               os=os,
@@ -104,7 +106,7 @@ runJitter<-function(os='osx',
 
     #re-run case associated with mininum objective function value, save in "best.runxx"
     cat("\n\n---Re-running ADMB program for",idx,"out of",numRuns,"as best run---\n\n");
-    fldr<-paste('best.run',formatZeros(idx,width=max(2,ceiling(log10(numRuns)))),sep='');
+    fldr<-paste('best.run',wtsUtilities::formatZeros(idx,width=max(2,ceiling(log10(numRuns)))),sep='');
     p2f<-file.path(path,fldr);
     par<-runTCSAM2013(path=p2f,
                       os=os,

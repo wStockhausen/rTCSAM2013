@@ -19,4 +19,7 @@ sfr (dataframe with stdv info for combining w/ parameter estimates info)
 This function extracts the posterior distributions of parameters and
 sdreport variables as implied by their estimated standard errors from several models.
 }
+\details{
+Uses \code{wtsUtilities::formatZeros()}.
+}
 

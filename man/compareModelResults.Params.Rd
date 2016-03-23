@@ -30,4 +30,7 @@ This function extracts and plots parameters values, together with their limits
 (if any) and the posterior distributions implied by their estimated standard
 errors from several models.
 }
+\details{
+Uses \code{reshape2::melt()}.
+}
 

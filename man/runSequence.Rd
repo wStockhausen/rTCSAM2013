@@ -36,5 +36,7 @@ are copied from the previous run's par file. The file 'best.txt' identifies the 
 with the best objective function value. The "best" sub-folder contains results from
 re-running the best run, this time estimating the hessian and obtaining the std file
 (if the hessian is invertible).
+
+Uses \code{wtsUtilities::formatZeros()}.
 }
 

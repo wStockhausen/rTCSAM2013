@@ -6,6 +6,7 @@
 #' @param obj.rep - report file list object or filename for R-style report
 #' @param obj.std - dataframe object with parameter std info or filename for std file
 #' @param obj.prs - dataframe object w/ parameters info or csv file with parameters info
+#' @param obj.wts - TCSAM_WTS-type list object
 #' @param base.dir - path to base folder
 #' @param mdl   - model name (optional if R report file is read)
 #' @param styr  - model start year
@@ -16,19 +17,15 @@
 #' @param B35 - B35 value for control rule plot
 #' 
 #' @return list with elements: \cr
-#' rep - obj.rep
-#' std - obj.std
-#' prs - obj.prs
+#' \itemize{
+#'  \item rep - obj.rep
+#'  \item std - obj.std
+#'  \item prs - obj.prs
+#'  \item wts - obj.wts
+#' }
 #' 
-#' @import graphics
-#' @import stats
-#' @import PBSmodelling
-#' @import tcltk
-#' @importFrom wtsUtilities formatZeros
-#' @importFrom wtsUtilities parseNum
-#' @importFrom wtsUtilities selectFile
-#' @importFrom wtsPlots plotErrorBars.V
-#'
+#' @details Convenience wrapper for \code{plotTCSAM2013I()}. 
+#' 
 #'@export
 #' 
 #----------------------------------
@@ -36,6 +33,7 @@
 plotTCSAM2013<-function(obj.rep=NULL,
                         obj.std=NULL,
                         obj.prs=NULL,
+                        obj.wts=NULL,
                         base.dir='./',
                         mdl='tcsam2013alta',#executable model name
                         endyr=NULL,    #assessment year
@@ -48,47 +46,23 @@ plotTCSAM2013<-function(obj.rep=NULL,
     #----------------------------------
     # Load files, if necessary
     if(!is.list(obj.rep)){
-        if (!is.character(obj.rep)){
-            in.rep<-wtsUtilities::selectFile(ext="R",caption="Select Jack's R output file");
-            base.dir=dirname(in.rep);
-            if (is.null(mdl)) {mdl<-strsplit(basename(in.rep),".",fixed=TRUE)[[1]][1];}
-        } else {
-            in.rep<-obj.rep;
-        }
-        obj.rep = readList(in.rep);
+        obj.rep<-getRep(obj.rep);
     }
     if (!is.data.frame(obj.std)){
-        if (!is.character(obj.std)){
-            in.std<-wtsUtilities::selectFile(ext='std',caption="Select std file");
-        } else {
-            in.std<-obj.std;
-        }
-        obj.std<-NULL;
-        if (!is.null(in.std)) {
-            if (file.exists(in.std)) {
-                cat("Reading file",in.std,'\n');
-                obj.std = read.table(in.std,as.is=T,header=F,skip=1);
-            } else {
-                cat('File',in.std,'does not exist.\n');
-            }
-        }
+        obj.std<-getStd(obj.std);
     }
     if (!is.data.frame(obj.prs)){
-        if (!is.character(obj.prs)){
-            in.prs<-wtsUtilities::selectFile(ext='csv',caption="Select active parameters info csv file");
-        } else {
-            in.prs<-obj.prs;
-        }
-        obj.prs<-NULL;
-        if (!is.null(in.prs)){
-            obj.prs<-read.csv(in.prs,stringsAsFactors=FALSE);
-        }    
+        obj.prs<-getPRS(obj.prs);
+    }
+    if(!is.list(obj.wts)){
+        obj.wts<-getRep(obj.wta);
     }
     
     #actually plot the results
     plotTCSAM2013I(obj.rep,
                    obj.std,
                    obj.prs,
+                   obj.wts,
                    base.dir=base.dir,
                    mdl=mdl,        #executable model name
                    endyr=endyr,    #assessment year
@@ -99,5 +73,5 @@ plotTCSAM2013<-function(obj.rep=NULL,
                    B35=B35);       #B35 value
     
     #return the objects
-    return(invisible(list(rep=obj.rep,std=obj.std,prs=obj.prs)));
+    return(invisible(list(rep=obj.rep,std=obj.std,prs=obj.prs,wts=obj.wts)));
 }

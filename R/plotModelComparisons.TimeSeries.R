@@ -14,6 +14,8 @@
 #'@param title - plot title
 #'@param ylab - y-axis label
 #'
+#'@details Uses \code{wtsPlots::plotErrorBars.V}.
+#'
 #'@export
 #'
 plotModelComparisons.TimeSeries<-function(obsyrs=NULL,

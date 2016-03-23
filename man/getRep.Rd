@@ -2,20 +2,21 @@
 % Please edit documentation in R/getRep.R
 \name{getRep}
 \alias{getRep}
-\title{Create a TCSAM2013 rep object from a rep file.}
+\title{Create a TCSAM2013 rep object from a TCSAM_OLDSTYLE R file.}
 \usage{
-getRep(in.rep = NULL)
+getRep(inp = NULL)
 }
 \arguments{
-\item{in.rep}{= filename of rep file}
+\item{inp}{= filename of TCSAM_OLDSTYLE R file}
 }
 \value{
-list object corresponding to the rep file, or NULL if file does not exist
+list object corresponding to the TCSAM_OLDSTYLE R file, or NULL if file does not exist
 }
 \description{
-Function to create a TCSAM2013 rep object from a rep file.
+Function to create a TCSAM2013 rep object from a TCSAM_OLDSTYLE R file.
 }
 \details{
 Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
+Uses \code{PBSmodelling::readList} to read file.
 }
 

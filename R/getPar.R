@@ -1,23 +1,23 @@
 #'
-#'@title Create a TCSAM2013 par object from a par file.
+#'@title Create a dataframe from an ADMB par file.
 #'
-#'@description Function to create a TCSAM2013 par object from a par file.
+#'@description Function to create a dataframe from an ADMB par file.
 #'
-#'@param in.par = filename of par file
+#'@param inp - filename of par file
 #'
-#'@return list object corresponding to the par file (or NULL if file does not exist)
+#'@return dataframe corresponding to the par file (or NULL if file does not exist)
 #'
-#'@details Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
+#'@details Uses \code{wtsUtilities::selectFile} to open a file dialog if inp is NULL.
 #' 
 #'@export
 #' 
-getPar<-function(in.par=NULL){
-    if (is.null(in.par)){
-        in.par<-wtsUtilities::selectFile(ext='par',caption="Select par file");
+getPar<-function(inp=NULL){
+    if (is.null(inp)){
+        inp<-wtsUtilities::selectFile(ext='par',caption="Select par file");
     }
-    if (!file.exists(in.par)) return(NULL);
+    if (!file.exists(inp)) return(NULL);
     
-    r1<-readLines(con=in.par);
+    r1<-readLines(con=inp);
     
     #parse first line
     str <- gsub('[^[:digit:][:blank:].]','',r1[1],perl=TRUE);#remove all characters except numbers and blanks

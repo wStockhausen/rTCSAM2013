@@ -1,9 +1,9 @@
 #'
-#'@title Create a TCSAM2013 std object from a std file.
+#'@title Create a dataframe (an std object) from an ADMB std file.
 #'
-#'@description Function to create a TCSAM2013 std object from a std file.
+#'@description Function to create a dataframe (an std object) from an ADMB std file.
 #'
-#'@param in.std = filename of std file
+#'@param inp - name of the ADMB std file
 #'
 #'@return list object corresponding to the std file, or NULL if file does not exist
 #'
@@ -11,13 +11,13 @@
 #'
 #'@export
 #' 
-getStd<-function(in.std=NULL){
-    if (is.null(in.std)){
-        in.std<-wtsUtilities::selectFile(ext='std',caption="Select std file");
+getStd<-function(inp=NULL){
+    if (is.null(inp)){
+        inp<-wtsUtilities::selectFile(ext='std',caption="Select std file");
     }
     obj.std<-NULL;
-    if ((!is.null(in.std))&&file.exists(in.std)){
-        obj.std = read.table(in.std,as.is=T,header=F,skip=1);
+    if ((!is.null(inp))&&file.exists(inp)){
+        obj.std = read.table(inp,as.is=T,header=F,skip=1);
     }
     return(invisible(obj.std))
 }

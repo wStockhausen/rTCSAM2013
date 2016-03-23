@@ -29,4 +29,7 @@ plotNatMort(sdobj, styr = 1949, endyr = 2013, min.yr = 1970,
 This function plots natural mortality estimates by year
   and sex for immatures, new shell matures and old shell matures.
 }
+\details{
+Uses \code{wtsPlots::plotCompsAsCircles}.
+}
 

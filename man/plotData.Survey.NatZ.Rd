@@ -15,4 +15,7 @@ plotData.Survey.NatZ(nAtZ, label = "trawl survey")
 This function plots survey numbers-at-size data by year for each sex as circles.
 Immatures are plotted in blue, matures in green. Shell condition is summed over.
 }
+\details{
+Uses \code{wtsPlots::plotCompsAsCircles}.
+}
 

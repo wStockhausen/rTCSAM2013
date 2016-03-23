@@ -40,4 +40,7 @@ plotMeanSizeComps(size.bins, obs.comp, prd.comp, cols = NULL, ymx = NULL,
 \description{
 This function plots comparisons of size comps using their averages.
 }
+\details{
+Uses \code{wtsPlots::plotErrorBars.V}.
+}
 

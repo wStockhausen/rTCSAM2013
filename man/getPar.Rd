@@ -2,20 +2,20 @@
 % Please edit documentation in R/getPar.R
 \name{getPar}
 \alias{getPar}
-\title{Create a TCSAM2013 par object from a par file.}
+\title{Create a dataframe from an ADMB par file.}
 \usage{
-getPar(in.par = NULL)
+getPar(inp = NULL)
 }
 \arguments{
-\item{in.par}{= filename of par file}
+\item{inp}{- filename of par file}
 }
 \value{
-list object corresponding to the par file (or NULL if file does not exist)
+dataframe corresponding to the par file (or NULL if file does not exist)
 }
 \description{
-Function to create a TCSAM2013 par object from a par file.
+Function to create a dataframe from an ADMB par file.
 }
 \details{
-Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
+Uses \code{wtsUtilities::selectFile} to open a file dialog if inp is NULL.
 }
 

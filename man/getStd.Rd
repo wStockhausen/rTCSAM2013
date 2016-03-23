@@ -2,18 +2,18 @@
 % Please edit documentation in R/getStd.R
 \name{getStd}
 \alias{getStd}
-\title{Create a TCSAM2013 std object from a std file.}
+\title{Create a dataframe (an std object) from an ADMB std file.}
 \usage{
-getStd(in.std = NULL)
+getStd(inp = NULL)
 }
 \arguments{
-\item{in.std}{= filename of std file}
+\item{inp}{- name of the ADMB std file}
 }
 \value{
 list object corresponding to the std file, or NULL if file does not exist
 }
 \description{
-Function to create a TCSAM2013 std object from a std file.
+Function to create a dataframe (an std object) from an ADMB std file.
 }
 \details{
 Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.

@@ -5,8 +5,8 @@
 \title{Plot TCSAM2013 model results.}
 \usage{
 plotTCSAM2013(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
-  base.dir = "./", mdl = "tcsam2013alta", endyr = NULL, styr = NULL,
-  obsyr = NULL, pltyr = 1965, F35 = 0.73, B35 = 33.54)
+  obj.wts = NULL, base.dir = "./", mdl = "tcsam2013alta", endyr = NULL,
+  styr = NULL, obsyr = NULL, pltyr = 1965, F35 = 0.73, B35 = 33.54)
 }
 \arguments{
 \item{obj.rep}{- report file list object or filename for R-style report}
@@ -14,6 +14,8 @@ plotTCSAM2013(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
 \item{obj.std}{- dataframe object with parameter std info or filename for std file}
 
 \item{obj.prs}{- dataframe object w/ parameters info or csv file with parameters info}
+
+\item{obj.wts}{- TCSAM_WTS-type list object}
 
 \item{base.dir}{- path to base folder}
 
@@ -33,11 +35,17 @@ plotTCSAM2013(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
 }
 \value{
 list with elements: \cr
-rep - obj.rep
-std - obj.std
-prs - obj.prs
+\itemize{
+ \item rep - obj.rep
+ \item std - obj.std
+ \item prs - obj.prs
+ \item wts - obj.wts
+}
 }
 \description{
 Function to plot model results from TCSAM2013.
+}
+\details{
+Convenience wrapper for \code{plotTCSAM2013I()}.
 }
 

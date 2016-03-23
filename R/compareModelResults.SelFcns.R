@@ -14,13 +14,11 @@
 #'model to be compared. If 'cases' is given, the user is prompted to select the file
 #'corresponding to each case. If 'cases' is not given, then the user may select an 
 #'arbitrary number of files (one at a time), ending selection by pressing 'cancel' on the selection box'.\cr\cr
-#'If 'objs' is not given, the working directory is set two levels above the 1st model case file selected.
+#'If 'objs' is not given, the working directory is set two levels above the 1st model case file selected.\cr\cr
+#'Uses \code{PBSmodelling::readList}, \code{reshape2::melt} and \code{wtsUtilities::selectFile}.
 #'
 #'@return vector of list objects corresponding to the objects returned by each model R file.
 #'
-#'@importFrom PBSmodelling readList
-#'@importFrom wtsUtilities selectFile
-#'@import reshape2
 #'@import ggplot2
 #'
 #'@export

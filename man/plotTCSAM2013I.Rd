@@ -4,16 +4,18 @@
 \alias{plotTCSAM2013I}
 \title{Plot TCSAM2013 model results.}
 \usage{
-plotTCSAM2013I(obj.rep, obj.std, obj.prs, base.dir = "./",
-  mdl = "tcsam2013alta", endyr = NULL, styr = NULL, obsyr = NULL,
-  pltyr = 1965, F35 = 0.73, B35 = 33.54)
+plotTCSAM2013I(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
+  obj.wts = NULL, base.dir = "./", mdl = "tcsam2013alta", endyr = NULL,
+  styr = NULL, obsyr = NULL, pltyr = 1965, F35 = 0.73, B35 = 33.54)
 }
 \arguments{
-\item{obj.rep}{- report file list object or filename for R-style report}
+\item{obj.rep}{- report file list object}
 
-\item{obj.std}{- dataframe object with parameter std info or filename for std file}
+\item{obj.std}{- dataframe object with parameter std info}
 
-\item{obj.prs}{- dataframe object w/ parameters info or csv file with parameters info}
+\item{obj.prs}{- dataframe object w/ parameters info}
+
+\item{obj.wts}{- TCSAM_WTS-type list object}
 
 \item{base.dir}{- path to base folder}
 
@@ -32,15 +34,13 @@ plotTCSAM2013I(obj.rep, obj.std, obj.prs, base.dir = "./",
 \item{B35}{- B35 value for control rule plot}
 }
 \value{
-list with elements: \cr
-rep - obj.rep
-std - obj.std
-prs - obj.prs
+nothing.
 }
 \description{
 Function to plot model results from TCSAM2013.
 }
 \details{
-Returns NULL if obj.rep is NULL.
+Uses \code{wtsPlots::plotErrorBars.V()}, 
+\code{wtsUtilities::formatZeros} and \code{wtsUtilities::parseNum}.
 }
 

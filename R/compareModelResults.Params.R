@@ -15,7 +15,7 @@
 #'
 #'@return - list with dfr, vfr, and plots as elements
 #'
-#'@import reshape2
+#'@details Uses \code{reshape2::melt()}.
 #'
 #'@export
 #'
@@ -33,7 +33,7 @@ compareModelResults.Params<-function(objs,dp=0.01,fac=3,
     plots<-plotModelResults.ScalarParams(dfr,vfr=lst$vfr,nc=nc,nr=nr,showPlot=showPlot,pdf=pdf)
     
     #combine dfr and lst$sfr
-    mdfr<-melt(dfr,id.vars=c('case','type','par','param'),variable.name='variable',factorsAsStrings=TRUE);
+    mdfr<-reshape2::melt(dfr,id.vars=c('case','type','par','param'),variable.name='variable',factorsAsStrings=TRUE);
     sdfr<-rbind(mdfr,lst$sfr);
     write.csv(sdfr,'ModelComparisons.ParameterEstimates.csv',row.names=FALSE);
     
@@ -51,7 +51,7 @@ compareModelResults.Params<-function(objs,dp=0.01,fac=3,
 #'
 #'@return - dataframe with the parameter information
 #'
-#'@importFrom wtsUtilities formatZeros
+#'@details Uses \code{wtsUtilities::formatZeros()}.
 #'
 #'@export
 #'
@@ -74,7 +74,7 @@ extractModelResults.Params<-function(objs,dp=0.01){
                     rw$param<-rw$par;
                     if (nr>1) {
                         rw$type <-'vector';
-                        rw$param<-paste(rw$par,"[",formatZeros(r,width=2),"]",sep='');
+                        rw$param<-paste(rw$par,"[",wtsUtilities::formatZeros(r,width=2),"]",sep='');
                     }
                     rw$value<-prsp$value[r];
                     rw$min  <-prsp$min[r];
@@ -104,7 +104,7 @@ extractModelResults.Params<-function(objs,dp=0.01){
 #'@return - list with elements vfr (dataframe with uncertainty info for plots) and 
 #'sfr (dataframe with stdv info for combining w/ parameter estimates info)
 #'
-#'@importFrom wtsUtilities formatZeros
+#'@details Uses \code{wtsUtilities::formatZeros()}.
 #'
 #'@export
 #'
@@ -133,7 +133,7 @@ extractModelResults.StdDevs<-function(objs,fac=3){
                         y<-0.9*exp(-0.5*((x-estp)/stdv)^2);
                         if (nr>1) {
                             type<-'vector';
-                            paramp<-paste(par,"[",formatZeros(r,width=2),"]",sep='');
+                            paramp<-paste(par,"[",wtsUtilities::formatZeros(r,width=2),"]",sep='');
                         }
                         vri<-list(case=case,type=type,par=par,param=paramp,x=x,y=y);
                         vfr<-rbind(vfr,as.data.frame(vri,stringsAsFactors=FALSE));
