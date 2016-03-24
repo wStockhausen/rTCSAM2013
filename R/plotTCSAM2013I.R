@@ -1045,19 +1045,19 @@ plotTCSAM2013I<-function(obj.rep=NULL,
            lty=c(1,1),lwd=c(3,3),col=c('blue','green'),cex=1)
     #----------------------------------
     
-    par(oma=c(1,1,1,1),mar=c(4,3,2,1)+0.2,mfrow=c(3,1))
     if (!is.null(obj.std)){
+      par(oma=c(1,1,1,1),mar=c(4,3,2,1)+0.2,mfrow=c(3,1))
       #-------------------------------------------------
       # Mature male biomass at mating time
       #-------------------------------------------------
       sdf.mmb<-obj.std[obj.std[,2]=="sdrMMB",]
       mmb.sd<-sdf.mmb[,4]
       mmb.mn<-sdf.mmb[,3]
-      plot(years[2:(length(years)-1)],mmb.mn,type="l",lty=1,
+      plot(years[1:(length(years)-1)],mmb.mn,type="l",lty=1,
            xlab="Year",ylab="Biomass (1000's t)",
            ylim=c(0,1.2*max(mmb.mn+mmb.sd,na.rm=TRUE)))
-      points(years[2:(length(years)-1)],mmb.mn,pch=1)
-      wtsPlots::plotErrorBars.V(years[2:(length(years)-1)],mmb.mn,
+      points(years[1:(length(years)-1)],mmb.mn,pch=1)
+      wtsPlots::plotErrorBars.V(years[1:(length(years)-1)],mmb.mn,
                       sigma=mmb.sd,CI=0.8)
       mtext("MMB at Mating",side=3,adj=0.0);
       #----------------------------------
@@ -1066,41 +1066,43 @@ plotTCSAM2013I<-function(obj.rep=NULL,
       # Recruitment
       #-------------------------------------------
       ##-by model year
-      recLag<-0;
-      sdf.R<-obj.std[obj.std[,2]=="sdrLnRec",];
+      recLag<-obj.rep$recLag;
+      sdf.R<-obj.std[obj.std[,2]=="sdrLnRec",];#1st year is styr+recLag
       R.mn<-2*exp(sdf.R[,3])/THOUSAND;#scale to total recruitment in millions
       R.sd<-sqrt(exp(sdf.R[,4]^2)-1)*R.mn;
-      yrs.R<-years[2:(length(years)-recLag)]
+      yrs.R<-(styr+recLag):endyr;
       plot(yrs.R,R.mn,type="l",lty=1,
-           xlab="Fertilization Year",ylab="numbers (millions)",
+           xlab="Year",ylab="numbers (millions)",
            ylim=c(0,1.2*max(R.mn+R.sd,na.rm=TRUE)))
+      abline(v=c(obj.rep$mnYrRecDevsHist,obj.rep$mnYrRecCurr),lty=2,lwd=2,col='grey')
       points(yrs.R,R.mn,pch=1)
       wtsPlots::plotErrorBars.V(yrs.R,R.mn,sigma=R.sd,CI=0.8,lognormal=TRUE)
       mtext("Total recruitment",side=3,adj=0.0);
-      rec.mn.1982<-mean(R.mn[(1982-recLag-1950):length(R.mn)]);
-      lines((1982:endyr)-recLag,rec.mn.1982+0*((1982:endyr)-recLag),lty=2,lwd=2)
+      mnR<-mean(R.mn[(1977-styr+1):length(R.mn)]);
+      lines(((1977+recLag):endyr),mnR+0*((1977+recLag):endyr),lty=2,lwd=2)
       
       ##-lagged to fertilization year
       recLag<-obj.rep$recLag;
-      sdf.R<-obj.std[obj.std[,2]=="sdrLnRec",];
+      sdf.R<-obj.std[obj.std[,2]=="sdrLnRec",];#1st year is styr+recLag
       R.mn<-2*exp(sdf.R[,3])/THOUSAND;#scale to total recruitment in millions
       R.sd<-sqrt(exp(sdf.R[,4]^2)-1)*R.mn;
-      yrs.R<-years[2:(length(years)-recLag)]
+      yrs.R<-styr:(endyr-recLag);
       plot(yrs.R,R.mn,type="l",lty=1,
            xlab="Fertilization Year",ylab="numbers (millions)",
            ylim=c(0,1.2*max(R.mn+R.sd,na.rm=TRUE)))
+      abline(v=c(obj.rep$mnYrRecDevsHist,obj.rep$mnYrRecCurr)-recLag,lty=2,lwd=2,col='grey')
       points(yrs.R,R.mn,pch=1)
       wtsPlots::plotErrorBars.V(yrs.R,R.mn,sigma=R.sd,CI=0.8,lognormal=TRUE)
       mtext("Total recruitment",side=3,adj=0.0);
-      rec.mn.1982<-mean(R.mn[(1982-recLag-1950):length(R.mn)]);
-      lines((1982:endyr)-recLag,rec.mn.1982+0*((1982:endyr)-recLag),lty=2,lwd=2)
+      mnR<-mean(R.mn[(1977-styr+1):length(R.mn)]);
+      lines(1977:(endyr-recLag),mnR+0*(1977:(endyr-recLag)),lty=2,lwd=2)
       #----------------------------------
     }## if obj.std not null
               
+    par(oma=c(1,1,1,1),mar=c(4,3,2,1)+0.2,mfrow=c(3,1))
     #----------------------------------
     # spawning biomass by sex
     #----------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
     prd.MMB<-obj.rep$"Mating.time.Male.Spawning.Biomass";
     prd.MFB<-obj.rep$"Mating.time.Female.Spawning.Biomass";
     plot(years.m1,prd.MMB+prd.MFB,type="l",lty=2,lwd=1,
@@ -1117,20 +1119,21 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     # Recruitment
     #-------------------------------------------
     ##-by model year
+    recLag<-obj.rep$recLag
     tsR<-2*(obj.rep$"estimated.number.of.recruits.female")/THOUSAND;
     yrs.R<-years;##-gives model year
     plot(yrs.R,tsR,type="l",lty=1,
          xlab="Year",ylab="numbers (millions)",
          xlim=range(years),
          ylim=c(0,1.2*max(tsR,na.rm=TRUE)))
-    mnRec<-mean(tsR[(1982-obj.rep$recLag-styr+1):length(tsR)]);
+    mnRec<-mean(tsR[(1977+recLag-styr+1):length(tsR)]);
     lines((1982:endyr)-obj.rep$recLag,mnRec+0*((1982:endyr)),lty=2,lwd=2)
     abline(v=c(obj.rep$mnYrRecDevsHist,obj.rep$mnYrRecCurr),lty=2,lwd=2,col='grey')
     points(yrs.R,tsR,pch=1)
     mtext("Total recruitment",side=3,adj=0.0);
     
     ##-by fertilization year
-    recLag<-obj.rep$recLag;##-will lag to ertilization year
+    recLag<-obj.rep$recLag;##-will lag to fertilization year
     tsR<-2*(obj.rep$"estimated.number.of.recruits.female")/THOUSAND;
     yrs.R<-years-recLag;
     plot(yrs.R,tsR,type="l",lty=1,
