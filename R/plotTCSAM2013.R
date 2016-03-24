@@ -24,7 +24,8 @@
 #'  \item wts - obj.wts
 #' }
 #' 
-#' @details Convenience wrapper for \code{plotTCSAM2013I()}. 
+#' @details Convenience wrapper for \code{plotTCSAM2013I()}. User is prompted
+#' for any obj.??? inputs that are NULL.
 #' 
 #'@export
 #' 

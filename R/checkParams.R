@@ -9,9 +9,11 @@
 #'@param obj.std - dataframe obtained from reading, or filename of, the .std file
 #'@param dp - percent difference between parameter value and upper/lower limits used to color plot
 #'
-#'@return - list
+#'@return - dataframe
 #'
-#'@import graphics
+#'@details If obj.prs is NULL, the user will be prompted to select a csv file.
+#'However, if obj.std is NULL, the user will NOT be prompted to select an
+#'std file and std info will NOT be included in the output.
 #'
 #'@export
 #'
@@ -19,21 +21,14 @@ checkParams<-function(obj.prs=NULL,
                       obj.std=NULL,
                       dp=0.01){
     if (!is.data.frame(obj.prs)){
-        if (!is.character(obj.prs)){
-            in.prs<-wtsUtilities::selectFile(ext='csv',caption="Select parameters info csv file");
-        } else {
-            in.prs<-obj.prs;
-        }
-        obj.prs<-read.csv(in.prs,stringsAsFactors=FALSE);
+        obj.prs<-getPRS(obj.prs);
     }
     if (!is.data.frame(obj.std)){
-        if (!is.character(obj.std)){
-            in.std<-wtsUtilities::selectFile(ext='std',caption="Select std file");
+        if (is.character(obj.std)) {
+            obj.std<-getStd(obj.std);
         } else {
-            in.std<-obj.std;
+            obj.std<-NULL;
         }
-        obj.std<-NULL;
-        if (!is.null(in.std)) obj.std = read.table(in.std,as.is=T,header=F,skip=1);
     }
     
     ##strip whitespace from obj.prs$names

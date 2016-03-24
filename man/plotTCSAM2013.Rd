@@ -46,6 +46,7 @@ list with elements: \cr
 Function to plot model results from TCSAM2013.
 }
 \details{
-Convenience wrapper for \code{plotTCSAM2013I()}.
+Convenience wrapper for \code{plotTCSAM2013I()}. User is prompted
+for any obj.??? inputs that are NULL.
 }
 
