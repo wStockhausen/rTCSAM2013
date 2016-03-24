@@ -1127,7 +1127,7 @@ plotTCSAM2013I<-function(obj.rep=NULL,
          xlim=range(years),
          ylim=c(0,1.2*max(tsR,na.rm=TRUE)))
     mnRec<-mean(tsR[(1977+recLag-styr+1):length(tsR)]);
-    lines((1982:endyr)-obj.rep$recLag,mnRec+0*((1982:endyr)),lty=2,lwd=2)
+    lines((1977+recLag):endyr,mnRec+0*((1977+recLag):endyr),lty=2,lwd=2)
     abline(v=c(obj.rep$mnYrRecDevsHist,obj.rep$mnYrRecCurr),lty=2,lwd=2,col='grey')
     points(yrs.R,tsR,pch=1)
     mtext("Total recruitment",side=3,adj=0.0);
@@ -1135,22 +1135,22 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     ##-by fertilization year
     recLag<-obj.rep$recLag;##-will lag to fertilization year
     tsR<-2*(obj.rep$"estimated.number.of.recruits.female")/THOUSAND;
-    yrs.R<-years-recLag;
+    yrs.R<-years-1-recLag;
     plot(yrs.R,tsR,type="l",lty=1,
          xlab="Fertilization Year",ylab="numbers (millions)",
          xlim=range(years),
          ylim=c(0,1.2*max(tsR,na.rm=TRUE)))
-    rec.mn.1982<-mean(tsR[(1982-recLag-styr+1):length(tsR)]);
-    lines((1982:endyr)-recLag,rec.mn.1982+0*((1982:endyr)-recLag),lty=2,lwd=2)
+    mnRec<-mean(tsR[(1983-1-recLag-styr+1):length(tsR)]);
+    lines(1977:(endyr-recLag),mnRec+0*(1977:(endyr-recLag)),lty=2,lwd=2)
     abline(v=c(obj.rep$mnYrRecDevsHist,obj.rep$mnYrRecCurr)-recLag,lty=2,lwd=2,col='grey')
     points(yrs.R,tsR,pch=1)
     mtext("Total recruitment (by fertilization year)",side=3,adj=0.0);
     #----------------------------------
     
+    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(3,1))
     #--------------------------------------------
     #Legal males.
     #--------------------------------------------
-    par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
     plot(obsyears, obj.rep$"observed.number.of.males.greater.than.101.mm"/THOUSAND,type="p",
         xlab="Year",ylab="Number (millions)",ylim=c(0,200))
     lines(obsyears,obj.rep$"estimated.survey.numbers.of.males.101"[(1:length(years))[years==min(obsyears)]:length(years)]/THOUSAND,
@@ -1166,7 +1166,6 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     #-------------------------------------------------
     # Fraction of male discard mortality in directed fishery
     #-------------------------------------------------
-    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
     frc<-obj.rep$"predicted.TCF.male.discard.mortality.biomass"/obj.rep$"predicted.retained.catch.biomass";
     plot(years.m1,frc,type='l',
          xlab="Fishery Year",ylab="ratio",
@@ -1189,7 +1188,7 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     # Harvest control rule and fishing mortality
     #------------------------------------------------------------
     if (!is.na(F35)){
-        par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
+        par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
         yrs<-styr:(endyr-1)
         mmb<-obj.rep$"Mating.time.Male.Spawning.Biomass";
         tfm<-obj.rep$"max.TOT.male.NS.mortality.rate";
@@ -1224,23 +1223,22 @@ plotTCSAM2013I<-function(obj.rep=NULL,
               lty=1,lwd=2)    
     }
     
-    #lines(seq(0,max(as.numeric(unlist(obj.rep$"Mating.time.Male.Spawning.Biomass"))),length=20),
-    #     rep(1.1,20),lty=1)
-    #text(50,1.15,"Pre-2000 Target F",cex=.7)
+    ##Stock-recruit relationship
+    cex<-par("cex")
     par(cex=0.75)
-    par(mai=c(.75,.75,.55,.35))
-    
-    # 5 year lag, don't use last male spb that is projected to spring of year after endyr in model
-    #recruits enter in spring of styr+1.  so first male spb and first rec go together
-    lag<-5;
+    recLag<-obj.rep$recLag;
     yrs<-styr:(endyr-1)
     tmp=length(unlist((obj.rep$"Mating.time.Male.Spawning.Biomass")));
-    x<-obj.rep$"Mating.time.Male.Spawning.Biomass"[21:(tmp-lag)];
-    y<-obj.rep$"estimated.number.of.recruits.female"[(20+lag):(tmp-1)]/1000;
-    plot(x,y,xlim=c(0,1.1*max(x)),ylim=c(0,1.1*max(y)),
+    x<-obj.rep$"Mating.time.Male.Spawning.Biomass";
+    y<-obj.rep$"estimated.number.of.recruits.female"/1000;
+    idx<-(obj.rep$mnYrRecCurr-1-recLag-styr+1):(endyr-1-recLag-styr+1);
+    plot(x[idx],y[idx+1+recLag],
+         xlim=c(0,1.1*max(x)),ylim=c(0,1.1*max(y)),
          xlab="Male Spawning Biomass(1000 t) at Feb. 15",
          ylab="Recruitment (millions)",type="n")
-    text(x,y,wtsUtilities::formatZeros(yrs[21:(tmp-lag)]%%100,width=2),adj=0,cex=1.0)
+    yrs.tmp<-(obj.rep$mnYrRecCurr-1-recLag):(endyr-1-recLag);
+    text(x,y,wtsUtilities::formatZeros(yrs.tmp%%100,width=2),adj=0,cex=1.0);
+    par(cex=cex)
     
     #----------------------------------
     # plot observed total and mature (spawning) biomass from survey
