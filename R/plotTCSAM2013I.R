@@ -338,22 +338,6 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     }
 
     #--------------------------------------------
-    #Survey size comps: numbers at size
-    #--------------------------------------------
-    colnames(obj.rep$"Observed.Survey.Numbers.by.length.females")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Survey.Numbers.by.length.females",
-                   obj.rep$"Predicted.Survey.Numbers.by.length.females",
-                   nr = 8, nc = 6,nplot = length(obsyears));
-    mtext("Survey numbers, females",side=3,adj=0.0,outer=TRUE);
-    
-    colnames(obj.rep$"Observed.Survey.Numbers.by.length.males")<-c("year",as.character(length.bins))
-    plotSizeCompsComparisons(obj.rep$"Observed.Survey.Numbers.by.length.males",
-                               obj.rep$"Predicted.Survey.Numbers.by.length.males",
-                               nr = 8, nc = 6,nplot = length(obsyears));
-    mtext("Survey numbers, males",side=3,adj=0.0,outer=TRUE);
-    #----------------------------------
-
-    #--------------------------------------------
     #Survey size comps: proportions at size
     #--------------------------------------------
     #--all females-----------
@@ -685,42 +669,7 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     mtext("Assumed size distribution at recruitment",side=3,adj=0.0);
     #----------------------------------
 
-    #----------------------------------------------
-    # TCF total selectivity for new shell males
-    #----------------------------------------------
-    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
-    sel<-obj.rep$"selectivity.fishery.total.new.males";
-    plot(length.bins,sel[1,],type="l",lwd=3,ylim=c(0,1.0),xlab="Carapace Width (mm)",ylab="Total Selectivity")
-    rownames(sel)<-years.m1;
-    ctr<-0
-    for (i in as.character(yrs.tcf)) {
-        lines(length.bins,sel[i,],lty=2,lwd=2)
-        y<-0.75-ctr*0.5/length(yrs.tcf)
-        iz<-which.min((sel[i,]-y)^2)
-        text(length.bins[iz],y,labels=i,cex=0.9,col="dark blue")
-        ctr<-ctr+1
-    }
-    mtext("Total directed fishery selectivity on new shell males",side=3,adj=0.0);
-    #----------------------------------
-
-    #----------------------------------------------
-    # TCF retained selectivity for new shell males
-    #----------------------------------------------
-    sel<-obj.rep$"selectivity.fishery.ret.new.males"
-    plot(length.bins,sel[1,],
-         type="l",ylim=c(0,1.0),lwd=3,xlab="Carapace width (mm)",ylab="Retention")
-    rownames(sel)<-years.m1;
-    ctr<-0
-    for (i in as.character(yrs.tcf)) {
-        lines(length.bins,sel[i,],lty=2,lwd=2)
-        y<-0.75-ctr*0.5/length(yrs.tcf)
-        iz<-which.min((sel[i,]-y)^2)
-        text(length.bins[iz],y,labels=i,cex=0.9,col="dark blue")
-        ctr<-ctr+1
-    }
-    mtext("Directed fishery retention, new shell males",side=3,adj=0,outer=FALSE)
-    #----------------------------------
-
+    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(3,1))
     #----------------------------------------------
     # Survey selectivity
     #----------------------------------------------
@@ -788,10 +737,54 @@ plotTCSAM2013I<-function(obj.rep=NULL,
            lty=ltys[c(1,2,4)],pch=pchs[c(1,2,4)],cex=0.7)
     #----------------------------------
     
+    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(3,1))
+    #----------------------------------------------
+    # TCF retained selectivity for new shell males
+    #----------------------------------------------
+    sel<-obj.rep$"selectivity.fishery.ret.new.males"
+    plot(length.bins,sel[1,],
+         type="l",ylim=c(0,1.0),lwd=3,xlab="Carapace width (mm)",ylab="Retention")
+    rownames(sel)<-years.m1;
+    ctr<-0
+    for (i in as.character(yrs.tcf)) {
+        lines(length.bins,sel[i,],lty=2,lwd=2)
+        y<-0.75-ctr*0.5/length(yrs.tcf)
+        iz<-which.min((sel[i,]-y)^2)
+        text(length.bins[iz],y,labels=i,cex=0.9,col="dark blue")
+        ctr<-ctr+1
+    }
+    mtext("Directed fishery retention",side=3,adj=0,outer=FALSE)
+    #----------------------------------
+
+    #----------------------------------------------
+    # TCF total selectivity for males
+    #----------------------------------------------
+    sel<-obj.rep$"selectivity.fishery.total.new.males";
+    plot(length.bins,sel[1,],type="l",lwd=3,ylim=c(0,1.0),xlab="Carapace Width (mm)",ylab="Total Selectivity")
+    rownames(sel)<-years.m1;
+    ctr<-0
+    for (i in as.character(yrs.tcf)) {
+        lines(length.bins,sel[i,],lty=2,lwd=2)
+        y<-0.75-ctr*0.5/length(yrs.tcf)
+        iz<-which.min((sel[i,]-y)^2)
+        text(length.bins[iz],y,labels=i,cex=0.9,col="dark blue")
+        ctr<-ctr+1
+    }
+    mtext("Total directed fishery selectivity on males",side=3,adj=0.0);
+    #----------------------------------
+
+    #----------------------------------------------
+    # TCF total selectivity for females
+    #----------------------------------------------
+    sel<-obj.rep$"selectivity.discard.females";
+    plot(length.bins,sel,type="l",lwd=3,ylim=c(0,1.0),xlab="Carapace Width (mm)",ylab="Total Selectivity")
+    mtext("Total directed fishery selectivity on females",side=3,adj=0.0);
+    #----------------------------------
+
     #--------------------------------
     # snow crab fishery selectivity
     #--------------------------------
-    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(2,1))
+    par(oma=c(2,2,2,2),mar=c(4,4,2,1)+0.2,mfrow=c(3,1))
     plot(length.bins,obj.rep$"selectivity.snow.females"[1,],
         type="l",lty=2,lwd=2,ylim=c(0,1.1),
         xlab="Carapace width(mm)",ylab="Selectivity")
@@ -841,17 +834,6 @@ plotTCSAM2013I<-function(obj.rep=NULL,
            c("females, era 1","females, era 2","females, era 3","males, era 1","males, era 2","males, era 3"),
            lty=c(2,2,2,1,1,1),col=rep(c("black","green","blue"),times=2),lwd=2,cex=0.7)
     #----------------------------------
-
-    #-------------------------------------------------
-    # Exploitation rate
-    #-------------------------------------------------
-    xpl<-obj.rep$"estimated.total.catch.divided.by.male.spawning.biomass.at.fishtime";
-    plot(years.m1, xpl, type="l",
-         xlab="Year",ylab="Exploitation Rate",xlim=range(plotyears),ylim=c(0,1.0))
-    xpl<-obj.rep$"estimated.total.catch.of.legal.males.divided.by.legal.males.at.fishtime"
-    lines(years.m1,xpl,,lty=2)
-    legend("topright",legend=c("total catch","legal males"),
-           lty=c(1,2),pch=c(NA,NA),cex=1)
 
     #-------------------------------------------------
     # Directed fishery capture rates/fishing mortality
@@ -1144,6 +1126,17 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     mtext("Directed fishery male discard mortality biomass relative to retained catch biomass",side=3,adj=0.0,outer=FALSE);
     #----------------------------------
 
+    #-------------------------------------------------
+    # Exploitation rate
+    #-------------------------------------------------
+    xpl<-obj.rep$"estimated.total.catch.divided.by.male.spawning.biomass.at.fishtime";
+    plot(years.m1, xpl, type="l",
+         xlab="Year",ylab="Exploitation Rate",xlim=range(plotyears),ylim=c(0,1.0))
+    xpl<-obj.rep$"estimated.total.catch.of.legal.males.divided.by.legal.males.at.fishtime"
+    lines(years.m1,xpl,,lty=2)
+    legend("topright",legend=c("total catch","legal males"),
+           lty=c(1,2),pch=c(NA,NA),cex=1)
+
     #------------------------------------------------------------
     # Harvest control rule and fishing mortality
     #------------------------------------------------------------
@@ -1351,6 +1344,22 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     mtext("Male",side=3,adj=0.1)
     #----------------------------------
     
+    #--------------------------------------------
+    #Survey size comps: numbers at size
+    #--------------------------------------------
+    colnames(obj.rep$"Observed.Survey.Numbers.by.length.females")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Survey.Numbers.by.length.females",
+                   obj.rep$"Predicted.Survey.Numbers.by.length.females",
+                   nr = 8, nc = 6,nplot = length(obsyears));
+    mtext("Survey numbers, females",side=3,adj=0.0,outer=TRUE);
+    
+    colnames(obj.rep$"Observed.Survey.Numbers.by.length.males")<-c("year",as.character(length.bins))
+    plotSizeCompsComparisons(obj.rep$"Observed.Survey.Numbers.by.length.males",
+                               obj.rep$"Predicted.Survey.Numbers.by.length.males",
+                               nr = 8, nc = 6,nplot = length(obsyears));
+    mtext("Survey numbers, males",side=3,adj=0.0,outer=TRUE);
+    #----------------------------------
+
     #----------------------------------
     # plot fits to components of survey size comps
     #----------------------------------
