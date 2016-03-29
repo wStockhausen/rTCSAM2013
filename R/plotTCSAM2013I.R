@@ -629,7 +629,7 @@ plotTCSAM2013I<-function(obj.rep=NULL,
     #----------------------------------
     if (!is.null(obj.std)){
         par(oma=c(0.5,1,1,0.5),mar=c(4,5,2,1)+0.2,mfrow=c(2,1))
-        plotNatMort(obj.std,min.yr=1970);
+        plotNatMort(obj.std,styr=styr,endyr=endyr,min.yr=1970);
     }
     #----------------------------------
 
