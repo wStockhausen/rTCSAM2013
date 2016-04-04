@@ -15,7 +15,7 @@
 #'
 #'@export
 #'
-getPrs1<-function(type='all',inp.dir='.'){
+getPrs<-function(type='all',inp.dir='.'){
     if (!any(type==c('all','active'))) {
         cat("type = '",type,"' undefined for function rTCSAM2013::getPrs(...).\n",sep='');
         cat("Returning NULL.\n\n");
