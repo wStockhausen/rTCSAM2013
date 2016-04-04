@@ -5,14 +5,13 @@
 #'(if any) and the posterior distributions implied by their estimated standard
 #'errors.
 #'
-#'@param obj.prs - dataframe or filename for csv file containing parameters information
+#'@param obj.prs - TCSAM2013 prs object or 'active' or 'all'
 #'@param obj.std - dataframe obtained from reading, or filename of, the .std file
 #'@param dp - percent difference between parameter value and upper/lower limits used to color plot
 #'
 #'@return - dataframe
 #'
-#'@details If obj.prs is NULL, the user will be prompted to select a csv file.
-#'However, if obj.std is NULL, the user will NOT be prompted to select an
+#'@details  If obj.std is NULL, the user will NOT be prompted to select an
 #'std file and std info will NOT be included in the output.
 #'
 #'@export
@@ -20,8 +19,8 @@
 checkParams<-function(obj.prs=NULL,
                       obj.std=NULL,
                       dp=0.01){
-    if (!is.data.frame(obj.prs)){
-        obj.prs<-getPRS(obj.prs);
+    if (!inherits(obj.prs,'tcsam2013.prs')){
+        obj.prs<-getPrs(obj.prs);
     }
     if (!is.data.frame(obj.std)){
         if (is.character(obj.std)) {
@@ -43,6 +42,7 @@ checkParams<-function(obj.prs=NULL,
     for (r in 1:nr){
         pmn<-obj.prs$min[r];
         pmx<-obj.prs$max[r];
+        pin<-obj.prs$init[r];
         pvl<-obj.prs$value[r];
         pnm<-obj.prs$name[r];
         ##cat(r,pnm,"\n")
@@ -50,7 +50,7 @@ checkParams<-function(obj.prs=NULL,
             plot(c(pmn,pmx),c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n',ylim=c(0,1));
             clr<-'green';
             if (abs(pvl-pmn)/(pmx-pmn)<dp/100) {
-                clr<-'blue';
+                clr<-rgb(0,0,1,alpha=0.6);
                 if (is.null(res)) {
                     res<-as.data.frame(list(name=pnm,type='low',idx=obj.prs$index[r],min=pmn,max=pmx,value=pvl),stringsAsFactors=FALSE);
                 } else {
@@ -69,6 +69,7 @@ checkParams<-function(obj.prs=NULL,
             adj=0.01;
             if ((pvl-pmn)/(pmx-pmn)<0.5) adj<-0.99;
             rect(pmn,0,pmx,0.8,col=clr);
+            lines(c(pin,pin),c(0,0.9),lwd=3,col=grey(0.4,alpha=0.8),lty=2);
             lines(c(pvl,pvl),c(0,1),lwd=3,col='black');
             if (!is.null(obj.std)){
                 ##cat("--'",obj.std[k,2],"' =? '",pnm,"'\n",sep='');
@@ -86,6 +87,7 @@ checkParams<-function(obj.prs=NULL,
             if (obj.prs$phase[r]<1) clr<-grey(0.9);
             plot(c(0.9,1.1)*pvl,c(0,1),type='n',ann=FALSE,xaxt='n',yaxt='n');
             rect(0.9*pvl,0,1.1*pvl,0.8,col=clr);
+            lines(c(pin,pin),c(0,0.9),lwd=3,col=grey(0.4,alpha=0.8),lty=2);
             lines(c(pvl,pvl),c(0,1),lwd=3,col='black');
             mtext(pnm,side=3,line=-1,cex=0.6,adj=0.01);
             if ((pmn==pmx)){

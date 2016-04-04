@@ -5,7 +5,7 @@
 \title{Plot TCSAM2013 model results.}
 \usage{
 plotTCSAM2013(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
-  obj.wts = NULL, base.dir = "./", mdl = "tcsam2013alta", endyr = NULL,
+  obj.wts = NULL, base.dir = ".", mdl = "tcsam2013alta", endyr = NULL,
   styr = NULL, obsyr = NULL, pltyr = 1965, F35 = 0.73, B35 = 33.54)
 }
 \arguments{

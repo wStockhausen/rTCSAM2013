@@ -35,7 +35,7 @@ plotTCSAM2013<-function(obj.rep=NULL,
                         obj.std=NULL,
                         obj.prs=NULL,
                         obj.wts=NULL,
-                        base.dir='./',
+                        base.dir='.',
                         mdl='tcsam2013alta',#executable model name
                         endyr=NULL,    #assessment year
                         styr=NULL,     #model start year
@@ -52,8 +52,8 @@ plotTCSAM2013<-function(obj.rep=NULL,
     if (!is.data.frame(obj.std)){
         obj.std<-getStd(obj.std);
     }
-    if (!is.data.frame(obj.prs)){
-        obj.prs<-getPRS(obj.prs);
+    if (is.character(obj.prs)){
+        obj.prs<-getPrs(type=obj.prs);
     }
     if(!is.list(obj.wts)){
         obj.wts<-getRep(obj.wta);

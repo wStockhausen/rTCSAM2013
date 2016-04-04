@@ -92,14 +92,16 @@ runTCSAM2013<-function(os='osx',
     
     #get jitter info
     if (jitter&(!is.null(dfr))) {
+      if (file.exists('jitterInfo.csv')){
         tbl<-read.csv('jitterInfo.csv',header=TRUE);
         dfr<-rbind(data.frame(name='seed',value=tbl$seed[1]),dfr);
+      }
     }
     
     if (plotResults){
         obj.rep<-getRep('TCSAM_OLDSTYLE.R');
         obj.std<-getStd(paste(model,'.std',sep=''));
-        obj.prs<-getPRS('TCSAM_WTS.final_params.all.csv');
+        obj.prs<-getPrs('all');
         obj.wts<-getWTS('TCSAM_WTS.final.R')
         plotTCSAM2013I(obj.rep,
                        obj.std,

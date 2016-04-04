@@ -7,7 +7,7 @@
 checkParams(obj.prs = NULL, obj.std = NULL, dp = 0.01)
 }
 \arguments{
-\item{obj.prs}{- dataframe or filename for csv file containing parameters information}
+\item{obj.prs}{- TCSAM2013 prs object or 'active' or 'all'}
 
 \item{obj.std}{- dataframe obtained from reading, or filename of, the .std file}
 
@@ -22,8 +22,7 @@ This function plots parameters values, together with their limits
 errors.
 }
 \details{
-If obj.prs is NULL, the user will be prompted to select a csv file.
-However, if obj.std is NULL, the user will NOT be prompted to select an
+If obj.std is NULL, the user will NOT be prompted to select an
 std file and std info will NOT be included in the output.
 }
 

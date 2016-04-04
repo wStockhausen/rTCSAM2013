@@ -185,7 +185,8 @@ plotModelResults.ScalarParams<-function(dfr,vfr=NULL,nc=3,nr=4,showPlot=TRUE,pdf
        }
        p <- ggplot(data=dfrsp)
        p <- p + geom_rect(mapping=aes_string(xmin='min',xmax='max',ymin=I(0),ymax=I(1)),alpha=0.5,fill='grey')
-       p <- p + geom_vline(aes_string(xintercept='value',colour='case',linetype='case'),size=1)
+       p <- p + geom_vline(aes_string(xintercept='init',colour='case'),linetype=2,alpha=0.7,,size=1)
+       p <- p + geom_vline(aes_string(xintercept='value',colour='case'),linetype=1,size=1)
        p <- p + guides(colour=guide_legend())
        p <- p + labs(x='parameter value',y='')
        if (!is.null(vfr)&(nrow(vfrsp)>0)){
