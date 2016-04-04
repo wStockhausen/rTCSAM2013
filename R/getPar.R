@@ -20,11 +20,10 @@ getPar<-function(inp=NULL){
     r1<-readLines(con=inp);
     
     #parse first line
-    str <- gsub('[^[:digit:][:blank:].]','',r1[1],perl=TRUE);#remove all characters except numbers and blanks
-    str <- str<-strsplit(str,'[[:blank:]]');#split str based on blanks
-    str <- str[[1]][str[[1]]!=''];#remove empty array elements
-    objfun <- as.numeric(str);
-    names(objfun)<-c("number of parameters",'objective function','max gradient');
+    str <- strsplit(r1[1],'[[:blank:]]');#split based on blanks
+    num <- as.numeric(str[[1]]);         #convert to numeric, non-numerics will be NAs
+    objfun <- num[!is.na(num)];          #extract numeric elements (num par, obj fun, max gradient)
+    names(objfun)<-c('number of parameters','objective function','max gradient');
     dfr<-data.frame(name=names(objfun),value=objfun,stringsAsFactors=FALSE)
     
     #parse remaining lines

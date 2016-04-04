@@ -32,10 +32,10 @@ runJitter(os = "osx", path = ".", model = "tcsam2013alta",
 }
 \value{
 - list w/ 4 elements:
- imx  - index of (1st) smallest value for the objective function
+ imn  - index of (1st) smallest value for the objective function
  seed - seed resulting in the smallest objective function
  par  - dataframe with par results from run w/ smallest objective function
- objFuns - vector of objective function values from all model runs
+ objFuns - table of objective function values, max gradients, and seed values from all model runs
  parList - list of par dataframes for each model run
 }
 \description{

@@ -32,10 +32,10 @@
 #'@param plotResults - T/F to plot final results using \code{plotTCSAM2013I}
 #'
 #'@return - list w/ 4 elements:
-#'  imx  - index of (1st) smallest value for the objective function
+#'  imn  - index of (1st) smallest value for the objective function
 #'  seed - seed resulting in the smallest objective function
 #'  par  - dataframe with par results from run w/ smallest objective function
-#'  objFuns - vector of objective function values from all model runs
+#'  objFuns - table of objective function values, max gradients, and seed values from all model runs
 #'  parList - list of par dataframes for each model run
 #'
 #'@export
@@ -58,7 +58,6 @@ runJitter<-function(os='osx',
 
     #run models
     if (!onlyEvalJitter){
-        objFuns<-vector(mode='numeric',length=numRuns)+NA;
         rc<-0;
         parList<-list();
         for (r in 1:numRuns){
@@ -78,8 +77,10 @@ runJitter<-function(os='osx',
                               plotResults=FALSE);
             if (!is.null(par)){
                 rc<-rc+1;
-                objFuns[r]<-par$value[3];
-                tbl<-data.frame(idx=r,objFun=objFuns[r],seed=par$value[par$name=='seed']);
+                objFun  <-par$value[par$name=='objective function'];
+                seed    <-par$value[par$name=='seed'];
+                maxgrad <-par$value[par$name=='max gradient'];
+                tbl<-data.frame(idx=r,objFun=objFun,maxGrad=maxgrad,seed=seed);
                 if (r==1) write.table(tbl,file=out.csv,sep=",",col.names=TRUE,row.names=FALSE,append=FALSE)
                 if (r>1)  write.table(tbl,file=out.csv,sep=",",col.names=FALSE,row.names=FALSE,append=TRUE)
             }
@@ -90,24 +91,20 @@ runJitter<-function(os='osx',
 #    return(list(objFuns=objFuns,parList=parList))
 
     #determine row index associated w/ minimum obj fun value
+    #read jitter results from file
+    tbl<-read.csv(out.csv);
+    ##idx<-which.min(tbl$objFun);
+    idx<-order(tbl$objFun,abs(tbl$maxGrad));
+    seed<-tbl$seed[idx[1]];
     if (onlyEvalJitter){
-        #need to read jitter results from file
-        tbl<-read.csv(out.csv);
-        idx<-which.min(tbl$objFun);
-        seed<-tbl$seed[idx];
-        objFuns<-tbl$objFun;
         parList<-NULL;
-    } else {
-        #don't need to read file
-        idx<-which.min(objFuns);
-        par<-parList[[idx]];
-        seed<-par$value[par$name=='seed'];
     }
 
     #re-run case associated with mininum objective function value, save in "best.runxx"
-    cat("\n\n---Re-running ADMB program for",idx,"out of",numRuns,"as best run---\n\n");
-    fldr<-paste('best.run',wtsUtilities::formatZeros(idx,width=max(2,ceiling(log10(numRuns)))),sep='');
+    cat("\n\n---Re-running ADMB program for",idx[1],"out of",numRuns,"as best run---\n");
+    fldr<-paste('best.run',wtsUtilities::formatZeros(idx[1],width=max(2,ceiling(log10(numRuns)))),sep='');
     p2f<-file.path(path,fldr);
+    cat("---Output folder is '",p2f,"'\n\n",sep='');
     par<-runTCSAM2013(path=p2f,
                       os=os,
                       model=model,
@@ -131,6 +128,6 @@ runJitter<-function(os='osx',
     print(elt);
 
     #return output
-    return(list(imx=idx,seed=seed,par=par,objFuns=objFuns,parList=parList));
+    return(list(imn=idx[1],seed=seed,par=par,objFuns=tbl,parList=parList));
 }
 #res<-jitterTCSAM2013(200);
