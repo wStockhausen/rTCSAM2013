@@ -37,6 +37,9 @@ compareModelResults.Params<-function(objs,dp=0.01,fac=3,
     sdfr<-rbind(mdfr,lst$sfr);
     write.csv(sdfr,'ModelComparisons.ParameterEstimates.csv',row.names=FALSE);
     
+    dfr<-reshape2::dcast(mdfr,par+param~.,fun.aggregate=wtsUtilities::cvp,value.var='value');
+    write.csv(dfr,'ModelComparisons.ParameterEstimates.Diffs.csv',row.names=FALSE);
+    
     return(invisible(list(sdfr=sdfr,vfr=lst$vfr,plots=plots)));
 }
 
@@ -48,6 +51,7 @@ compareModelResults.Params<-function(objs,dp=0.01,fac=3,
 #'
 #'@param objs - model results objects (each is a list with elements 'prs' and 'std')
 #'@param dp - percent difference between parameter value and upper/lower limits used to flag outliers
+#'@param verbose - flag (T/F) to print debugging info
 #'
 #'@return - dataframe with the parameter information
 #'
@@ -55,14 +59,16 @@ compareModelResults.Params<-function(objs,dp=0.01,fac=3,
 #'
 #'@export
 #'
-extractModelResults.Params<-function(objs,dp=0.01){
+extractModelResults.Params<-function(objs,dp=0.01,verbose=FALSE){
     dfr<-NULL;
     cases<-names(objs);
     for (case in cases){
+        if (verbose) cat("case =",case,"\n")
         #loop over model cases
         prs<-objs[[case]]$prs;        
         params<-unique(prs$name);
         for (param in params){
+            if (verbose) cat("--param =",param,"\n")
             prsp<-prs[prs$name==param,];
             nr<-nrow(prsp);
             if (nr>0){
@@ -80,7 +86,7 @@ extractModelResults.Params<-function(objs,dp=0.01){
                     rw$min  <-prsp$min[r];
                     rw$max  <-prsp$max[r];
                     rw$scl  <- 0;
-                    if (is.finite(rw$min)){
+                    if (is.finite(rw$min)&&(rw$max-rw$min>0)){
                         if (abs(rw$value-rw$min)/(rw$max-rw$min)<dp/100) rw$scl <- -1;
                         if (abs(rw$value-rw$max)/(rw$max-rw$min)<dp/100) rw$scl <-  1;
                     }#finite limits
@@ -184,8 +190,8 @@ plotModelResults.ScalarParams<-function(dfr,vfr=NULL,nc=3,nr=4,showPlot=TRUE,pdf
            vfrsp<-vfr[idx,];
        }
        p <- ggplot(data=dfrsp)
-       p <- p + geom_rect(mapping=aes_string(xmin='min',xmax='max',ymin=I(0),ymax=I(1)),alpha=0.5,fill='grey')
-       p <- p + geom_vline(aes_string(xintercept='init',colour='case'),linetype=2,alpha=0.7,,size=1)
+       p <- p + geom_rect(mapping=aes_string(xmin='min',xmax='max'),ymin=I(0),ymax=I(1),alpha=0.5,fill='grey')
+##       p <- p + geom_vline(aes_string(xintercept='init',colour='case'),linetype=2,alpha=0.7,,size=1)
        p <- p + geom_vline(aes_string(xintercept='value',colour='case'),linetype=1,size=1)
        p <- p + guides(colour=guide_legend())
        p <- p + labs(x='parameter value',y='')

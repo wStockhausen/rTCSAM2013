@@ -4,12 +4,14 @@
 \alias{extractModelResults.Params}
 \title{Function to extract parameter values from different models.}
 \usage{
-extractModelResults.Params(objs, dp = 0.01)
+extractModelResults.Params(objs, dp = 0.01, verbose = FALSE)
 }
 \arguments{
 \item{objs}{- model results objects (each is a list with elements 'prs' and 'std')}
 
 \item{dp}{- percent difference between parameter value and upper/lower limits used to flag outliers}
+
+\item{verbose}{- flag (T/F) to print debugging info}
 }
 \value{
 - dataframe with the parameter information
