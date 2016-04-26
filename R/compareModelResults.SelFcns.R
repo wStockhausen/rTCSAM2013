@@ -109,7 +109,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -143,7 +143,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -185,7 +185,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -213,7 +213,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.85)
@@ -242,7 +242,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -271,7 +271,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -328,7 +328,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -357,7 +357,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -386,7 +386,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -428,7 +428,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
@@ -470,7 +470,7 @@ compareModelResults.SelFcns<-function(objs=NULL,
         mdfrp$case<-case;
         mdfr<-rbind(mdfr,mdfrp);
     }
-    mdfr<-dcast(mdfr,case+y+z~.,value.var='val')
+    mdfr<-reshape2::dcast(mdfr,case+y+z~.,value.var='val')
     p <- ggplot(data=mdfr,aes_string('z','.',colour='case',shape='case'))
     p <- p + geom_line(size=0.5,alpha=1)
 #    p <- p + geom_point(size=3,alpha=0.8)
