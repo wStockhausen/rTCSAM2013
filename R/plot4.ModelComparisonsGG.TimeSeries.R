@@ -86,16 +86,18 @@ plot4.ModelComparisonsGG.TimeSeries<-function(dfr,
                                               showPlot=showPlot);
         plots$p3<-p3;
         
-        #plot with model results only in recent years
+        #plot observations &  model results only in recent years
         xmx<-max(dfr$year,na.rm=TRUE);
         xplims<-c(xmx-numRecent,xmx+1);
         if (!is.null(xlims)){
             xplims[1]<-max(xlims[1],xplims[1],na.rm=TRUE);#max of mins
             xplims[2]<-min(xlims[2],xplims[2],na.rm=TRUE);#min of maxes
         }
-        idx<-!(dfr$category=='observed');
+        # idx<-!(dfr$category=='observed');
+        # idy<-dfr$year %in% xplims[1]:xplims[2];
+        # yplims<-range(dfr$val[idx&idy],na.rm=TRUE,finite=TRUE);
         idy<-dfr$year %in% xplims[1]:xplims[2];
-        yplims<-range(dfr$val[idx&idy],na.rm=TRUE,finite=TRUE);
+        yplims<-range(dfr$val[idy],na.rm=TRUE,finite=TRUE);
         if (!is.null(ylims)){
             yplims[1]<-max(ylims[1],yplims[1],na.rm=TRUE);#max of mins
             yplims[2]<-min(ylims[2],yplims[2],na.rm=TRUE);#min of maxes
