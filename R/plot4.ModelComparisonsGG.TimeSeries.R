@@ -104,7 +104,7 @@ plot4.ModelComparisonsGG.TimeSeries<-function(dfr,
         }
         p4<-plotModelComparisonsGG.TimeSeries(dfr,
                                               facets=facets,
-                                              plotObs=FALSE,
+                                              plotObs=TRUE,
                                               plotMod=TRUE,
                                               ci=ci,
                                               pdfType=pdfType,
