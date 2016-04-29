@@ -37,6 +37,7 @@ plot4.ModelComparisonsGG.TimeSeries<-function(dfr,
                                                 ylims=NULL,
                                                 showPlot=TRUE){
     plots<-list();
+    
     #plot with observations & model results
     if (plotObs&plotMod){
         p1<-plotModelComparisonsGG.TimeSeries(dfr,
@@ -52,41 +53,8 @@ plot4.ModelComparisonsGG.TimeSeries<-function(dfr,
                                               ylims=ylims,
                                               showPlot=showPlot);
         plots$p1<-p1;
-    }
-    #plot with observations only
-    if (plotObs){
-        p2<-plotModelComparisonsGG.TimeSeries(dfr,
-                                              facets=facets,
-                                              plotObs=TRUE,
-                                              plotMod=FALSE,
-                                              ci=ci,
-                                              pdfType=pdfType,
-                                              xlab=xlab,
-                                              ylab=ylab,
-                                              title=title,
-                                              xlims=xlims,
-                                              ylims=ylims,
-                                              showPlot=showPlot);
-        plots$p2<-p2;
-    }
-    #plot with model results only
-    if (plotMod){
-        #plot full time series
-        p3<-plotModelComparisonsGG.TimeSeries(dfr,
-                                              facets=facets,
-                                              plotObs=FALSE,
-                                              plotMod=TRUE,
-                                              ci=ci,
-                                              pdfType=pdfType,
-                                              xlab=xlab,
-                                              ylab=ylab,
-                                              title=title,
-                                              xlims=xlims,
-                                              ylims=ylims,
-                                              showPlot=showPlot);
-        plots$p3<-p3;
-        
-        #plot observations &  model results only in recent years
+
+        #plot in recent years only
         xmx<-max(dfr$year,na.rm=TRUE);
         xplims<-c(xmx-numRecent,xmx+1);
         if (!is.null(xlims)){
@@ -102,7 +70,7 @@ plot4.ModelComparisonsGG.TimeSeries<-function(dfr,
             yplims[1]<-max(ylims[1],yplims[1],na.rm=TRUE);#max of mins
             yplims[2]<-min(ylims[2],yplims[2],na.rm=TRUE);#min of maxes
         }
-        p4<-plotModelComparisonsGG.TimeSeries(dfr,
+        p2<-plotModelComparisonsGG.TimeSeries(dfr,
                                               facets=facets,
                                               plotObs=TRUE,
                                               plotMod=TRUE,
@@ -113,6 +81,41 @@ plot4.ModelComparisonsGG.TimeSeries<-function(dfr,
                                               title=title,
                                               xlims=xplims,
                                               ylims=yplims,
+                                              showPlot=showPlot);
+        plots$p2<-p2;
+    }
+    
+    #plot with observations only
+    if (plotObs){
+        p3<-plotModelComparisonsGG.TimeSeries(dfr,
+                                              facets=facets,
+                                              plotObs=TRUE,
+                                              plotMod=FALSE,
+                                              ci=ci,
+                                              pdfType=pdfType,
+                                              xlab=xlab,
+                                              ylab=ylab,
+                                              title=title,
+                                              xlims=xlims,
+                                              ylims=ylims,
+                                              showPlot=showPlot);
+        plots$p3<-p3;
+    }
+    
+    #plot with model results only
+    if (plotMod){
+        #plot full time series
+        p4<-plotModelComparisonsGG.TimeSeries(dfr,
+                                              facets=facets,
+                                              plotObs=FALSE,
+                                              plotMod=TRUE,
+                                              ci=ci,
+                                              pdfType=pdfType,
+                                              xlab=xlab,
+                                              ylab=ylab,
+                                              title=title,
+                                              xlims=xlims,
+                                              ylims=ylims,
                                               showPlot=showPlot);
         plots$p4<-p4;
     }

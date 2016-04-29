@@ -1,5 +1,5 @@
 #'
-#'@title Compare estimated/predicted time series among several model runs.
+#'@title Compare estimated/predicted time series among several model runs
 #'
 #'@description Function to compare estimated/predicted time series among 
 #'several model runs.
@@ -9,6 +9,8 @@
 #'@param numRecent - number of recent years to plot
 #'@param styr  - start year for model run
 #'@param endyr - final year of model run (assessment year)
+#'@param plot1stObs - flag to plot observations from the first case, only
+#'@param plotLegal  - flag to plot legal abundance
 #'@param obsyr - start year for survey observations
 #'@param pltyr - start year for plots with only model-predicted values
 #'@param reclag - recruitment lag
@@ -30,6 +32,8 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
                                          numRecent=15,
                                          styr=NULL,     #model start year
                                          endyr=NULL,    #model end year
+                                         plot1stObs=TRUE,
+                                         plotLegal=FALSE,
                                          obsyr=NULL,    #first year of survey observations
                                          pltyr=NULL,    #first year for plots
                                          recLag=5,
@@ -131,84 +135,6 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
         plotyears[[case]]<-pltyr[[case]]:endyr[[case]];
     }
     
-    #----------------------------------
-    # plot observed and predicted mature (spawning) biomass from survey
-    #----------------------------------
-    dfr<-NULL;
-    types<-c('male','female');
-    otypes<-c("Observed.survey.male.spawning.biomass",
-              "Observed.survey.female.spawning.biomass");
-    mtypes<-c("Predicted.Male.survey.mature.Biomass",
-              "Predicted.Female.survey.mature.Biomass");
-    for (t in 1:length(types)){
-        dfrp<-NULL;
-        for (case in cases){
-            otype<-otypes[t];
-            idx<-years[[case]] %in% obsyears[[case]];
-            est <-(reps[[case]])[[otype]][idx];
-            cv  <-(reps[[case]])[[paste(otype,"cv",sep='.')]];
-            dfro<-data.frame(case=case,category='observed',year=obsyears[[case]],val=est,cv=cv);
-            mtype<-mtypes[t];
-            prd <-(reps[[case]])[[mtype]]
-            dfrm<-data.frame(case=case,category='predicted',year=years[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
-        }
-        dfrp$type <- types[t];
-        dfr<-rbind(dfr,dfrp);
-    }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab="Biomass (1000's t)",
-                                            title="Mature survey biomass",
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
-    write.csv(dfr,file='ModelComparisons.MatureSurveyBiomass.csv',row.names=FALSE);
-    
-    #----------------------------------
-    #legal male abundance at survey time
-    #----------------------------------
-    dfr<-NULL;
-    types<-c('legal males');
-    otypes<-c("observed.number.of.males.greater.than.101.mm");
-    mtypes<-c("estimated.survey.numbers.of.males.101");
-    for (t in 1:length(types)){
-        dfrp<-NULL;
-        for (case in cases){
-            otype<-otypes[t];
-            est <-(reps[[case]])[[otype]]/1000;#convert to millions
-            dfro<-data.frame(case=case,category='observed',year=obsyears[[case]],val=est);
-            mtype<-mtypes[t];
-            prd <-(reps[[case]])[[mtype]]/1000;#convert to millions
-            dfrm<-data.frame(case=case,category='predicted',year=years[[case]],val=prd);
-            dfrp<-rbind(dfrp,dfro,dfrm);
-        }
-        dfrp$type <- types[t];
-        dfr<-rbind(dfr,dfrp);
-    }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab="'Legal' males (millions)",
-                                            title="'Legal' males (> 138 mm CW)",
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
-    write.csv(dfr,file='ModelComparisons.LegalMaleAbundance.csv',row.names=FALSE);
-    
    #----------------------------------
     #male spawning biomass
    #----------------------------------
@@ -308,6 +234,53 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
                                             showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.Recruitment.csv',row.names=FALSE);
     
+    #----------------------------------
+    # plot observed and predicted mature (spawning) biomass from survey
+    #----------------------------------
+    dfr<-NULL;
+    types<-c('male','female');
+    otypes<-c("Observed.survey.male.spawning.biomass",
+              "Observed.survey.female.spawning.biomass");
+    mtypes<-c("Predicted.Male.survey.mature.Biomass",
+              "Predicted.Female.survey.mature.Biomass");
+    for (t in 1:length(types)){
+        dfrp<-NULL;
+        for (case in cases){
+            otype<-otypes[t];
+            idx<-years[[case]] %in% obsyears[[case]];
+            est <-(reps[[case]])[[otype]][idx];
+            cv  <-(reps[[case]])[[paste(otype,"cv",sep='.')]];
+            dfro<-data.frame(case=case,category='observed',year=obsyears[[case]],val=est,cv=cv);
+            mtype<-mtypes[t];
+            prd <-(reps[[case]])[[mtype]]
+            dfrm<-data.frame(case=case,category='predicted',year=years[[case]],val=prd,cv=NA);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
+        }
+        dfrp$type <- types[t];
+        dfr<-rbind(dfr,dfrp);
+    }
+    #make 4-plot from observations & model results
+    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
+                                            numRecent=numRecent,
+                                            facets='type~.',
+                                            plotObs=TRUE,
+                                            plotMod=TRUE,
+                                            ci=0.95,
+                                            pdfType='lognormal',
+                                            xlab='year',
+                                            ylab="Biomass (1000's t)",
+                                            title="Mature survey biomass",
+                                            xlims=NULL,
+                                            ylims=NULL,
+                                            showPlot=TRUE);
+    write.csv(dfr,file='ModelComparisons.MatureSurveyBiomass.csv',row.names=FALSE);
+    
     #---------------------------------
     #retained catch
     #---------------------------------
@@ -330,7 +303,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -373,7 +352,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -416,7 +401,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -459,7 +450,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -502,7 +499,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -545,7 +548,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -588,7 +597,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -631,7 +646,13 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
             mtype<-mtypes[t];
             prd <-(reps[[case]])[[mtype]]
             dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
-            dfrp<-rbind(dfrp,dfro,dfrm);
+            if (plot1stObs){
+                if (case==cases[1]){
+                    dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                } else {
+                    dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                }
+            } else {dfrp<-rbind(dfrp,dfro,dfrm);}
         }
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
@@ -1228,5 +1249,49 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
                                             showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.GTF.Males.csv',row.names=FALSE);
     
+    #----------------------------------
+    #legal male abundance at survey time
+    #----------------------------------
+    if (plotLegal){
+        dfr<-NULL;
+        types<-c('legal males');
+        otypes<-c("observed.number.of.males.greater.than.101.mm");
+        mtypes<-c("estimated.survey.numbers.of.males.101");
+        for (t in 1:length(types)){
+            dfrp<-NULL;
+            for (case in cases){
+                otype<-otypes[t];
+                est <-(reps[[case]])[[otype]]/1000;#convert to millions
+                dfro<-data.frame(case=case,category='observed',year=obsyears[[case]],val=est);
+                mtype<-mtypes[t];
+                prd <-(reps[[case]])[[mtype]]/1000;#convert to millions
+                dfrm<-data.frame(case=case,category='predicted',year=years[[case]],val=prd);
+                if (plot1stObs){
+                    if (case==cases[1]){
+                        dfrp<-rbind(dfrp,dfro,dfrm);#include observations
+                    } else {
+                        dfrp<-rbind(dfrp,dfrm);     #exclude observations
+                    }
+                } else {dfrp<-rbind(dfrp,dfro,dfrm);}
+            }
+            dfrp$type <- types[t];
+            dfr<-rbind(dfr,dfrp);
+        }
+        #make 4-plot from observations & model results
+        ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
+                                                numRecent=numRecent,
+                                                facets='type~.',
+                                                plotObs=TRUE,
+                                                plotMod=TRUE,
+                                                ci=0.95,
+                                                pdfType='lognormal',
+                                                xlab='year',
+                                                ylab="'Legal' males (millions)",
+                                                title="'Legal' males (> 138 mm CW)",
+                                                xlims=NULL,
+                                                ylims=NULL,
+                                                showPlot=TRUE);
+        write.csv(dfr,file='ModelComparisons.LegalMaleAbundance.csv',row.names=FALSE);
+    }
     return(invisible(reps));
 }
