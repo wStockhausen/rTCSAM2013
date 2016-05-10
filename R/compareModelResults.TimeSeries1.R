@@ -1181,7 +1181,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     #"max.GTF.male.mortality.rate"                       
     #---------------------------------
     vartype<-"max.GTF.male.mortality.rate";
-    title="Groundfish bycatch fishing mortality";
+    title="Groundfish bycatch fishing mortality on males";
     ylab="Fully-selected Fishing Mortality Rate";
     dfr<-NULL;
     types<-c('male');
@@ -1217,7 +1217,7 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
     #"mean.GTF.male.mortality.rate"                       
     #---------------------------------
     vartype<-"mean.GTF.male.mortality.rate";
-    title="Groundfish bycatch fishing mortality";
+    title="Groundfish bycatch fishing mortality on males";
     ylab="Mean Fishing Mortality Rate";
     dfr<-NULL;
     types<-c('male');
@@ -1248,6 +1248,78 @@ compareModelResults.TimeSeries1<-function(reps=NULL,
                                             ylims=NULL,
                                             showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.GTF.Males.csv',row.names=FALSE);
+    
+    #---------------------------------
+    #"max.GTF.female.mortality.rate"                       
+    #---------------------------------
+    vartype<-"max.GTF.female.mortality.rate";
+    title="Groundfish bycatch fishing mortality on females";
+    ylab="Fully-selected Fishing Mortality Rate";
+    dfr<-NULL;
+    types<-c('male');
+    mtypes<-c(vartype);
+    for (t in 1:length(types)){
+        dfrp<-NULL;
+        for (case in cases){
+            mtype<-mtypes[t];
+            prd <-(reps[[case]])[[mtype]]
+            dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
+            dfrp<-rbind(dfrp,dfrm);
+        }
+        dfrp$type <- types[t];
+        dfr<-rbind(dfr,dfrp);
+    }
+    #make 4-plot from observations & model results
+    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
+                                            numRecent=numRecent,
+                                            facets='type~.',
+                                            plotObs=FALSE,
+                                            plotMod=TRUE,
+                                            ci=0.95,
+                                            pdfType='lognormal',
+                                            xlab='year',
+                                            ylab=ylab,
+                                            title=title,
+                                            xlims=NULL,
+                                            ylims=NULL,
+                                            showPlot=TRUE);
+    write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.GTF.Females.csv',row.names=FALSE);
+
+    #---------------------------------
+    #"mean.GTF.female.mortality.rate"                       
+    #---------------------------------
+    vartype<-"mean.GTF.female.mortality.rate";
+    title="Groundfish bycatch fishing mortality";
+    ylab="Mean Fishing Mortality Rate";
+    dfr<-NULL;
+    types<-c('male');
+    mtypes<-c(vartype);
+    for (t in 1:length(types)){
+        dfrp<-NULL;
+        for (case in cases){
+            mtype<-mtypes[t];
+            prd <-(reps[[case]])[[mtype]]
+            dfrm<-data.frame(case=case,category='predicted',year=years.m1[[case]],val=prd,cv=NA);
+            dfrp<-rbind(dfrp,dfrm);
+        }
+        dfrp$type <- types[t];
+        dfr<-rbind(dfr,dfrp);
+    }
+    #make 4-plot from observations & model results
+    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
+                                            numRecent=numRecent,
+                                            facets='type~.',
+                                            plotObs=FALSE,
+                                            plotMod=TRUE,
+                                            ci=0.95,
+                                            pdfType='lognormal',
+                                            xlab='year',
+                                            ylab=ylab,
+                                            title=title,
+                                            xlims=NULL,
+                                            ylims=NULL,
+                                            showPlot=TRUE);
+    write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.GTF.Females.csv',row.names=FALSE);
     
     #----------------------------------
     #legal male abundance at survey time
