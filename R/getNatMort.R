@@ -37,13 +37,13 @@ getNatMort<-function(sdobj,
   dfr<-NULL;
   sexes<-c('female','male');
   for (x in 1:2){
-      dfrp<-data.frame(sex=sexes[x],shell='',maturity='immature',year=yrs,
+      dfrp<-data.frame(sex=sexes[x],shell='new shell',maturity='immature',year=yrs,
                        val=M.imm.est[,x],std=M.imm.std[,x]);
       dfr<-rbind(dfr,dfrp);
-      dfrp<-data.frame(sex=sexes[x],shell='new',maturity='mature',year=yrs,
+      dfrp<-data.frame(sex=sexes[x],shell='new shell',maturity='mature',year=yrs,
                        val=M.NS.est[,x],std=M.NS.std[,x]);
       dfr<-rbind(dfr,dfrp);
-      dfrp<-data.frame(sex=sexes[x],shell='old',maturity='mature',year=yrs,
+      dfrp<-data.frame(sex=sexes[x],shell='old shell',maturity='mature',year=yrs,
                        val=M.NS.est[,x],std=M.NS.std[,x]);
       dfr<-rbind(dfr,dfrp);
   }
