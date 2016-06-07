@@ -4,10 +4,15 @@
 \alias{getMDFR.PopProcesses}
 \title{Get predicted population processes from several model runs}
 \usage{
-getMDFR.PopProcesses(reps, type = "R_cz")
+getMDFR.PopProcesses(reps, type = c("M_yxm", "R_cz", "prM2M_cxz", "mnZAM_cxz",
+  "T_cxzz"), verbose = FALSE)
 }
 \arguments{
 \item{reps}{- list of objects derived from Jack's R files for the models to be compared}
+
+\item{type}{- population process to retrieve}
+
+\item{verbose}{- flag (T/F) to print debug info}
 }
 \value{
 dataframe
@@ -19,9 +24,12 @@ several model runs.
 \details{
 Potential values for 'type' are:
 \itemize{
+ \item {'M_yxm' - natural mortality rates}
  \item {'R_cz' - size distribution for recruitment}
  \item {'prM2M_cxz' - probability of molt-to-maturity}
- \item {'N_yxmsz' - numbers-at-size by x,m,s [TODO]}
+ \item {'mnZAM_cxz' - mean growth increment}
+ \item {'T_cxzz' - growth transition matrix}
 }
+Uses \code{reshape2::melt}.
 }
 

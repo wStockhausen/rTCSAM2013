@@ -8,7 +8,7 @@
 #'
 #'@details Potential values for 'type' are:
 #'\itemize{
-#'  \item {'MB_yx' - mature biomass at mating, bysex (1000's t)}
+#'  \item {'MB_yx' - mature biomass at mating, by sex (1000's t)}
 #'  \item {'R_y' - total recruitment (millions)}
 #'  \item {'N_yxmsz' - numbers-at-size by x,m,s [TODO]}
 #'}
@@ -85,7 +85,7 @@ getMDFR.PopQuants<-function(reps,
     if (type=="MB_yx"){
         #--males
         types<-c('MMB');
-        mtypes<-c("Mating.time.Male.Spawning.Biomass");
+        mtypes<-c("mod.MMB");
         for (t in 1:length(types)){
             dfrp<-NULL;
             for (case in cases){
@@ -99,7 +99,7 @@ getMDFR.PopQuants<-function(reps,
         }
         #--females
         types<-c('MFB');
-        mtypes<-c("Mating.time.Female.Spawning.Biomass");
+        mtypes<-c("mod.MFB");
         for (t in 1:length(types)){
             dfrp<-NULL;
             for (case in cases){
@@ -119,7 +119,7 @@ getMDFR.PopQuants<-function(reps,
     #----------------------------------
     if (type=="R_y"){
         types<-c('Recruitment');
-        mtypes<-c("estimated.number.of.recruits.male");
+        mtypes<-c("mod.R");
         for (t in 1:length(types)){
             dfrp<-NULL;
             for (case in cases){

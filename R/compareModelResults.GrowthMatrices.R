@@ -1,7 +1,7 @@
 #'
-#'@title Compare probability of molt-to-maturity among several model runs
+#'@title Compare growth matrices among several model runs
 #'
-#'@description Function to compare probability of molt-to-maturity among several model runs.
+#'@description Function to compare growth matrices among several model runs.
 #'
 #'@param reps - list of objects derived from Jack's R files for the models to be compared
 #'@param cases - vector of labels for model cases (if 'reps' is not given)
@@ -15,16 +15,16 @@
 #'If 'reps' is not given, the working directory is set two levels above the 1st model case file selected.\cr\cr
 #'Uses \code{PBSmodelling::readList} and \code{wtsUtilities::selectFile}.
 #'
-#'@return ggplot object
+#'@return list of ggplot objects
 #'
 #'@import ggplot2
 #'
 #'@export
 #'
-compareModelResults.PrM2M<-function(reps=NULL,
-                                    cases=NULL,
-                                    showPlot=FALSE,
-                                    pdf=NULL){
+compareModelResults.GrowthMatrices<-function(reps=NULL,
+                                             cases=NULL,
+                                             showPlot=FALSE,
+                                             pdf=NULL){
     if (is.null(reps)){
         #read in rep files
         in.obj<-0;
@@ -62,15 +62,21 @@ compareModelResults.PrM2M<-function(reps=NULL,
     }
     
     #----------------------------------
-    # plot probability of molt-to-maturity
+    # plot growth transition matrices
     #----------------------------------
-    dfr<-getMDFR.PopProcesses(reps,type="prM2M_cxz");
+    dfr<-getMDFR.PopProcesses(reps,type="T_cxzz");
     
-    p <- ggplot(dfr,aes_string(x='z',y='val',colour='model'));
-    p <- p + geom_line(size=1.5);
-    p <- p + facet_grid(x~.);
-    p <- p + labs(x="size (mm CW)", y="pr(molt-to-maturity|size)");
-    if (showPlot||!is.null(pdf)) print(p);
+    plots<-list();
+    for (x in c('male','female')){
+        dfrp<-dfr[dfr$x==x,];
+        p <- ggplot(dfrp,aes_string(x='zp',y='val',colour='model'));
+        p <- p + ggtitle(paste0(x,"s"));
+        p <- p + geom_line();
+        p <- p + facet_wrap(~z,ncol=4);
+        p <- p + labs(y="probability", x="Post-molt Size (mm CW)");
+        if (showPlot||!is.null(pdf)) print(p);
+        plots[[x]]<-p;
+    }
 
-    return(p);
+    return(plots);
 }

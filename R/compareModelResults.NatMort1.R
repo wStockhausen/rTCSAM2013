@@ -62,24 +62,14 @@ compareModelResults.NatMort1<-function(reps=NULL,
     }
     
     #----------------------------------
-    # plot probability of molt-to-maturity
+    # plot natural mortality rates
     #----------------------------------
-    dfr<-NULL;
-    sexs<-c('female','male');
-    types<-c('immature','mature');
-    mtypes<-c("natural.mortality.immature.females.males",
-              "natural.mortality.mature.new.shell.females.males");
-    for (case in cases){
-        for (t in 1:length(types)){
-            nm <-(reps[[case]])[[mtypes[t]]];
-            dfrm<-data.frame(case=case,type=types[t],sex=sexs,val=nm);
-            dfr<-rbind(dfr,dfrm);
-        }
-    }
+    dfr<-getMDFR.PopProcesses(reps,type="M_yxm");
     
-    p <- ggplot(dfr,aes_string(x='case',y='val',fill='case'));
-    p <- p + geom_bar(position=position_dodge(),stat="identity");
-    p <- p + facet_grid(type~sex);
+    p <- ggplot(dfr,aes_string(x='y',y='val',colour='model'));
+    p <- p + geom_line();
+    p <- p + ylim(c(0,NA))
+    p <- p + facet_grid(x~m);
     p <- p + labs(x="", y="M");
     if (showPlot||!is.null(pdf)) print(p);
 

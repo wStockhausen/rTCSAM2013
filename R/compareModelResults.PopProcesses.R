@@ -6,13 +6,7 @@
 #'
 #'@param reps - list of objects derived from Jack's R files for the models to be compared
 #'@param cases - vector of labels for model cases (if 'reps' is not given)
-#'@param numRecent - number of recent years to plot
-#'@param styr  - start year for model run
-#'@param endyr - final year of model run (assessment year)
-#'@param plot1stObs - flag to plot observations from the first case, only
-#'@param obsyr - start year for survey observations
-#'@param pltyr - start year for plots with only model-predicted values
-#'@param reclag - recruitment lag
+#'@param showPlot - flag (T/F) to show plot
 #'@param pdf - name for output pdf file
 #'
 #'@details If 'reps' is not given, then the user is prompted to select Jack's R file output from each 
@@ -22,7 +16,9 @@
 #'If 'reps' is not given, the working directory is set two levels above the 1st model case file selected.\cr\cr
 #'Uses \code{PBSmodelling::readList} and \code{wtsUtilities::selectFile}.
 #'
-#'@return vector of list objects corresponding to the objects returned by each model R file.
+#'@return (nested) list of ggplot2 objects, returned invisibly.
+#'
+#'@import ggplot2
 #'
 #'@export
 #'
@@ -61,51 +57,6 @@ compareModelResults.PopProcesses<-function(reps=NULL,
     #create cases, if necessary
     if (is.null(cases)) cases<-names(reps);
 
-    #set up time info
-    endyr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$endyr)) {
-            endyr[[case]]<-reps[[case]]$endyr;
-        } else {            
-            cat("'endyr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'endyr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    styr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$styr)) {
-            styr[[case]]<-reps[[case]]$styr;
-        } else {            
-            cat("'styr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'styr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    obsyr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$obsyr)) {
-            obsyr[[case]]<-reps[[case]]$obsyr;
-        } else {            
-            cat("'obsyr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'obsyr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    pltyr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$pltyr)) {
-            pltyr[[case]]<-reps[[case]]$pltyr;
-        } else {            
-            cat("'pltyr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'pltyr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    
-    #set some constants
-    THOUSAND <-1000;
-
     #create pdf, if necessary
     if(!is.null(pdf)){
         pdf(file=pdf,width=11,height=8,onefile=TRUE);
@@ -116,18 +67,7 @@ compareModelResults.PopProcesses<-function(reps=NULL,
     }
     on.exit(par(oldpar),add=TRUE);
     
-    years    <-list();
-    years.m1 <-list();
-    obsyears <-list();
-    plotyears<-list();
-    for (case in cases){
-        years[[case]]    <-styr[[case]]:endyr[[case]];
-        years.m1[[case]] <-styr[[case]]:(endyr[[case]]-1);
-        obsyears[[case]] <-obsyr[[case]]:endyr[[case]];
-        plotyears[[case]]<-pltyr[[case]]:endyr[[case]];
-    }
-    
-    plots<-list();
+    plots<-list();#output list
     
     #-------------------------------------------#
     #plot natural mortality rates
@@ -146,9 +86,27 @@ compareModelResults.PopProcesses<-function(reps=NULL,
     #-------------------------------------------#
     #plot mean growth rates
     #-------------------------------------------#
-    p<-compareModelResults.Growth(reps,cases);
+    p<-compareModelResults.MeanGrowth(reps,cases);
     if (showPlot||!is.null(pdf)) print(p);
-    plots$growth<-p;
+    plots$mnGr<-p;
+    
+    #-------------------------------------------#
+    #plot growth transition matrices
+    #-------------------------------------------#
+    p<-compareModelResults.GrowthMatrices(reps,cases);
+    if (showPlot||!is.null(pdf)) print(p);
+    plots$GrTMs<-p;
+    
+    #-------------------------------------------#
+    #plot recruitment size distribution
+    #-------------------------------------------#
+    dfr<-getMDFR.PopProcesses(reps,type="R_cz");
+    p <- ggplot(dfr,aes_string(x='z',y='val',colour='model'));
+    p <- p + geom_line();
+    p <- p + ylim(c(0,NA));
+    p <- p + labs(x="size (mm CW)",y="recruitment size distribution");
+    if (showPlot||!is.null(pdf)) print(p);
+    plots$R_z<-p;
     
     return(invisible(plots));
 }

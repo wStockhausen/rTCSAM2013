@@ -28,7 +28,7 @@ several model runs.
 \details{
 Potential values for 'type' are:
 \itemize{
- \item {'MB_yx' - mature biomass at mating, bysex (1000's t)}
+ \item {'MB_yx' - mature biomass at mating, by sex (1000's t)}
  \item {'R_y' - total recruitment (millions)}
  \item {'N_yxmsz' - numbers-at-size by x,m,s [TODO]}
 }

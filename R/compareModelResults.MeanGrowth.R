@@ -21,10 +21,10 @@
 #'
 #'@export
 #'
-compareModelResults.Growth<-function(reps=NULL,
-                                     cases=NULL,
-                                     showPlot=FALSE,
-                                     pdf=NULL){
+compareModelResults.MeanGrowth<-function(reps=NULL,
+                                         cases=NULL,
+                                         showPlot=FALSE,
+                                         pdf=NULL){
     if (is.null(reps)){
         #read in rep files
         in.obj<-0;
@@ -62,24 +62,14 @@ compareModelResults.Growth<-function(reps=NULL,
     }
     
     #----------------------------------
-    # plot probability of molt-to-maturity
+    # plot mean growth
     #----------------------------------
-    dfr<-NULL;
-    types<-c('male','female');
-    mtypes<-c("Predicted.mean.postmolt.length.males",
-              "Predicted.mean.postmolt.length.females");
-    for (case in cases){
-        zbs<-reps[[case]]$length.bins;
-        for (t in 1:length(types)){
-            prd <-(reps[[case]])[[mtypes[t]]];
-            dfrm<-data.frame(case=case,sex=types[t],size=zbs,val=prd);
-            dfr<-rbind(dfr,dfrm);
-        }
-    }
+    dfr<-getMDFR.PopProcesses(reps,type="mnZAM_cxz");
     
-    p <- ggplot(dfr,aes_string(x='size',y='val',colour='case'));
+    p <- ggplot(dfr,aes_string(x='z',y='val',colour='model'));
     p <- p + geom_line(size=1.5);
-    p <- p + facet_grid(sex~.);
+    p <- p + geom_abline(slope=1,intercept=0,linetype=2)
+    p <- p + facet_grid(x~.);
     p <- p + labs(x="Pre-molt Size (mm CW)", y="Mean Post-molt Size (mm CW)");
     if (showPlot||!is.null(pdf)) print(p);
 
