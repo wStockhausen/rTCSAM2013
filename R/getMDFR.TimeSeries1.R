@@ -5,6 +5,8 @@
 #'several model runs.
 #'
 #'@param reps - list of objects derived from Jack's R files for the models to be compared
+#'@param type - time series to retrieve
+#'@param verbose - flag (T/F) to print debug info
 #'
 #'@details Potential values for 'type' are:
 #'\itemize{
@@ -16,7 +18,7 @@
 #'
 #'@export
 #'
-getMDFR.PopQuants<-function(reps,
+getMDFR.TimeSeries1<-function(reps,
                               type="MB_xy"){
 
     cases<-names(reps);
@@ -77,61 +79,8 @@ getMDFR.PopQuants<-function(reps,
         plotyears[[case]]<-pltyr[[case]]:endyr[[case]];
     }
     
-    dfr<-NULL;
     #----------------------------------
-    #Mating Biomass
-    #----------------------------------
-    if (type=="MB_xy"){
-        #--males
-        types<-c('MMB');
-        mtypes<-c("Mating.time.Male.Spawning.Biomass");
-        for (t in 1:length(types)){
-            dfrp<-NULL;
-            for (case in cases){
-                mtype<-mtypes[t];
-                prd <-(reps[[case]])[[mtype]];
-                dfrm<-data.frame(x='male',y=years.m1[[case]],val=prd,
-                                 model=case,modeltype='TCSAM2013');
-                dfrp<-rbind(dfrp,dfrm);
-            }
-            dfr<-rbind(dfr,dfrp);
-        }
-        #--females
-        types<-c('MFB');
-        mtypes<-c("Mating.time.Female.Spawning.Biomass");
-        for (t in 1:length(types)){
-            dfrp<-NULL;
-            for (case in cases){
-                mtype<-mtypes[t];
-                prd <-(reps[[case]])[[mtype]];
-                dfrm<-data.frame(x='female',y=years.m1[[case]],val=prd,
-                                 model=case,modeltype='TCSAM2013');
-                dfrp<-rbind(dfrp,dfrm);
-            }
-            dfr<-rbind(dfr,dfrp);
-        }
-        return(dfr);
-    }
-
-    #----------------------------------
-    #recruitment
-    #----------------------------------
-    types<-c('Recruitment');
-    mtypes<-c("estimated.number.of.recruits.male");
-    for (t in 1:length(types)){
-        dfrp<-NULL;
-        for (case in cases){
-            mtype<-mtypes[t];
-            prd <-2*(reps[[case]])[[mtype]]/1000;#scale to millions, males+females
-            dfrm<-data.frame(y=years[[case]],val=prd,
-                             model=case,modeltype='TCSAM2013');
-            dfrp<-rbind(dfrp,dfrm);
-        }
-        dfr<-rbind(dfr,dfrp);
-    }
-
-    #----------------------------------
-    # plot observed and predicted mature (spawning) biomass from survey
+    # observed and predicted mature (spawning) biomass from survey
     #----------------------------------
     dfr<-NULL;
     types<-c('male','female');
@@ -161,20 +110,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab="Biomass (1000's t)",
-                                            title="Mature survey biomass",
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MatureSurveyBiomass.csv',row.names=FALSE);
     
     #---------------------------------
@@ -210,20 +145,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.RetainedCatch.csv',row.names=FALSE);
     
     #---------------------------------
@@ -259,20 +180,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.TotalMortality.TCF.Males.csv',row.names=FALSE);
     
     #---------------------------------
@@ -308,20 +215,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.TotalMortality.TCF.Females.csv',row.names=FALSE);
     
     #---------------------------------
@@ -357,20 +250,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.TotalMortality.SCF.Males.csv',row.names=FALSE);
     
     #---------------------------------
@@ -406,20 +285,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.TotalMortality.SCF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -455,20 +320,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.TotalMortality.RKF.Males.csv',row.names=FALSE);
     
     #---------------------------------
@@ -504,20 +355,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.TotalMortality.RKF.Females.csv',row.names=FALSE);
     
     #---------------------------------
@@ -553,20 +390,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=TRUE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.TotalMortality.GTF.Males.csv',row.names=FALSE);
     
     #---------------------------------
@@ -589,20 +412,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxFishingMortalityRate.TCFR.csv',row.names=FALSE);
     
     #---------------------------------
@@ -625,20 +434,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanFishingMortalityRate.TCFR.csv',row.names=FALSE);
 
     #---------------------------------
@@ -661,20 +456,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.TCF.Males.csv',row.names=FALSE);
 
     #---------------------------------
@@ -697,20 +478,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.TCF.Males.csv',row.names=FALSE);
 
     #---------------------------------
@@ -733,20 +500,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.TCF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -769,20 +522,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.TCF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -805,20 +544,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.SCF.Males.csv',row.names=FALSE);
 
     #---------------------------------
@@ -841,21 +566,8 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.SCF.Males.csv',row.names=FALSE);
+    return(dfr);
 
     #---------------------------------
     #"max.SCF.female.mortality.rate"                                
@@ -877,20 +589,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.SCF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -913,20 +611,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.SCF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -949,20 +633,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.RKF.Males.csv',row.names=FALSE);
 
     #---------------------------------
@@ -985,20 +655,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.RKF.Males.csv',row.names=FALSE);
 
     #---------------------------------
@@ -1021,20 +677,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.RKF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -1057,20 +699,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.RKF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -1093,20 +721,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.GTF.Males.csv',row.names=FALSE);
 
     #---------------------------------
@@ -1129,20 +743,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.GTF.Males.csv',row.names=FALSE);
     
     #---------------------------------
@@ -1165,20 +765,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MaxTotFishingMortalityRate.GTF.Females.csv',row.names=FALSE);
 
     #---------------------------------
@@ -1201,20 +787,6 @@ getMDFR.PopQuants<-function(reps,
         dfrp$type <- types[t];
         dfr<-rbind(dfr,dfrp);
     }
-    #make 4-plot from observations & model results
-    ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                            numRecent=numRecent,
-                                            facets='type~.',
-                                            plotObs=FALSE,
-                                            plotMod=TRUE,
-                                            ci=0.95,
-                                            pdfType='lognormal',
-                                            xlab='year',
-                                            ylab=ylab,
-                                            title=title,
-                                            xlims=NULL,
-                                            ylims=NULL,
-                                            showPlot=TRUE);
     write.csv(dfr,file='ModelComparisons.MeanTotFishingMortalityRate.GTF.Females.csv',row.names=FALSE);
     
     #----------------------------------
@@ -1245,21 +817,6 @@ getMDFR.PopQuants<-function(reps,
             dfrp$type <- types[t];
             dfr<-rbind(dfr,dfrp);
         }
-        #make 4-plot from observations & model results
-        ps<-plot4.ModelComparisonsGG.TimeSeries(dfr,
-                                                numRecent=numRecent,
-                                                facets='type~.',
-                                                plotObs=TRUE,
-                                                plotMod=TRUE,
-                                                ci=0.95,
-                                                pdfType='lognormal',
-                                                xlab='year',
-                                                ylab="'Legal' males (millions)",
-                                                title="'Legal' males (> 138 mm CW)",
-                                                xlims=NULL,
-                                                ylims=NULL,
-                                                showPlot=TRUE);
         write.csv(dfr,file='ModelComparisons.LegalMaleAbundance.csv',row.names=FALSE);
     }
-    return(invisible(reps));
 }

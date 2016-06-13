@@ -17,7 +17,7 @@ compareModelResults.PopProcesses(reps = NULL, cases = NULL,
 \item{pdf}{- name for output pdf file}
 }
 \value{
-vector of list objects corresponding to the objects returned by each model R file.
+(nested) list of ggplot2 objects, returned invisibly.
 }
 \description{
 Function to compare estimated/predicted time series among 

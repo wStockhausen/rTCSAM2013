@@ -2,7 +2,7 @@
 % Please edit documentation in R/getRep.R
 \name{getRep}
 \alias{getRep}
-\title{Create a TCSAM2013 rep object from a TCSAM_OLDSTYLE R file.}
+\title{Create a TCSAM2013 rep object from a TCSAM_OLDSTYLE R file}
 \usage{
 getRep(inp = NULL)
 }
@@ -10,7 +10,8 @@ getRep(inp = NULL)
 \item{inp}{= filename of TCSAM_OLDSTYLE R file}
 }
 \value{
-list object corresponding to the TCSAM_OLDSTYLE R file, or NULL if file does not exist
+list object corresponding to the TCSAM_OLDSTYLE R file, or NULL if file does not exist. 
+Returned object has class 'tcsam213.rep'.
 }
 \description{
 Function to create a TCSAM2013 rep object from a TCSAM_OLDSTYLE R file.
