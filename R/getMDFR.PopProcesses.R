@@ -4,7 +4,7 @@
 #'@description Function to get predicted population processes from 
 #'several model runs.
 #'
-#'@param reps - list of objects derived from Jack's R files for the models to be compared
+#'@param reps - tcsam2013.rep object (derived from OLDSTYLE R files) for the models to be compared
 #'@param type - population process to retrieve
 #'@param verbose - flag (T/F) to print debug info
 #'
@@ -18,7 +18,8 @@
 #'}
 #'Uses \code{reshape2::melt}.
 #'
-#'@return dataframe
+#'@return dataframe with columns 'modeltype','model',
+#''y' or 'pc','x','m' or 'z', and 'val' (or 'zp' and 'val').
 #'
 #'@export
 #'
@@ -26,6 +27,9 @@ getMDFR.PopProcesses<-function(reps,
                                type=c('M_yxm',"R_cz",'prM2M_cxz','mnZAM_cxz','T_cxzz'),
                                verbose=FALSE){
 
+    if (inherits(reps,'tcsam2013.rep')){
+        reps<-list(`2013`=reps);#wrap in list
+    }
     cases<-names(reps);
     
     #set up time info
@@ -115,25 +119,28 @@ getMDFR.PopProcesses<-function(reps,
     if (type[1]=="R_cz"){
         dfr<-NULL;
         for (case in cases){
+            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
             dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc='1',z=reps[[case]]$zBs,
+                             pc=pc,z=reps[[case]]$zBs,
                              val=(reps[[case]])[["mod.prR_z"]]);
             dfr<-rbind(dfr,dfrp);
         }
         return(dfr);
     }
+    
     #----------------------------------
     #pr(molt-to-maturity|z)
     #----------------------------------
     if (type[1]=="prM2M_cxz"){
         dfr<-NULL;
         for (case in cases){
+            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
             dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=1,x="female",z=reps[[case]]$zBs,
+                             pc=pc,x="female",z=reps[[case]]$zBs,
                              val=(reps[[case]])[["mod.prM2M.F"]]);
             dfr<-rbind(dfr,dfrp);
             dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=1,x="male",z=reps[[case]]$zBs,
+                             pc=pc,x="male",z=reps[[case]]$zBs,
                              val=(reps[[case]])[["mod.prM2M.M"]]);
             dfr<-rbind(dfr,dfrp);
         }
@@ -145,12 +152,13 @@ getMDFR.PopProcesses<-function(reps,
     if (type[1]=="mnZAM_cxz"){
         dfr<-NULL;
         for (case in cases){
+            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
             dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=1,x="female",z=reps[[case]]$zBs,
+                             pc=pc,x="female",z=reps[[case]]$zBs,
                              val=(reps[[case]])[["mod.mnPMZ.F"]]);
             dfr<-rbind(dfr,dfrp);
             dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=1,x="male",z=reps[[case]]$zBs,
+                             pc=pc,x="male",z=reps[[case]]$zBs,
                              val=(reps[[case]])[["mod.mnPMZ.M"]]);
             dfr<-rbind(dfr,dfrp);
         }
@@ -162,19 +170,20 @@ getMDFR.PopProcesses<-function(reps,
     if (type[1]=="T_cxzz"){
         dfr<-NULL;
         for (case in cases){
+            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
             val=(reps[[case]])[["mod.prGr_xzz.F"]];
             dimnames(val)<-list(z =as.character(reps[[case]]$zBs),
                                 zp=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
-                        pc=1,x="female",dfrp);
+                        pc=pc,x="female",dfrp);
             dfr<-rbind(dfr,dfrp);
             val=(reps[[case]])[["mod.prGr_xzz.M"]];
             dimnames(val)<-list(z =as.character(reps[[case]]$zBs),
                                 zp=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
-                        pc=1,x="male",dfrp);
+                        pc=pc,x="male",dfrp);
             dfr<-rbind(dfr,dfrp);
         }
         return(dfr);

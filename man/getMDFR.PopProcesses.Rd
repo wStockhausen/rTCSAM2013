@@ -8,14 +8,15 @@ getMDFR.PopProcesses(reps, type = c("M_yxm", "R_cz", "prM2M_cxz", "mnZAM_cxz",
   "T_cxzz"), verbose = FALSE)
 }
 \arguments{
-\item{reps}{- list of objects derived from Jack's R files for the models to be compared}
+\item{reps}{- tcsam2013.rep object (derived from OLDSTYLE R files) for the models to be compared}
 
 \item{type}{- population process to retrieve}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }
 \value{
-dataframe
+dataframe with columns 'modeltype','model',
+'y' or 'pc','x','m' or 'z', and 'val' (or 'zp' and 'val').
 }
 \description{
 Function to get predicted population processes from 
