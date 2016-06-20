@@ -8,7 +8,7 @@ getMDFR.PopQuants(reps, type = c("MB_xy", "R_y", "N_yxmsz", "N_yxmz",
   "N_yxms", "N_yxm", "N_yx"), verbose = FALSE)
 }
 \arguments{
-\item{reps}{- list of objects derived from Jack's R files for the models to be compared}
+\item{reps}{- list of tcsam2013.rep objects derived from "oldstyle" R report files for the models to be compared}
 
 \item{type}{- population quantity to retrieve}
 
@@ -25,12 +25,13 @@ several model runs.
 Potential values for 'type' are:
 \itemize{
  \item {'MB_yx' - mature biomass at mating, by sex (1000's t)}
- \item {'R_y' - total recruitment (millions)}
- \item {'N_yxmsz' - annual abundance by x,m,s,z (millions)}
- \item {'N_yxmz'  - annual abundance by x,m,z (millions)}
- \item {'N_yxms'  - annual abundance by x,m,s (millions)}
- \item {'N_yxz'   - annual abundance by x,m (millions)}
- \item {'N_yx'    - annual abundance by x (millions)}
+ \item {'R_y' - annual total recruitment (millions)}
+ \item {'iN_xmsz' - initial (July 1) abundance by x,m,s,z (millions)}
+ \item {'N_yxmsz' - annual (July 1) abundance by x,m,s,z (millions)}
+ \item {'N_yxmz'  - annual (July 1) abundance by x,m,z (millions)}
+ \item {'N_yxms'  - annual (July 1) abundance by x,m,s (millions)}
+ \item {'N_yxz'   - annual (July 1) abundance by x,m (millions)}
+ \item {'N_yx'    - annual (July 1) abundance by x (millions)}
 }
 }
 

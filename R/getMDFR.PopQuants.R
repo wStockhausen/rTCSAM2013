@@ -4,19 +4,20 @@
 #'@description Function to get predicted population quantities (time series) from 
 #'several model runs.
 #'
-#'@param reps - list of objects derived from Jack's R files for the models to be compared
+#'@param reps - list of tcsam2013.rep objects derived from "oldstyle" R report files for the models to be compared
 #'@param type - population quantity to retrieve
 #'@param verbose - flag (T/F) to print debug info
 #'
 #'@details Potential values for 'type' are:
 #'\itemize{
 #'  \item {'MB_yx' - mature biomass at mating, by sex (1000's t)}
-#'  \item {'R_y' - total recruitment (millions)}
-#'  \item {'N_yxmsz' - annual abundance by x,m,s,z (millions)}
-#'  \item {'N_yxmz'  - annual abundance by x,m,z (millions)}
-#'  \item {'N_yxms'  - annual abundance by x,m,s (millions)}
-#'  \item {'N_yxz'   - annual abundance by x,m (millions)}
-#'  \item {'N_yx'    - annual abundance by x (millions)}
+#'  \item {'R_y' - annual total recruitment (millions)}
+#'  \item {'iN_xmsz' - initial (July 1) abundance by x,m,s,z (millions)}
+#'  \item {'N_yxmsz' - annual (July 1) abundance by x,m,s,z (millions)}
+#'  \item {'N_yxmz'  - annual (July 1) abundance by x,m,z (millions)}
+#'  \item {'N_yxms'  - annual (July 1) abundance by x,m,s (millions)}
+#'  \item {'N_yxz'   - annual (July 1) abundance by x,m (millions)}
+#'  \item {'N_yx'    - annual (July 1) abundance by x (millions)}
 #'}
 #'
 #'@return dataframe
@@ -117,7 +118,7 @@ getMDFR.PopQuants<-function(reps,
         for (case in cases){
             dfrp<-data.frame(modeltype='TCSAM2013',model=case,
                              y=years[[case]],
-                             val=-(reps[[case]])[["mod.R"]]);
+                             val=(reps[[case]])[["mod.R"]]);
             dfr<-rbind(dfr,dfrp);
         }
         return(dfr);
@@ -126,7 +127,7 @@ getMDFR.PopQuants<-function(reps,
     #----------------------------------
     #population abundance (millions)
     #----------------------------------
-    if (substr(type[1])=="N_yx"){
+    if ((substr(type[1],1,4)=="N_yx")||(type[1]=="iN_xmsz")){
         dfr<-NULL;
         for (case in cases){
             #INF
@@ -134,6 +135,7 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="female",m="immature",s="new shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
@@ -142,6 +144,7 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="female",m="immature",s="old shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
@@ -150,6 +153,7 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="female",m="mature",s="new shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
@@ -158,6 +162,7 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="female",m="mature",s="old shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
@@ -166,6 +171,7 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="male",m="immature",s="new shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
@@ -174,6 +180,7 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="male",m="immature",s="old shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
@@ -182,6 +189,7 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="male",m="mature",s="new shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
@@ -190,10 +198,12 @@ getMDFR.PopQuants<-function(reps,
             dimnames(val)<-list(y=as.character(years[[case]]),
                                 z=as.character(reps[[case]]$zBs));
             dfrp<-reshape2::melt(val,value.name='val')
+            if (type[1]=="iN_xmsz") dfrp<-dfrp[dfrp$y==styr[[case]],];
             dfrp<-cbind(modeltype='TCSAM2013',model=case,
                         x="male",m="mature",s="old shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('modeltype','model','y','x','m','s','z','val')]);
         }
+        if (type[1]=="iN_xmsz") return(dfr);
         if (type[1]=="N_yxmsz") return(dfr);
         if (type[1]=="N_yxmz"){
             dfrp<-NULL;
