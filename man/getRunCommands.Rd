@@ -6,7 +6,8 @@
 \usage{
 getRunCommands(os = "osx", model = "tcsam2013alta", path2model = "",
   configFile = "", pin = FALSE, hess = FALSE, mcmc = FALSE,
-  jitter = FALSE, seed = NULL, cleanup = TRUE)
+  jitter = FALSE, seed = NULL, minPhase = NULL, maxPhase = NULL,
+  rmEXE = FALSE, cleanup = TRUE)
 }
 \arguments{
 \item{os}{- 'win', 'mac' or 'osx'}
@@ -17,7 +18,7 @@ getRunCommands(os = "osx", model = "tcsam2013alta", path2model = "",
 
 \item{configFile}{- filename (including path) to model configuration file}
 
-\item{pin}{- flag (T/F) to use a pin file}
+\item{pin}{- flag (T/F) to use/not use a default pin file, or an ascii filename to use a non-default one}
 
 \item{hess}{- flag (T/F) to calculate the hessian}
 
@@ -26,6 +27,12 @@ getRunCommands(os = "osx", model = "tcsam2013alta", path2model = "",
 \item{jitter}{- flag (T/F) to use jitter initial values}
 
 \item{seed}{- value for random number seed to generate jitter}
+
+\item{minPhase}{- min phase to start estimation}
+
+\item{maxPhase}{- max phase for estimation}
+
+\item{rmEXE}{- flag to remove model executable from run folder}
 
 \item{cleanup}{- flag (T/F) to clean up unnecessary files}
 }

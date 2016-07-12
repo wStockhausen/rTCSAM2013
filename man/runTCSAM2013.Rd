@@ -6,8 +6,8 @@
 \usage{
 runTCSAM2013(os = "osx", path = ".", model = "tcsam2013alta",
   path2model = "", configFile = "", pin = FALSE, hess = FALSE,
-  mcmc = FALSE, jitter = FALSE, seed = NULL, plotResults = hess,
-  cleanup = TRUE)
+  mcmc = FALSE, minPhase = NULL, maxPhase = NULL, jitter = FALSE,
+  seed = NULL, plotResults = hess, rmEXE = FALSE, cleanup = TRUE)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -20,17 +20,23 @@ runTCSAM2013(os = "osx", path = ".", model = "tcsam2013alta",
 
 \item{configFile}{- filename (including path) to model configuration file}
 
-\item{pin}{- T/F to use a pin file}
+\item{pin}{- flag (T/F) to use/not use a default pin file, or an ascii filename to use a non-default one}
 
 \item{hess}{- T/F to compute hessian (and .std file)}
 
 \item{mcmc}{- T/F to run mcmc}
+
+\item{minPhase}{- min phase to start estimation}
+
+\item{maxPhase}{- max phase for estimation}
 
 \item{jitter}{- T/F to jitter parameters}
 
 \item{seed}{- seed for random number generator (or NULL)}
 
 \item{plotResults}{- T/F to plot results using \code{plotTCSAM2013I}}
+
+\item{rmEXE}{- flag to remove model executable from run folder}
 
 \item{cleanup}{- flag (T/F) to clean up unnecessary files}
 }

@@ -15,12 +15,15 @@
 #'@param model      - TCSAM2013 model executable name
 #'@param path2model - path to model executable
 #'@param configFile - filename (including path) to model configuration file
-#'@param pin  - T/F to use a pin file
+#'@param pin - flag (T/F) to use/not use a default pin file, or an ascii filename to use a non-default one
 #'@param hess - T/F to compute hessian (and .std file)
 #'@param mcmc - T/F to run mcmc
+#'@param minPhase - min phase to start estimation
+#'@param maxPhase - max phase for estimation
 #'@param jitter  - T/F to jitter parameters
 #'@param seed    - seed for random number generator (or NULL)
 #'@param plotResults - T/F to plot results using \code{plotTCSAM2013I}
+#'@param rmEXE - flag to remove model executable from run folder
 #'@param cleanup - flag (T/F) to clean up unnecessary files
 #'
 #'@return - dataframe with 2 columns (name, value) with jitter seed (if jittered) and par file info, or NULL if par file does not exist
@@ -38,9 +41,12 @@ runTCSAM2013<-function(os='osx',
                        pin=FALSE,
                        hess=FALSE,
                        mcmc=FALSE,
+                       minPhase=NULL,
+                       maxPhase=NULL,
                        jitter=FALSE,
                        seed=NULL,
                        plotResults=hess,
+                       rmEXE=FALSE,
                        cleanup=TRUE){
     #start timing
     stm<-Sys.time();
@@ -63,8 +69,11 @@ runTCSAM2013<-function(os='osx',
                              pin=pin,
                              hess=hess,
                              mcmc=mcmc,
+                             minPhase=minPhase,
+                             maxPhase=maxPhase,
                              jitter=jitter,
                              seed=seed,
+                             rmEXE=rmEXE,
                              cleanup=cleanup)
     if (tolower(os)=='win'){
         cat(run.cmds,file="tmp.bat")
