@@ -4,17 +4,30 @@
 \alias{plotModelComparisonsGG.TimeSeries}
 \title{Plot comparisons of time series from a set of model runs}
 \usage{
-plotModelComparisonsGG.TimeSeries(dfr, position = "dodge", facets = NULL,
-  scales = "fixed", plotObs = TRUE, plotMod = TRUE, ci = 0.95,
-  pdfType = "lognormal", xlab = "year", ylab = NULL, title = NULL,
-  xlims = NULL, ylims = NULL, showPlot = TRUE)
+plotModelComparisonsGG.TimeSeries(dfr, x = "y", y = "val", lci = "lci",
+  uci = "uci", model = "model", category = "category", facets = NULL,
+  position = "dodge", scales = "fixed", plotObs = TRUE, plotMod = TRUE,
+  ci = 0.95, pdfType = "lognormal", xlab = "year", ylab = NULL,
+  title = NULL, xlims = NULL, ylims = NULL, showPlot = TRUE)
 }
 \arguments{
 \item{dfr}{- dataframe}
 
-\item{position}{- indicates ggplot2 position_ to use ('dodge','jitter','identity',)}
+\item{x}{- column name with x axis values}
+
+\item{y}{- column name with y axis values}
+
+\item{lci}{- column name with y axis values}
+
+\item{uci}{- column name with y axis values}
+
+\item{model}{- column name with model names}
+
+\item{category}{- column name with category values (i.e., "observed","predicted")}
 
 \item{facets}{- string giving faceting formula}
+
+\item{position}{- indicates ggplot2 position_ to use ('dodge','jitter','identity',)}
 
 \item{scales}{- ggplot2 scales option for facet_grid}
 

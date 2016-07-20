@@ -2,17 +2,31 @@
 % Please edit documentation in R/plot4.ModelComparisonsGG.TimeSeries.R
 \name{plot4.ModelComparisonsGG.TimeSeries}
 \alias{plot4.ModelComparisonsGG.TimeSeries}
-\title{Plot 4 comparisons of time series from a set of model runs}
+\title{Plot comparisons of time series from a set of model runs, with a "zoom" for recent years}
 \usage{
-plot4.ModelComparisonsGG.TimeSeries(dfr, numRecent = 15, facets = NULL,
-  scales = "fixed", plotObs = TRUE, plotMod = TRUE, ci = 0.95,
-  pdfType = "lognormal", xlab = "year", ylab = NULL, title = NULL,
-  xlims = NULL, ylims = NULL, showPlot = TRUE)
+plot4.ModelComparisonsGG.TimeSeries(dfr, numRecent = 15, x = "y",
+  y = "val", lci = "lci", uci = "uci", model = "model",
+  category = "category", facets = NULL, scales = "fixed",
+  plotObs = TRUE, plotMod = TRUE, ci = 0.95, pdfType = "lognormal",
+  xlab = "year", ylab = NULL, title = NULL, xlims = NULL,
+  ylims = NULL, showPlot = TRUE)
 }
 \arguments{
 \item{dfr}{- dataframe}
 
 \item{numRecent}{- number of "recent" years to plot}
+
+\item{x}{- column name with x axis values}
+
+\item{y}{- column name with y axis values}
+
+\item{lci}{- column name with y axis values}
+
+\item{uci}{- column name with y axis values}
+
+\item{model}{- column name with model names}
+
+\item{category}{- column name with category values (i.e., "observed","predicted")}
 
 \item{facets}{- string giving faceting formula}
 
@@ -42,6 +56,10 @@ plot4.ModelComparisonsGG.TimeSeries(dfr, numRecent = 15, facets = NULL,
 list with requested ggplot objects
 }
 \description{
-Function to plot a comparison of time series from a set of model runs.
+Function to plot a comparison of time series from a set of model runs, with a "zoom" for recent years.
+}
+\details{
+numRecent provides the "zoom" for a second set of faceted plots including
+only the most recent years.
 }
 

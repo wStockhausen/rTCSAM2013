@@ -20,6 +20,8 @@
 #'
 #'@return ggplot2 object
 #'
+#'@details None.
+#'
 #'@import ggplot2
 #'
 #'@export

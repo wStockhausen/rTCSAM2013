@@ -44,4 +44,7 @@ ggplot2 object
 \description{
 Function to plot z-scores from a smodel run.
 }
+\details{
+None.
+}
 
