@@ -4,10 +4,16 @@
 \alias{plotTCSAM2013I.GG}
 \title{Plot TCSAM2013 model results.}
 \usage{
-plotTCSAM2013I.GG(obj, F35 = 0.73, B35 = 33.54, showPlot = TRUE,
-  pdf = FALSE)
+plotTCSAM2013I.GG(obj, numRecent = 15, plot1stObs = TRUE, F35 = 0.73,
+  B35 = 33.54, showPlot = TRUE, pdf = FALSE)
 }
 \arguments{
+\item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
+
+\item{numRecent}{- number of "recent" years to include in "zoom" plots}
+
+\item{plot1stObs}{- flag to plot observations from the first case, only}
+
 \item{F35}{- F35 value for control rule plot}
 
 \item{B35}{- B35 value for control rule plot}
@@ -15,20 +21,6 @@ plotTCSAM2013I.GG(obj, F35 = 0.73, B35 = 33.54, showPlot = TRUE,
 \item{showPlot}{- flag (T/F) to print plots to screen (if pdf==FALSE)}
 
 \item{pdf}{- flag (T/F) to print plots to a pdf}
-
-\item{obj.rep}{- report file list object}
-
-\item{obj.std}{- dataframe object with parameter std info}
-
-\item{obj.prs}{- dataframe object w/ parameters info}
-
-\item{obj.wts}{- TCSAM_WTS-type list object}
-
-\item{base.dir}{- path to base folder}
-
-\item{scenario}{- model scenario, for labels}
-
-\item{numRecent}{- number of "recent" years to include in "zoom" plots}
 }
 \value{
 list of ggplot2 objects.

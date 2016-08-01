@@ -97,8 +97,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                       size=guide_legend(order=1));
     p <- p + facet_grid(x~.)
     p <- p + theme(legend.box='horizontal')
-    if (showPlot) print(p);
     cap<-"Figure &&fno. Observed proportions-at-size from the survey.";
+    if (showPlot) figno<-printGGList(p,cap=cap,figno=figno);
     plots[[cap]]<-p;
     
     #----------------------------------
@@ -115,16 +115,16 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     p1 <- p1 + geom_line(data=dfrp[idxp&idxm,]);
     p1 <- p1 + facet_wrap(~y,ncol=5);
     p1 <- p1 + labs(x="size (mm CW)",y="proportion") + ggtitle("males");
-    if (showPlot) print(p1);
     cap1<-"Figure &&fno. Observed and predicted proportions-at-size for males from the survey.";
+    if (showPlot) figno<-printGGList(p1,cap=cap1,figno=figno);
     plots[[cap1]]<-p1;
     p2 <- ggplot(data=dfrp,mapping=aes_string(x='z',y='val',fill='category',colour='category',linetype='case'));
     p2 <- p2 + geom_bar(data=dfrp[idxo&idxf,],stat='identity');
     p2 <- p2 + geom_line(data=dfrp[idxp&idxf,]);
     p2 <- p2 + facet_wrap(~y,ncol=5);
     p2 <- p2 + labs(x="size (mm CW)",y="proportion") + ggtitle("females");
-    if (showPlot) print(p2);
     cap2<-"Figure &&fno. Observed and predicted proportions-at-size for females from the survey.";
+    if (showPlot) figno<-printGGList(p2,cap=cap2,figno=figno);
     plots[[cap2]]<-p2;
     
     #----------------------------------
@@ -143,8 +143,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                       size=guide_legend(order=1));
     p <- p + facet_grid(x~.)
     p <- p + theme(legend.box='horizontal')
-    if (showPlot) print(p);
     cap<-"Figure &&fno. Pearson's residuals for proportions-at-size from the survey.";
+    if (showPlot) figno<-printGGList(p,cap=cap,figno=figno);
     plots[[cap]]<-p;
     
     #----------------------------------
@@ -158,8 +158,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
     p <- p + facet_grid("x~m");
     p <- p + labs(y="proportion",x="size (mm CW)")
-    if (showPlot) print(p);
     cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey.";
+    if (showPlot) figno<-printGGList(p,cap=cap,figno=figno);
     plots[[cap]]<-p;
     
     dfrp<-getMDFR.SurveyQuantities(obj,"mnPrNatZ_xz");
@@ -170,8 +170,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
     p <- p + facet_grid("x~.");
     p <- p + labs(y="proportion",x="size (mm CW)")
-    if (showPlot) print(p);
     cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey.";
+    if (showPlot) figno<-printGGList(p,cap=cap,figno=figno);
     plots[[cap]]<-p;
     
     #----------------------------------
@@ -181,8 +181,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     p <- ggplot(data=dfrp,mapping=aes_string(x='y',y='val',colour="category",linetype='case'));
     p <- p + geom_line();
     p <- p + labs(y="sample size",x="year")
-    if (showPlot) print(p);
     cap<-"Figure &&fno. Input and effective sample sizes for proportions-at-size from the survey.";
+    if (showPlot) figno<-printGGList(p,cap=cap,figno=figno);
     plots[[cap]]<-p;
     
     #----------------------------------
@@ -195,8 +195,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     p <- p + labs(y="selectivity",x="size (mm CW)");
     p <- p + guides(colour=guide_legend("time period"));
     p <- p + facet_grid(x~.);
-    if (showPlot) print(p);
     cap<-"Figure &&fno. Estimated selectivity functions for the survey.";
+    if (showPlot) figno<-printGGList(p,cap=cap,figno=figno);
     plots[[cap]]<-p;
     
     #----------------------------------
@@ -216,9 +216,11 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                                             title="Legal male abundance",
                                             xlims=NULL,
                                             ylims=NULL,
-                                            showPlot=showPlot);
+                                            showPlot=FALSE);
     cap1<-"Figure &&fno. Comparison of observed and predicted legal male abundance from the survey.";
     cap2<-"Figure &&fno. Comparison of observed and predicted legal male abundance from the survey (zoomed to recent).";
+    names(ps)<-c(cap1,cap2);
+    if (showPlot) figno<-printGGList(ps,figno=figno);
     plots[[cap1]]<-ps[[1]];
     plots[[cap2]]<-ps[[2]];
 
@@ -239,9 +241,11 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                                             title="Legal male biomass",
                                             xlims=NULL,
                                             ylims=NULL,
-                                            showPlot=showPlot);
+                                            showPlot=FALSE);
     cap1<-"Figure &&fno. Comparison of observed and predicted legal male biomass from the survey.";
     cap2<-"Figure &&fno. Comparison of observed and predicted legal male biomass from the survey (zoomed to recent).";
+    names(ps)<-c(cap1,cap2);
+    if (showPlot) figno<-printGGList(ps,figno=figno);
     plots[[cap1]]<-ps[[1]];
     plots[[cap2]]<-ps[[2]];
     

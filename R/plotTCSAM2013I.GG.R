@@ -3,13 +3,9 @@
 #' 
 #' @description Function to plot model results from TCSAM2013.
 #' 
-#' @param obj.rep - report file list object
-#' @param obj.std - dataframe object with parameter std info
-#' @param obj.prs - dataframe object w/ parameters info
-#' @param obj.wts - TCSAM_WTS-type list object
-#' @param base.dir - path to base folder
-#' @param scenario   - model scenario, for labels
+#'@param obj - object that can be converted into a list of tcsam2013.resLst objects
 #' @param numRecent - number of "recent" years to include in "zoom" plots
+#'@param plot1stObs - flag to plot observations from the first case, only
 #' @param F35 - F35 value for control rule plot
 #' @param B35 - B35 value for control rule plot
 #' @param showPlot - flag (T/F) to print plots to screen (if pdf==FALSE)
@@ -23,6 +19,8 @@
 #----------------------------------
 # Set model variables for plots
 plotTCSAM2013I.GG<-function(obj,
+                            numRecent=15,
+                            plot1stObs=TRUE,
                             F35=0.73,      #F35 value
                             B35=33.54,     #B35 value
                             showPlot=TRUE,
@@ -59,8 +57,8 @@ plotTCSAM2013I.GG<-function(obj,
     # plot survey quantities
     #----------------------------------
     ps<-compareModelResults.SurveyQuantities(obj,
-                                             numRecent=15,
-                                             plot1stObs=TRUE,
+                                             numRecent=numRecent,
+                                             plot1stObs=plot1stObs,
                                              showPlot=FALSE,
                                              pdf=NULL);
     if (showPlot) figno<-printGGList(ps,figno=figno);
@@ -70,8 +68,8 @@ plotTCSAM2013I.GG<-function(obj,
     # plot fishery quantities
     #----------------------------------
     ps<-compareModelResults.FisheryQuantities(obj,
-                                              numRecent=15,
-                                              plot1stObs=TRUE,
+                                              numRecent=numRecent,
+                                              plot1stObs=plot1stObs,
                                               showPlot=FALSE,
                                               pdf=NULL);
     if (showPlot) figno<-printGGList(ps,figno=figno);
