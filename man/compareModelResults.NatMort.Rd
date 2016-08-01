@@ -4,23 +4,21 @@
 \alias{compareModelResults.NatMort}
 \title{Function to plot natural mortality rates by year using ggplot2}
 \usage{
-compareModelResults.NatMort(resLst, ci = 0.8, min.yr = NULL,
-  max.yr = NULL, showPlot = TRUE)
+compareModelResults.NatMort(obj, showPlot = TRUE, pdf = NULL)
 }
 \arguments{
-\item{resLst}{- list of results objects}
+\item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
-\item{ci}{- confidence interval for error bars}
-
-\item{min.yr}{- min year to plot}
-
-\item{max.yr}{- max year to plot}
+\item{showPlot}{- flag (T/F) to show plot}
 }
 \value{
-list with dataframe and list of plots as elements
+ggplot2 object
 }
 \description{
 This function plots natural mortality estimates by year
   and sex for immatures, new shell matures and old shell matures.
+}
+\details{
+None.
 }
 

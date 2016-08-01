@@ -6,8 +6,7 @@
 #'@param inp = filename of TCSAM_OLDSTYLE R file
 #'
 #'@return list object corresponding to the TCSAM_OLDSTYLE R file, or NULL if file does not exist. 
-#'Returned object has class 'tcsam213.rep'.
-#'
+#'Returned object has class 'tcsam2013.rep'.
 #'
 #'@details Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
 #'Uses \code{PBSmodelling::readList} to read file.

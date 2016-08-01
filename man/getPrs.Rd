@@ -2,15 +2,17 @@
 % Please edit documentation in R/getPrs.R
 \name{getPrs}
 \alias{getPrs}
-\title{Get a TCSAM2013 prs object by reading initial and final parameters csv files.}
+\title{Get a TCSAM2013 prs object by reading initial and final parameters csv files}
 \usage{
 getPrs(type = "all", inp.dir = ".")
 }
 \arguments{
 \item{type}{- 'all' or 'active'}
+
+\item{inp.dir}{- folder for files (or NULL to select a folder)}
 }
 \value{
-A prs model object (a dataframe). The returned object will be a list of class 'tcsam2013.prs'.
+A prs model object (a dataframe). The returned object will be a dataframe of class 'tcsam2013.prs'.
 }
 \description{
 Function to get a TCSAM2013 prs object by reading initial and final parameters csv file.

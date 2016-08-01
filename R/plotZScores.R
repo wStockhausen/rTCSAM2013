@@ -1,7 +1,7 @@
 #'
-#'@title Plot z-scores from a model run
+#'@title Plot z-scores from a set of model runs
 #'
-#'@description Function to plot z-scores from a smodel run.
+#'@description Function to plot z-scores from a set of model runs.
 #'
 #'@param dfr - dataframe
 #'@param x - column name for x axis (default = 'year')

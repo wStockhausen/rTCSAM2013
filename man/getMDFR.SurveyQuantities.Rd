@@ -2,17 +2,17 @@
 % Please edit documentation in R/getMDFR.SurveyQuantities.R
 \name{getMDFR.SurveyQuantities}
 \alias{getMDFR.SurveyQuantities}
-\title{Get estimated/predicted surveys-related quantities from several model runs}
+\title{Get estimated/predicted survey-related quantities from several model runs}
 \usage{
-getMDFR.SurveyQuantities(reps, type = c("MB_yx", "B_yx", "lglN_y", "lblB_y",
-  "N_yxms", "N_yxm", "N_yx", "N_yxmsz", "N_yxmz", "N_yxz", "prNatZ_yxmsz",
-  "prNatZ_yxmz", "prNatZ_yxz", "PRs_yxz", "mnPrNatZ_xz", "zscrs_yx", "effSS_y"),
-  verbose = FALSE)
+getMDFR.SurveyQuantities(obj, type = c("MB_yx", "B_yx", "lglN_y", "lblB_y",
+  "N_yxms", "N_yxm", "N_yx", "NatZ_yxz", "prNatZ_yxmsz", "prNatZ_yxmz",
+  "prNatZ_yxz", "PRs_yxz", "mnPrNatZ_xmz", "mnPrNatZ_xz", "zscrs_yx",
+  "effSS_y"), verbose = FALSE)
 }
 \arguments{
-\item{reps}{- list of objects derived from Jack's R files for the models to be compared}
+\item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
-\item{type}{- survey-related time series to retrieve}
+\item{type}{- survey-related quantity to retrieve}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }
@@ -20,7 +20,7 @@ getMDFR.SurveyQuantities(reps, type = c("MB_yx", "B_yx", "lglN_y", "lblB_y",
 dataframe
 }
 \description{
-Function to get estimated/predicted surveys-related quantities fom 
+Function to get estimated/predicted survey-related quantities from 
 several model runs.
 }
 \details{
@@ -33,13 +33,12 @@ Potential values for 'type' are:
  \item {'N_yx'    - annual abundance by x (millions)}
  \item {'lglN_y'  - legal male annual abundance (millions)}
  \item {'lglB_y'  - legal male annual abundance (millions)}
- \item {'NatZ_yxmsz' - annual abundance-at-size by x,m,s (millions)}
- \item {'NatZ_yxmz'  - annual abundance-at-size by x,m (millions)}
  \item {'NatZ_yxz'   - annual abundance-at-size by x (millions)}
  \item {'prNatZ_yxmsz' - annual proportions-at-size by x,m,s}
  \item {'prNatZ_yxmz'  - annual proportions-at-size by x,m}
  \item {'prNatZ_yxz'   - annual proportions-at-size by x}
  \item {'PRs_yxz'      - pearsons residuals for annual proportions-at-size by x}
+ \item {'mnPrNatZ_xmz' - mean proportions-at-size by x,m}
  \item {'mnPrNatZ_xz'  - mean proportions-at-size by x}
  \item {'selSrv_cxz' - survey selectivity, by time period and sex}
  \item {'zscrs_yx'  - annual z-scores for fit to mature survey biomass, by sex}

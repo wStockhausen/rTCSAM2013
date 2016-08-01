@@ -4,14 +4,17 @@
 \alias{plotModelComparisonsGG.TimeSeries}
 \title{Plot comparisons of time series from a set of model runs}
 \usage{
-plotModelComparisonsGG.TimeSeries(dfr, x = "y", y = "val", lci = "lci",
-  uci = "uci", model = "model", category = "category", facets = NULL,
-  position = "dodge", scales = "fixed", plotObs = TRUE, plotMod = TRUE,
-  ci = 0.95, pdfType = "lognormal", xlab = "year", ylab = NULL,
-  title = NULL, xlims = NULL, ylims = NULL, showPlot = TRUE)
+plotModelComparisonsGG.TimeSeries(dfr, plot1stObs = TRUE, x = "y",
+  y = "val", lci = "lci", uci = "uci", case = "case",
+  category = "category", facets = NULL, position = "dodge",
+  scales = "fixed", plotObs = TRUE, plotMod = TRUE, ci = 0.95,
+  pdfType = "lognormal", xlab = "year", ylab = NULL, title = NULL,
+  xlims = NULL, ylims = NULL, showPlot = TRUE)
 }
 \arguments{
 \item{dfr}{- dataframe}
+
+\item{plot1stObs}{- flag to plot observations from first case only}
 
 \item{x}{- column name with x axis values}
 
@@ -21,7 +24,7 @@ plotModelComparisonsGG.TimeSeries(dfr, x = "y", y = "val", lci = "lci",
 
 \item{uci}{- column name with y axis values}
 
-\item{model}{- column name with model names}
+\item{case}{- column name with case names}
 
 \item{category}{- column name with category values (i.e., "observed","predicted")}
 
@@ -33,7 +36,7 @@ plotModelComparisonsGG.TimeSeries(dfr, x = "y", y = "val", lci = "lci",
 
 \item{plotObs}{- plot observations}
 
-\item{plotMod}{- plot model fits/predictions}
+\item{plotMod}{- plot case fits/predictions}
 
 \item{ci}{- confidence interval for error bars}
 
@@ -56,5 +59,8 @@ ggplot object
 }
 \description{
 Function to plot a comparison of time series from a set of model runs.
+}
+\details{
+None.
 }
 

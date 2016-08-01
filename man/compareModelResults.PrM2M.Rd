@@ -4,13 +4,10 @@
 \alias{compareModelResults.PrM2M}
 \title{Compare probability of molt-to-maturity among several model runs}
 \usage{
-compareModelResults.PrM2M(reps = NULL, cases = NULL, showPlot = FALSE,
-  pdf = NULL)
+compareModelResults.PrM2M(obj, showPlot = FALSE, pdf = NULL)
 }
 \arguments{
-\item{reps}{- list of objects derived from Jack's R files for the models to be compared}
-
-\item{cases}{- vector of labels for model cases (if 'reps' is not given)}
+\item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
 \item{showPlot}{- flag to print plot to current device}
 
@@ -23,11 +20,6 @@ ggplot object
 Function to compare probability of molt-to-maturity among several model runs.
 }
 \details{
-If 'reps' is not given, then the user is prompted to select Jack's R file output from each 
-model to be compared. If 'cases' is given, the user is prompted to select the file
-corresponding to each case. If 'cases' is not given, then the user may select an 
-arbitrary number of files (one at a time), ending selection by pressing 'cancel' on the selection box'.\cr\cr
-If 'reps' is not given, the working directory is set two levels above the 1st model case file selected.\cr\cr
-Uses \code{PBSmodelling::readList} and \code{wtsUtilities::selectFile}.
+None.
 }
 

@@ -4,19 +4,19 @@
 \alias{getMDFR.PopProcesses}
 \title{Get predicted population processes from several model runs}
 \usage{
-getMDFR.PopProcesses(reps, type = c("M_yxm", "R_cz", "prM2M_cxz", "mnZAM_cxz",
+getMDFR.PopProcesses(obj, type = c("M_yxm", "R_cz", "prM2M_cxz", "mnZAM_cxz",
   "T_cxzz"), verbose = FALSE)
 }
 \arguments{
-\item{reps}{- tcsam2013.rep object (derived from OLDSTYLE R files) for the models to be compared}
-
 \item{type}{- population process to retrieve}
 
 \item{verbose}{- flag (T/F) to print debug info}
+
+\item{reps}{- tcsam2013.rep object (derived from OLDSTYLE R files) for the models to be compared}
 }
 \value{
-dataframe with columns 'modeltype','model',
-'y' or 'pc','x','m' or 'z', and 'val' (or 'zp' and 'val').
+dataframe with columns 'case',
+'y','x','m' or 'z', and 'val' (or 'zp' and 'val').
 }
 \description{
 Function to get predicted population processes from 

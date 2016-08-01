@@ -4,12 +4,18 @@
 \alias{plotTCSAM2013I.GG}
 \title{Plot TCSAM2013 model results.}
 \usage{
-plotTCSAM2013I.GG(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
-  obj.wts = NULL, base.dir = "./", scenario = "tcsam2013alta",
-  endyr = NULL, styr = NULL, obsyr = NULL, pltyr = 1965, F35 = 0.73,
-  B35 = 33.54, showPlot = TRUE, pdf = FALSE)
+plotTCSAM2013I.GG(obj, F35 = 0.73, B35 = 33.54, showPlot = TRUE,
+  pdf = FALSE)
 }
 \arguments{
+\item{F35}{- F35 value for control rule plot}
+
+\item{B35}{- B35 value for control rule plot}
+
+\item{showPlot}{- flag (T/F) to print plots to screen (if pdf==FALSE)}
+
+\item{pdf}{- flag (T/F) to print plots to a pdf}
+
 \item{obj.rep}{- report file list object}
 
 \item{obj.std}{- dataframe object with parameter std info}
@@ -22,22 +28,6 @@ plotTCSAM2013I.GG(obj.rep = NULL, obj.std = NULL, obj.prs = NULL,
 
 \item{scenario}{- model scenario, for labels}
 
-\item{endyr}{- assessment year}
-
-\item{styr}{- model start year}
-
-\item{obsyr}{- first year for survey observations}
-
-\item{pltyr}{- first year for some plots}
-
-\item{F35}{- F35 value for control rule plot}
-
-\item{B35}{- B35 value for control rule plot}
-
-\item{showPlot}{- flag (T/F) to print plots to screen (if pdf==FALSE)}
-
-\item{pdf}{- flag (T/F) to print plots to a pdf}
-
 \item{numRecent}{- number of "recent" years to include in "zoom" plots}
 }
 \value{
@@ -47,7 +37,6 @@ list of ggplot2 objects.
 Function to plot model results from TCSAM2013.
 }
 \details{
-Uses \code{wtsPlots::plotErrorBars.V()}, 
-\code{wtsUtilities::formatZeros} and \code{wtsUtilities::parseNum}.
+#'
 }
 

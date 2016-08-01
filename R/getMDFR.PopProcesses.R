@@ -18,113 +18,20 @@
 #'}
 #'Uses \code{reshape2::melt}.
 #'
-#'@return dataframe with columns 'modeltype','model',
-#''y' or 'pc','x','m' or 'z', and 'val' (or 'zp' and 'val').
+#'@return dataframe with columns 'case',
+#''y','x','m' or 'z', and 'val' (or 'zp' and 'val').
 #'
 #'@export
 #'
-getMDFR.PopProcesses<-function(reps,
+getMDFR.PopProcesses<-function(obj,
                                type=c('M_yxm',"R_cz",'prM2M_cxz','mnZAM_cxz','T_cxzz'),
                                verbose=FALSE){
 
-    if (inherits(reps,'tcsam2013.rep')){
-        reps<-list(`2013`=reps);#wrap in list
-    }
-    cases<-names(reps);
-    
-    #set up time info
-    endyr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$endyr)) {
-            endyr[[case]]<-reps[[case]]$endyr;
-        } else {            
-            cat("'endyr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'endyr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    styr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$styr)) {
-            styr[[case]]<-reps[[case]]$styr;
-        } else {            
-            cat("'styr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'styr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    obsyr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$obsyr)) {
-            obsyr[[case]]<-reps[[case]]$obsyr;
-        } else {            
-            cat("'obsyr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'obsyr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    pltyr<-list();
-    for (case in cases){
-        if (!is.null(reps[[case]]$pltyr)) {
-            pltyr[[case]]<-reps[[case]]$pltyr;
-        } else {            
-            cat("'pltyr' missing from rep file for case '",case,"'!\n")
-            cat("Must set 'pltyr' in rep file.\n","Aborting...\n");
-            return(NULL);
-        }
-    }
-    
-    #set some constants
-    THOUSAND <-1000;
-
-    years    <-list();
-    years.m1 <-list();
-    obsyears <-list();
-    plotyears<-list();
-    for (case in cases){
-        years[[case]]    <-styr[[case]]:endyr[[case]];
-        years.m1[[case]] <-styr[[case]]:(endyr[[case]]-1);
-        obsyears[[case]] <-obsyr[[case]]:endyr[[case]];
-        plotyears[[case]]<-pltyr[[case]]:endyr[[case]];
-    }
-    
     #----------------------------------
     #natural mortality rates
     #----------------------------------
     if (type[1]=="M_yxm"){
-        dfr<-NULL;
-        for (case in cases){
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             y=years.m1[[case]],x="female",m="immature",
-                             val=(reps[[case]])[["mod.M.INF"]]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             y=years.m1[[case]],x="female",m="mature",
-                             val=(reps[[case]])[["mod.M.MNF"]]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             y=years.m1[[case]],x="male",m="immature",
-                             val=(reps[[case]])[["mod.M.INM"]]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             y=years.m1[[case]],x="male",m="mature",
-                             val=(reps[[case]])[["mod.M.MNM"]]);
-            dfr<-rbind(dfr,dfrp);
-        }
-        return(dfr);
-    }
-    #----------------------------------
-    #recruitment size distribution
-    #----------------------------------
-    if (type[1]=="R_cz"){
-        dfr<-NULL;
-        for (case in cases){
-            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=pc,z=reps[[case]]$zBs,
-                             val=(reps[[case]])[["mod.prR_z"]]);
-            dfr<-rbind(dfr,dfrp);
-        }
+        dfr<-getMDFR.NaturalMortality(obj);
         return(dfr);
     }
     
@@ -132,60 +39,66 @@ getMDFR.PopProcesses<-function(reps,
     #pr(molt-to-maturity|z)
     #----------------------------------
     if (type[1]=="prM2M_cxz"){
-        dfr<-NULL;
-        for (case in cases){
-            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=pc,x="female",z=reps[[case]]$zBs,
-                             val=(reps[[case]])[["mod.prM2M.F"]]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=pc,x="male",z=reps[[case]]$zBs,
-                             val=(reps[[case]])[["mod.prM2M.M"]]);
-            dfr<-rbind(dfr,dfrp);
-        }
+        dfr<-getMDFR.PrM2M(obj);
         return(dfr);
     }
     #----------------------------------
     #mean growth increments
     #----------------------------------
     if (type[1]=="mnZAM_cxz"){
-        dfr<-NULL;
-        for (case in cases){
-            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=pc,x="female",z=reps[[case]]$zBs,
-                             val=(reps[[case]])[["mod.mnPMZ.F"]]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(modeltype='TCSAM2013',model=case,
-                             pc=pc,x="male",z=reps[[case]]$zBs,
-                             val=(reps[[case]])[["mod.mnPMZ.M"]]);
-            dfr<-rbind(dfr,dfrp);
-        }
+        dfr<-getMDFR.meanGrowth(obj);
         return(dfr);
     }
+    
+    lst<-convertToListOfResults(obj);
+    cases<-names(lst);
+    
+    tinfo<-getTimeInfo(lst);
+    styr<-tinfo$styr;
+    endyr<-tinfo$endyr;
+    years<-tinfo$years;
+    years.m1<-tinfo$years.m1;
+
     #----------------------------------
     #growth transition matrices
     #----------------------------------
     if (type[1]=="T_cxzz"){
+        rws<-list();
+        rws[["M"]]<-list(x=  'male');
+        rws[["F"]]<-list(x='female');
         dfr<-NULL;
         for (case in cases){
-            pc<-paste0(styr[[case]],"-",endyr[[case]]-1);
-            val=(reps[[case]])[["mod.prGr_xzz.F"]];
-            dimnames(val)<-list(z =as.character(reps[[case]]$zBs),
-                                zp=as.character(reps[[case]]$zBs));
-            dfrp<-reshape2::melt(val,value.name='val')
-            dfrp<-cbind(modeltype='TCSAM2013',model=case,
-                        pc=pc,x="female",dfrp);
-            dfr<-rbind(dfr,dfrp);
-            val=(reps[[case]])[["mod.prGr_xzz.M"]];
-            dimnames(val)<-list(z =as.character(reps[[case]]$zBs),
-                                zp=as.character(reps[[case]]$zBs));
-            dfrp<-reshape2::melt(val,value.name='val')
-            dfrp<-cbind(modeltype='TCSAM2013',model=case,
-                        pc=pc,x="male",dfrp);
+            pc<-paste0(styr[[case]],"-",endyr[[case]]);
+            for (nm in names(rws)) {
+                rw<-rws[[nm]];
+                val=(lst[[case]]$rep)[[paste0("pop.grw.prGr_xzz.",nm)]];
+                dimnames(val)<-list(z =as.character(lst[[case]]$rep$mod.zBs),
+                                    zp=as.character(lst[[case]]$rep$mod.zBs));
+                dfrp<-reshape2::melt(val,value.name='val')
+                dfrp<-cbind(case=case,y=pc,x=rw$x,dfrp);
+                dfr<-rbind(dfr,dfrp);
+            }
+        }
+        return(dfr);
+    }
+    
+    #----------------------------------
+    #recruitment size distribution
+    #----------------------------------
+    if (type[1]=="R_cz"){
+        dfr<-NULL;
+        for (case in cases){
+            pc<-paste0(styr[[case]],"-",endyr[[case]]);
+            dfrp<-data.frame(case=case,y=pc,x='all',z=lst[[case]]$rep$mod.zBs,
+                             val=(lst[[case]]$rep)[["pop.prR_z"]]);
             dfr<-rbind(dfr,dfrp);
         }
         return(dfr);
     }
+
+    cat("In getMDFR.PopProcesses()\n");
+    cat("Type '",type[1],"' not recognized.\n",sep='');    
+    cat("Returning NULL.\n");
+    return(NULL);
 }
+

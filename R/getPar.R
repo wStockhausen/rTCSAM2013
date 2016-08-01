@@ -1,5 +1,5 @@
 #'
-#'@title Create a dataframe from an ADMB par file.
+#'@title Create a dataframe from an ADMB par file
 #'
 #'@description Function to create a dataframe from an ADMB par file.
 #'

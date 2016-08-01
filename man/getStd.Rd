@@ -2,7 +2,7 @@
 % Please edit documentation in R/getStd.R
 \name{getStd}
 \alias{getStd}
-\title{Create a dataframe (an std object) from an ADMB std file.}
+\title{Create a dataframe (an std object) from an ADMB std file}
 \usage{
 getStd(inp = NULL)
 }
@@ -10,7 +10,7 @@ getStd(inp = NULL)
 \item{inp}{- name of the ADMB std file}
 }
 \value{
-list object corresponding to the std file, or NULL if file does not exist
+dataframe of class 'tcsam2013.std', corresponding to the std file, or NULL if file does not exist
 }
 \description{
 Function to create a dataframe (an std object) from an ADMB std file.

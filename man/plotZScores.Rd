@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotZScores.R
 \name{plotZScores}
 \alias{plotZScores}
-\title{Plot z-scores from a model run}
+\title{Plot z-scores from a set of model runs}
 \usage{
 plotZScores(dfr, x = "y", y = "zscore", color = NULL, shape = NULL,
   position = "identity", dodge = 0.2, facets = NULL,
@@ -42,7 +42,7 @@ plotZScores(dfr, x = "y", y = "zscore", color = NULL, shape = NULL,
 ggplot2 object
 }
 \description{
-Function to plot z-scores from a smodel run.
+Function to plot z-scores from a set of model runs.
 }
 \details{
 None.

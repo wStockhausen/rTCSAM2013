@@ -2,7 +2,7 @@
 % Please edit documentation in R/getWTS.R
 \name{getWTS}
 \alias{getWTS}
-\title{Create a TCSAM2013 wts object from a TCSAM_WTS R file.}
+\title{Create a TCSAM2013 wts object from a TCSAM_WTS R file}
 \usage{
 getWTS(inp = NULL)
 }

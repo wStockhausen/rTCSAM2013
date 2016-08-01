@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPar.R
 \name{getPar}
 \alias{getPar}
-\title{Create a dataframe from an ADMB par file.}
+\title{Create a dataframe from an ADMB par file}
 \usage{
 getPar(inp = NULL)
 }

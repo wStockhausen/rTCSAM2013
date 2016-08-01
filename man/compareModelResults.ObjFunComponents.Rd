@@ -2,32 +2,33 @@
 % Please edit documentation in R/compareModelResults.ObjFunComponents.R
 \name{compareModelResults.ObjFunComponents}
 \alias{compareModelResults.ObjFunComponents}
-\title{Compare changes in objective function components from a base model for several models.}
+\title{Compare changes in objective function components from a base model for several models}
 \usage{
-compareModelResults.ObjFunComponents(in.csvs = NULL, cases = NULL,
-  pdf = "ModelComparisons.ObjFunComponents.pdf")
+compareModelResults.ObjFunComponents(obj, base = NULL, y = c("diff",
+  "objFun"), showPlot = FALSE, pdf = NULL)
 }
 \arguments{
-\item{in.csvs}{- vector of paths to final likelihood components csv files for the models to be compared}
+\item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
+
+\item{base}{- name of case to use as base model, or NULL to use first}
+
+\item{y}{- 'diff' or 'objFun'}
+
+\item{showPlot}{- flag (T/F) to show plot}
 
 \item{pdf}{- filename for pdf output}
-
-\item{case}{- plot labels for model cases (same order as in.csvs)}
 }
 \value{
-vector with selected file names as elements (can be used as in.csvs on another
-call to the function)
+list of ggplot2 objects
 }
 \description{
 Function to compare changes in objective function components 
 from a base model for several models.
 }
 \details{
-If in.csvs is not given, then the user is prompted to select final likelihood files 
-for comparison. If cases is given but not in.csvs, the user is prompted to select the file
-corresponding to each case. If both 'cases' and 'in.csvs' are NULL, then the user may select an 
-arbitrary number of files (one at a time), ending selection by pressing 'cancel' on the selection box'.\cr\cr
-Objective function component comparisons are relative to the first (base) case. NEGATIVE
-differences indicate a better fit (smaller value for the component in the alternative model).
+If 'base' is not given, objective function component comparisons are relative to the first case. NEGATIVE
+differences indicate a better fit (smaller value for the component in the alternative model). Selecting 
+\code{y="diff"} plots relative objective function values--i.e., relative to the base model. Selecting \code{y="objFun"}
+plots absolute values.
 }
 

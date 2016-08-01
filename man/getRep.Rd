@@ -11,7 +11,7 @@ getRep(inp = NULL)
 }
 \value{
 list object corresponding to the TCSAM_OLDSTYLE R file, or NULL if file does not exist. 
-Returned object has class 'tcsam213.rep'.
+Returned object has class 'tcsam2013.rep'.
 }
 \description{
 Function to create a TCSAM2013 rep object from a TCSAM_OLDSTYLE R file.

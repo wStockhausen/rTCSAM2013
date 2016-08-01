@@ -4,12 +4,11 @@
 \alias{compareModelResults.SurveyQuantities}
 \title{Compare estimated/predicted survey quatities among several model runs}
 \usage{
-compareModelResults.SurveyQuantities(reps = NULL, numRecent = 15,
-  plot1stObs = TRUE, showPlot = FALSE,
-  pdf = "ModelComparisons.SurveyTimeSeries.pdf")
+compareModelResults.SurveyQuantities(obj = NULL, numRecent = 15,
+  plot1stObs = TRUE, showPlot = FALSE, pdf = NULL)
 }
 \arguments{
-\item{reps}{- list of objects derived from Jack's R files for the models to be compared}
+\item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
 \item{numRecent}{- number of recent years to plot}
 

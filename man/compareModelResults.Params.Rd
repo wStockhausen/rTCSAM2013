@@ -2,13 +2,13 @@
 % Please edit documentation in R/compareModelResults.Params.R
 \name{compareModelResults.Params}
 \alias{compareModelResults.Params}
-\title{Function to compare parameter values from different models.}
+\title{Function to compare parameter values from different models}
 \usage{
-compareModelResults.Params(objs, dp = 0.01, fac = 3, nc = 3, nr = 4,
-  showPlot = TRUE, pdf = "ModelComparisons.Params.pdf")
+compareModelResults.Params(obj, dp = 0.01, fac = 3, nc = 4, nr = 6,
+  showPlot = FALSE, pdf = NULL)
 }
 \arguments{
-\item{objs}{- model results objects (each is a list with elements 'prs' and 'std')}
+\item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
 \item{dp}{- percent difference between parameter value and upper/lower limits used to flag outliers}
 
@@ -23,14 +23,18 @@ compareModelResults.Params(objs, dp = 0.01, fac = 3, nc = 3, nr = 4,
 \item{pdf}{- file name for printing plots to a pdf file (or NULL to print to screen)}
 }
 \value{
-- list with dfr, vfr, and plots as elements
+- list of lists with ggplot2 objects as elements
 }
 \description{
-This function extracts and plots parameters values, together with their limits
-(if any) and the posterior distributions implied by their estimated standard
-errors from several models.
+This function extracts and plots parameters values from several models, 
+together with their limits(if any) and their estimated standard errors (if any).
 }
 \details{
-Uses \code{reshape2::melt()}.
+Uses \code{getMDFR.ParamsPlusStdDevs()}. Returned list has top level elements:
+\itemize{
+ \item{population}
+ \item{surveys}
+ \item{fisheries}
+}
 }
 

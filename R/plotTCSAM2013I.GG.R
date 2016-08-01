@@ -9,10 +9,6 @@
 #' @param obj.wts - TCSAM_WTS-type list object
 #' @param base.dir - path to base folder
 #' @param scenario   - model scenario, for labels
-#' @param styr  - model start year
-#' @param endyr - assessment year
-#' @param obsyr - first year for survey observations
-#' @param pltyr - first year for some plots
 #' @param numRecent - number of "recent" years to include in "zoom" plots
 #' @param F35 - F35 value for control rule plot
 #' @param B35 - B35 value for control rule plot
@@ -21,120 +17,74 @@
 #' 
 #' @return list of ggplot2 objects.
 #' 
-#' @details Uses \code{wtsPlots::plotErrorBars.V()}, 
-#' \code{wtsUtilities::formatZeros} and \code{wtsUtilities::parseNum}.
-#' 
+#' @details #' 
 #' @export
 #'
 #----------------------------------
 # Set model variables for plots
-plotTCSAM2013I.GG<-function(obj.rep=NULL,
-                            obj.std=NULL,
-                            obj.prs=NULL,
-                            obj.wts=NULL,
-                            base.dir='./',
-                            scenario='tcsam2013alta',#executable model name
-                            endyr=NULL,    #assessment year
-                            styr=NULL,     #model start year
-                            obsyr=NULL,    #first year of survey observations
-                            pltyr=1965,    #first year for plots
+plotTCSAM2013I.GG<-function(obj,
                             F35=0.73,      #F35 value
                             B35=33.54,     #B35 value
                             showPlot=TRUE,
                             pdf=FALSE){    
-    if (is.null(obj.rep)){
-        cat("obj.rep file is NULL.\n")
+    if (is.null(obj)){
+        cat("plotTCSAM2013I.GG: 'obj'  is NULL.\n")
         cat("Aborting...\n");
         return(NULL);
     }
-    #------------    
-    if (is.null(endyr)){
-        if (is.null(obj.rep$mod.endyr)){
-            cat("'endyr' missing from rep file and not specified as an input.\n")
-            cat("Must set 'endyr' to assessment year.\n",
-                "Aborting...\n");
-            return(NULL);
-        } else {
-            endyr<-obj.rep$mod.endyr;
-        }
-    }
-    if (is.null(styr)){
-        if (is.null(obj.rep$mod.styr)){
-            cat("'styr' missing from rep file and not specified as an input.\n")
-            cat("Must set 'styr' to assessment year.\n",
-                "Aborting...\n");
-            return(NULL);
-        } else {
-            styr<-obj.rep$mod.styr;
-        }
-    }
-    if (is.null(obsyr)){
-        if (is.null(obj.rep$mod.obsyr)){
-            cat("'obsyr' missing from rep file and not specified as an input.\n")
-            cat("Must set 'obsyr' to assessment year.\n",
-                "Aborting...\n");
-            return(NULL);
-        } else {
-            obsyr<-obj.rep$mod.obsyr;
-        }
-    }
-    if (is.null(pltyr)){
-        if (is.null(obj.rep$mod.pltyr)){
-            cat("'pltyr' missing from rep file and not specified as an input.\n")
-            cat("Must set 'pltyr' to assessment year.\n",
-                "Aborting...\n");
-            return(NULL);
-        } else {
-            pltyr<-obj.rep$mod.pltyr;
-        }
-    }
     
-    #set some constants
-    isGmacs  <- (obj.rep$mod.optFM==1)
-    years    <-seq(styr,endyr);
-    years.m1 <-seq(styr,endyr-1);
-    obsyears <-seq(obsyr,endyr);
-    plotyears<-seq(pltyr,endyr);
-    
-    # zBs<-obj.rep$mod.zBs;
-    # if (is.null(zBs)) zBs<- seq(27,182,length=32);
-
     #----------------------------------
-    # create lists for processing, output
+    # create lists for output
     #----------------------------------
-    reps<-list();
-    reps[[scenario]]<-obj.rep;
-    
     plots<-list();
+    figno<-1;
     
     #----------------------------------
     # Set filename for pdf output
     #----------------------------------
     if (pdf){
-        filen=paste(scenario,"oldstyle.pdf",sep='.');
-        pdf(file=file.path(base.dir,filen),width=8.5,height=11);
+        pdf(file=pdf,width=8.5,height=11);
+        showPlot<-TRUE;
         on.exit(dev.off());
     }
 
     #----------------------------------
     # Plot parameter values w/ limits and std's
     #----------------------------------
-    if (!is.null(obj.prs)) {
-        #checkParams(obj.prs,obj.std);
-    }
-    
+    ps<-compareModelResults.Params(obj);
+    if (showPlot) figno<-printGGList(ps,figno=figno);
+    plots[["params"]]<-ps;
+
     #----------------------------------
     # plot survey quantities
     #----------------------------------
-    ps<-compareModelResults.SurveyQuantities(reps=reps,
+    ps<-compareModelResults.SurveyQuantities(obj,
                                              numRecent=15,
                                              plot1stObs=TRUE,
                                              showPlot=FALSE,
                                              pdf=NULL);
+    if (showPlot) figno<-printGGList(ps,figno=figno);
     plots[["surveys"]]<-ps;
-    if (showPlot) print(ps);
 
     #----------------------------------
+    # plot fishery quantities
+    #----------------------------------
+    ps<-compareModelResults.FisheryQuantities(obj,
+                                              numRecent=15,
+                                              plot1stObs=TRUE,
+                                              showPlot=FALSE,
+                                              pdf=NULL);
+    if (showPlot) figno<-printGGList(ps,figno=figno);
+    plots[["fisheries"]]<-ps;
+
+    #----------------------------------
+    # plot population quantities
+    #----------------------------------
+    ps<-compareModelResults.PopQuantities(obj,
+                                          showPlot=FALSE,
+                                          pdf=NULL);
+    if (showPlot) figno<-printGGList(ps,figno=figno);
+    plots[["population"]]<-ps;
 
     # #------------------------------------
     # # Fits to retained & male discard mortalities

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calcABC.R
 \name{calcABC}
 \alias{calcABC}
-\title{Function to calculate ABC and OFL from projection model output.}
+\title{Function to calculate ABC and OFL from projection model output}
 \usage{
 calcABC(res = NULL, fn = NULL, pstar = 0.49, buffer = 0.1,
   title = NULL)
@@ -20,5 +20,8 @@ calcABC(res = NULL, fn = NULL, pstar = 0.49, buffer = 0.1,
 }
 \description{
 This function calculates ABC and OFL from TCSAM2013 projection model output.
+}
+\details{
+Uses standard graphics.
 }
 

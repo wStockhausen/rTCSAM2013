@@ -2,10 +2,10 @@
 % Please edit documentation in R/calcCIs.R
 \name{calcCIs}
 \alias{calcCIs}
-\title{Compute confidence intervals from cvs.}
+\title{Compute confidence intervals from cvs}
 \usage{
-calcCIs(vals, cvs = NULL, sdvs = NULL, pdfType = "lognormal", ci = 0.95,
-  verbose = FALSE)
+calcCIs(vals, cvs = NULL, sdvs = NULL, pdfType = c("lognormal", "normal"),
+  ci = 0.95, verbose = FALSE)
 }
 \arguments{
 \item{vals}{- vector of values}
@@ -25,5 +25,8 @@ list with vectors lci, uci as  named elements
 }
 \description{
 Function to compute confidence intervals.
+}
+\details{
+None.
 }
 

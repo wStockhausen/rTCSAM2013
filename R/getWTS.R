@@ -1,5 +1,5 @@
 #'
-#'@title Create a TCSAM2013 wts object from a TCSAM_WTS R file.
+#'@title Create a TCSAM2013 wts object from a TCSAM_WTS R file
 #'
 #'@description Function to create a TCSAM2013 wts object from a TCSAM_WTS R file.
 #'

@@ -1,5 +1,5 @@
 #'
-#'@title Function to calculate ABC and OFL from projection model output.
+#'@title Function to calculate ABC and OFL from projection model output
 #'
 #'@description This function calculates ABC and OFL from TCSAM2013 projection model output.
 #'
@@ -9,8 +9,7 @@
 #'@param buffer - buffer for ABC as fraction (i.e., 0.20 = 20 \% yields ABC = 0.8*OFL)
 #'@param title - title for plot
 #'
-#'@import stats
-#'@import graphics
+#'@details Uses standard graphics.
 #'
 #'@export
 #'
