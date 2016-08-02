@@ -6,8 +6,13 @@
 #'@param plots - a ggplot2 object or a list of ggplot2 objects
 #'@param figno - figure number (or NULL)
 #'@param cap - plot caption
+#'@param show - flag (T/F) to actually print plots
 #'
-#'@return figure number for next plot, if figno was not NULL.
+#'@return list with elements:
+#'\itemize{
+#'  \item{figno - figure number for next plot, if figno was not NULL}
+#'  \item{plotlist - non-nested list of plots, with numbered captions as names}
+#'} 
 #'
 #'@details Captions for each figure are taken from the name of the list element associated with the plot.
 #'\code{figno} is substituted for '&&fno' in the caption and incremented for the next plot.
@@ -16,21 +21,28 @@
 #'
 #'@export
 #
-printGGList<-function(plots,figno=NULL,cap=NULL){
+printGGList<-function(plots,figno=NULL,cap=NULL,show=TRUE){
+    plotlist<-list();
     if (inherits(plots,"ggplot")){
         #plots is a ggplot object
-        print(plots);
         if (!is.null(figno)) {
             cap<-gsub("&&fno",figno,cap);
             figno<-figno+1;
         }
-        cat(cap,"\n"); ##do something to put caption with figure!!
+        if (show) {
+            print(plots);
+            cat(cap,"\n",sep=''); 
+        }
+        plotlist[[cap]]<-plots;
+        return(list(figno=figno,plotlist=plotlist));
     } else {
         #plots is a list
         for (nm in names(plots)){
             plot<-plots[[nm]];
-            figno<-printGGList(plot,figno=figno,cap=nm);
+            res<-printGGList(plot,figno=figno,cap=nm);
+            figno<-res$figno;
+            plotlist<-c(plotlist,res$plotlist);
         }
     }
-    return(figno);
+    return(list(figno=figno,plotlist=plotlist));
 }

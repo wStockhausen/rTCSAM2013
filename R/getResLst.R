@@ -28,7 +28,12 @@ getResLst<-function(inp.dir=NULL,
         inp.dir<-dirname(inp.dir);#determine folder
     }
     
-    if (!dir.exists(inp.dir)) return(NULL);
+    if (!dir.exists(inp.dir)) {
+        cat("Warning for getResLst(...).\n");
+        cat("The following folder does not exist:\n\t'",inp.dir,"'\n",sep='');
+        cat("Returning NULL.\n")
+        return(NULL);
+    }
     
     prs<-getPrs(inp.dir=inp.dir,type='all');
     rep<-getRep(inp=file.path(inp.dir,rep));

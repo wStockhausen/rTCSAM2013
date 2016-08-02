@@ -19,7 +19,7 @@ compareModelResults.SurveyQuantities(obj = NULL, numRecent = 15,
 \item{pdf}{- name for output pdf file}
 }
 \value{
-list of ggplot2 objects
+non-nested list of ggplot2 objects, with captions as names
 }
 \description{
 Function to compare estimated/predicted survey quantities among 

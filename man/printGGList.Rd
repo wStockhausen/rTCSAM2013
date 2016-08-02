@@ -4,7 +4,7 @@
 \alias{printGGList}
 \title{Print a ggplot2 object, or list of ggplot2 objects}
 \usage{
-printGGList(plots, figno = NULL, cap = NULL)
+printGGList(plots, figno = NULL, cap = NULL, show = TRUE)
 }
 \arguments{
 \item{plots}{- a ggplot2 object or a list of ggplot2 objects}
@@ -12,9 +12,15 @@ printGGList(plots, figno = NULL, cap = NULL)
 \item{figno}{- figure number (or NULL)}
 
 \item{cap}{- plot caption}
+
+\item{show}{- flag (T/F) to actually print plots}
 }
 \value{
-figure number for next plot, if figno was not NULL.
+list with elements:
+\itemize{
+ \item{figno - figure number for next plot, if figno was not NULL}
+ \item{plotlist - non-nested list of plots, with numbered captions as names}
+}
 }
 \description{
 Function to print a ggplot2 object or a list of ggplot2 objects.

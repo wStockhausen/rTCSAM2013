@@ -4,19 +4,12 @@
 \alias{compareModelResults.Params}
 \title{Function to compare parameter values from different models}
 \usage{
-compareModelResults.Params(obj, dp = 0.01, fac = 3, nc = 4, nr = 6,
-  showPlot = FALSE, pdf = NULL)
+compareModelResults.Params(obj, dp = 0.01, showPlot = FALSE, pdf = NULL)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
 \item{dp}{- percent difference between parameter value and upper/lower limits used to flag outliers}
-
-\item{fac}{- number of std devs to extend uncertainty plots}
-
-\item{nc}{- number of columns of plots per page}
-
-\item{nr}{- number of rows of plots per page}
 
 \item{showPlot}{- flag to show plots}
 

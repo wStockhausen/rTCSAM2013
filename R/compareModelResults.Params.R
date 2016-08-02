@@ -6,9 +6,6 @@
 #'
 #'@param obj - object that can be converted into a list of tcsam2013.resLst objects
 #'@param dp - percent difference between parameter value and upper/lower limits used to flag outliers
-#'@param fac - number of std devs to extend uncertainty plots
-#'@param nc - number of columns of plots per page
-#'@param nr - number of rows of plots per page
 #'@param showPlot - flag to show plots
 #'@param pdf - file name for printing plots to a pdf file (or NULL to print to screen)
 #'
@@ -26,8 +23,7 @@
 #'@export
 #'
 compareModelResults.Params<-function(obj,
-                                     dp=0.01,fac=3,
-                                     nc=4,nr=6,
+                                     dp=0.01,
                                      showPlot=FALSE,
                                      pdf=NULL){
     
@@ -41,14 +37,16 @@ compareModelResults.Params<-function(obj,
     
     #plot parameter estimates
     plots<-list();
+    figno<-1;
     dodge<-position_dodge(width=1/length(cases));
     for (ctg in c('population','surveys','fisheries')){
-        plots1<-list();
         dfrp<-dfr[dfr$category==ctg,];
         for (prc in as.character(unique(dfrp$process))){
             dfrpp<-dfrp[dfrp$process==prc,];
             dfrpp$uci<-dfrpp$value+dfrpp$stdv;
             dfrpp$lci<-dfrpp$value-dfrpp$stdv;
+            np<-length(unique(dfrpp$label));
+            nc<-floor(sqrt(np)); 
             p <- ggplot(dfrpp);
             p <- p + geom_rect(mapping=aes_string(ymin='min',ymax='max'),xmin=I(-1),xmax=I(1),alpha=0.5,fill='grey');
             p <- p + geom_hline(aes_string(yintercept='min', colour='case'),linetype=2,size=1,alpha=0.7,show.legend=FALSE)
@@ -60,10 +58,10 @@ compareModelResults.Params<-function(obj,
             p <- p + scale_x_continuous(breaks=NULL);
             p <- p + labs(y='parameter value',x='',title=prc);
             p <- p + facet_wrap(~label,ncol=nc,drop=FALSE,scales="free_y");
-            if (showPlot) print(p);
-            plots1[[prc]]<-p;
+            cap<-paste0("Figure &&fno. Estimated parameters for ",prc,".\n");
+            if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+            plots[[cap]]<-p; p<-NULL;
         }
-        plots[[ctg]]<-plots1;
     } #ctg's
 
     return(invisible(plots));
