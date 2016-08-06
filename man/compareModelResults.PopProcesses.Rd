@@ -14,7 +14,7 @@ compareModelResults.PopProcesses(obj, showPlot = FALSE, pdf = NULL)
 \item{pdf}{- name for output pdf file}
 }
 \value{
-(nested) list of ggplot2 objects, returned invisibly.
+list of ggplot2 objects, returned invisibly.
 }
 \description{
 Function to compare predicted population processes among 

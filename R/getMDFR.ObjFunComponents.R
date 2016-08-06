@@ -31,6 +31,9 @@ getMDFR.ObjFunComponents<-function(obj,base=NULL){
         dfr<-rbind(dfr,dfrp);
     }
     dfr<-dfr[,c("case","idx","weight","likelihood","objFun","diff","category","description")];
+    #trim whitespace
+    dfr$category<-trimws(dfr$category,which='both');
+    dfr$description<-trimws(dfr$description,which='both');
 
 
     return(invisible(dfr));

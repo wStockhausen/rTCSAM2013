@@ -38,6 +38,7 @@ compareModelResults.PopQuantities<-function(obj,
     on.exit(par(oldpar),add=TRUE);
     
     plots<-list();#output list
+    fino<-1;
     
     #-------------------------------------------#
     #plot mature biomass
@@ -50,12 +51,15 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Mature Biomass (1000's t)");
     p <- p + ggtitle("Mature Biomass");
     p <- p + facet_grid(x~.);
-    if (showPlot) print(p);
-    plots[["MB"]]<-p;
+    cap<-"\nFigure &&fno. Estimated mature biomass at mating time.\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
+    
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    if (showPlot) print(p);
-    plots[["MB.zoom"]]<-p;
+    cap<-"\nFigure &&fno. Estimated mature biomass at mating time (recent years only).\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; p<-NULL;
     
     #-------------------------------------------#
     #plot recruitment
@@ -68,12 +72,15 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Recruitment (millions)");
     p <- p + ggtitle("Recruitment");
     p <- p + facet_grid(x~.);
-    if (showPlot) print(p);
-    plots[["rec"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual recruitment.";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
+    
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    if (showPlot) print(p);
-    plots[["rec.zoom"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual recruitment (recent years only).\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; p<-NULL;
     
     #-------------------------------------------#
     #plot annual abundance by x
@@ -84,12 +91,15 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Abundance (millions)");
     p <- p + ggtitle("Population Abundance");
     p <- p + facet_grid(x~.);
-    if (showPlot) print(p);
-    plots[["N_yx"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual abundance.\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
+    
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    if (showPlot) print(p);
-    plots[["N_yx.zoom"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual abundance (recent years only).\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; p<-NULL;
     
     #-------------------------------------------#
     #plot annual abundance by xm
@@ -100,12 +110,15 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Abundance (millions)");
     p <- p + ggtitle("Population Abundance");
     p <- p + facet_grid(m~x);
-    if (showPlot) print(p);
-    plots[["N_yxm"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual abundance, by sex and maturity.\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
+    
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    if (showPlot) print(p);
-    plots[["N_yxm.zoom"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual abundance, by sex and maturity (recent years only).\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
     
     #-------------------------------------------#
     #plot annual abundance by xms
@@ -116,12 +129,15 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Abundance (millions)");
     p <- p + ggtitle("Population Abundance");
     p <- p + facet_grid(m+s~x);
-    if (showPlot) print(p);
-    plots[["N_yxms"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual abundance, by sex, maturity, and shell condition.\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
+    
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    if (showPlot) print(p);
-    plots[["N_yxms.zoom"]]<-p;
+    cap<-"\nFigure &&fno. Estimated annual abundance, by sex, maturity, and shell condition (recent yeaers only).\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
     
     #-------------------------------------------#
     #plot final abundance by xmz
@@ -133,8 +149,9 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Abundance (millions)");
     p <- p + ggtitle("Population Abundance");
     p <- p + facet_grid(m~x);
-    if (showPlot) print(p);
-    plots[["fN_xmsz"]]<-p;
+    cap<-"\nFigure &&fno. Estimated final abundance, by sex, maturity, shell condition and size.\n";
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+    plots[[cap]]<-p; 
 
     return(invisible(plots));
 }

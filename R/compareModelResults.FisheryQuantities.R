@@ -32,10 +32,16 @@ compareModelResults.FisheryQuantities<-function(obj,
     
     
     #----------------------------------
-    # 
+    # convert to list of ResLst objects
     #----------------------------------
     obj<-convertToListOfResults(obj);
+    
+    #----------------------------------
+    # pull out generic info
+    #----------------------------------
     cases<-names(obj);
+    tinfo<-getTimeInfo(obj);
+    endyr<-tinfo$endyr;
     
     #----------------------------------
     # define output list of plots
@@ -434,7 +440,6 @@ compareModelResults.FisheryQuantities<-function(obj,
         p <- p + labs(y="selectivity",x="size (mm CW)");
         p <- p + guides(colour=guide_legend("case"));
         p <- p + facet_wrap(~pc,ncol=3);
-        if (showPlot) print(p);
         cap<-paste0("Figure &&fno. Estimated selectivity functions for total catch in",fsh,".");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
@@ -457,7 +462,71 @@ compareModelResults.FisheryQuantities<-function(obj,
         plots[[cap]]<-p; p<-NULL;
     }
 
-    #TODO: fishing mortality/capture rates
-    
+    #----------------------------------
+    # plot max fishing mortality/capture rates
+    #----------------------------------
+    dfrp<-getMDFR.FisheryQuantities(obj,'max rates');
+    for (fsh in c('TCF','SCF','RKF','GTF')){
+        idx<-(dfrp$fishery==fsh);
+        dfrpp<-dfrp[idx,];
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
+        p <- p + geom_line();
+        p <- p + geom_point();
+        p <- p + labs(y="max rate",x="year");
+        p <- p + guides(colour=guide_legend("case"),
+                        shape=guide_legend("category"),
+                        linetype=guide_legend("category"));
+        p <- p + facet_grid(x~fishery);
+        cap<-paste0("Figure &&fno. Estimated max fishery rates in ",fsh,".");
+        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        plots[[cap]]<-p; p<-NULL;
+        #zoomed to recent
+        dfrpp<-dfrp[idx&(dfrp$y>=(max(dfrp$y)-15)-numRecent),];
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
+        p <- p + geom_line();
+        p <- p + geom_point();
+        p <- p + labs(y="max rate",x="year");
+        p <- p + guides(colour=guide_legend("case"),
+                        shape=guide_legend("category"),
+                        linetype=guide_legend("category"));
+        p <- p + facet_grid(x~fishery);
+        cap<-paste0("Figure &&fno. Estimated max fishery rates in ",fsh," (zoomed to recent years).");
+        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        plots[[cap]]<-p; p<-NULL;
+    }
+
+    #----------------------------------
+    # plot mean fishing mortality/capture rates
+    #----------------------------------
+    dfrp<-getMDFR.FisheryQuantities(obj,'mean rates');
+    for (fsh in c('TCF','SCF','RKF','GTF')){
+        idx<-(dfrp$fishery==fsh);
+        dfrpp<-dfrp[idx,];
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
+        p <- p + geom_line();
+        p <- p + geom_point();
+        p <- p + labs(y="mean rate",x="year");
+        p <- p + guides(colour=guide_legend("case"),
+                        shape=guide_legend("category"),
+                        linetype=guide_legend("category"));
+        p <- p + facet_grid(x~fishery);
+        cap<-paste0("Figure &&fno. Estimated mean fishery rates in ",fsh,".");
+        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        plots[[cap]]<-p; p<-NULL;
+        #zoom to recent
+        dfrpp<-dfrp[idx&(dfrp$y>=(max(dfrp$y)-15)-numRecent),];
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
+        p <- p + geom_line();
+        p <- p + geom_point();
+        p <- p + labs(y="mean rate",x="year");
+        p <- p + guides(colour=guide_legend("case"),
+                        shape=guide_legend("category"),
+                        linetype=guide_legend("category"));
+        p <- p + facet_grid(x~fishery);
+        cap<-paste0("Figure &&fno. Estimated mean fishery rates in ",fsh," (zoomed to recent years).");
+        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        plots[[cap]]<-p; p<-NULL;
+    }
+
     return(invisible(plots));
 }

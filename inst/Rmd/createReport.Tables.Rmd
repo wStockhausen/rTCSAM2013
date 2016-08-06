@@ -1,0 +1,110 @@
+---
+title: "TCSAM2013 Model Results: Tables"
+author: "William Stockhausen"
+date: '`r format(Sys.Date(),"%d %B, %Y")`'
+output: word_document
+orientation: landscape
+params: 
+    paths: none
+    obj: none
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
+                      dpi=300,fig.width=6.5,out.width="6.5in")
+```
+
+```{r init}
+    require(pander);
+    require(reshape2);
+    require(rTCSAM2013);
+    panderOptions("table.caption.prefix","Table ")
+    panderOptions("table.split.table",Inf)
+    paths<-params$paths;
+    obj<-params$obj;
+    tblno<-1;
+```
+
+#Input model cases
+```{r getFiles}
+    if (is.null(obj)){
+        if (!is.character(paths)){
+            cat("'paths' parameter is not a character vector!\n");
+            stop();
+        }
+        obj<-list();
+        for (case in names(paths)){
+            cat(case,": '",paths[case],"'\n",sep='');
+            obj[[case]]<-getResLst(inp.dir=paths[case]);
+        }
+    } else {
+        obj<-convertToListOfResults(obj);
+    }
+    cases<-names(obj);
+    ncases<-length(cases);
+```
+
+```{r printCases,fig}
+    if (!is.null(paths)){ 
+        t<-as.data.frame(list(case=cases, path=getSubPaths(paths,last=3)));
+    } else {
+        t<-as.data.frame(list(case=cases));
+    }
+    row.names(t)<-NULL;
+    pander(t,caption=paste0(tblno,". Model cases for comparison."));
+    tblno<-tblno+1;
+```
+
+#Objective function components
+```{r printTable.OFCs,results='asis'}
+    dfr<-getMDFR.ObjFunComponents(obj);
+    panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
+    cats<-as.character(unique(dfr$category))
+    for (i in 1:length(cats)){
+        dfrp<-dfr[dfr$category==cats[i],];
+        row.names(dfrp)<-NULL;
+        if (ncases==1){
+            #single model case
+            cols<-c("description","weight","likelihood","objFun");
+            pandoc.table(dfrp[,cols],digits=2,round=2,keep.trailing.zeros=TRUE,justify='lccc',
+                   caption=paste0(tblno,". Objective function ",cats[i]," components."))
+        } else {
+            #multiple model cases (want to reshape dfrp with cases as columns)
+            dfro<-reshape2::dcast(dfrp,formula="description~case",fun.aggregate=sum,value.var="objFun");
+            dfrd<-reshape2::dcast(dfrp,formula="description~case",fun.aggregate=sum,value.var="diff")[,cases];
+            names(dfrd)<-paste0(cases,"-",cases[1]);
+            dfrp<-cbind(dfro[,c("description",cases)],dfrd);
+            just<-'l';for (j in 1:(2*ncases)) just<-paste0(just,'c');
+            pandoc.table(dfrp,digits=2,round=2,keep.trailing.zeros=TRUE,justify=just,
+                   caption=paste0(tblno,". Objective function ",cats[i]," components."))
+        }
+        tblno<-tblno+1;
+    }
+    panderOptions('knitr.auto.asis',TRUE)
+```
+
+#Parameter estimates
+```{r printTable.Params,results='asis'}
+    dfr<-getMDFR.ParamsPlusStdDevs(obj);
+    dfr$param<-gsub("\\[..\\]","",dfr$param,perl=TRUE);#remove [XX] from parameter vectors
+    dfr$index<-as.character(dfr$index);
+    dfr$phase<-as.character(dfr$phase);
+    panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
+    cats<-as.character(unique(dfr$category))
+    for (i in 1:length(cats)){
+        dfrp<-dfr[dfr$category==cats[i],];
+        prcs<-as.character(unique(dfrp$process));
+        for (j in 1:length(prcs)){
+            dfrpp<-dfrp[dfrp$process==prcs[j],];
+            row.names(dfrpp)<-NULL;
+            if (ncases==1){
+                cols<-c("description","param","index","phase",
+                        "min","max","init","value","stdv","check");
+                pandoc.table(dfrpp[,cols],keep.trailing.zeros=TRUE,justify='llcccccccc',
+                       caption=paste0(tblno,". Parameter estimates for ",cats[i]," ",prcs[j]," ."));
+                tblno<-tblno+1;
+            } else {
+            }
+        }
+    }
+```

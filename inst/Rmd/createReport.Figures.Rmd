@@ -1,0 +1,118 @@
+---
+title: "TCSAM2013 Model Results: Figures"
+author: "William Stockhausen"
+date: '`r format(Sys.Date(),"%d %B, %Y")`'
+output: word_document
+orientation: landscape
+params: 
+    paths: none
+    obj: none
+    numRecent: 15
+    plot1stObs: TRUE
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
+                      dpi=300,fig.width=6.5,fig.height=6)
+```
+
+```{r init}
+    require(pander);
+    require(ggplot2);
+    require(ggthemes);
+    require(reshape2);
+    require(rTCSAM2013);
+    panderOptions("table.caption.prefix","Table ")
+    panderOptions("table.split.table",Inf)
+    paths<-params$paths;
+    obj<-params$obj;
+    numRecent<-params$numRecent;
+    plot1stObs<-as.logical(params$plot1stObs);
+    figno<-1;
+    tblno<-1;
+```
+
+#Input model cases
+```{r getFiles}
+    if (is.null(obj)){
+        if (!is.character(paths)){
+            cat("'paths' parameter is not a character vector!\n");
+            stop();
+        }
+        obj<-list();
+        for (case in names(paths)){
+            cat(case,": '",paths[case],"'\n",sep='');
+            obj[[case]]<-getResLst(inp.dir=paths[case]);
+        }
+    } else {
+        obj<-convertToListOfResults(obj);
+    }
+    cases<-names(obj);
+    ncases<-length(cases);
+```
+
+```{r printCases,fig}
+    if (!is.null(paths)){ 
+        t<-as.data.frame(list(case=cases, path=getSubPaths(paths,last=2)));
+    } else {
+        t<-as.data.frame(list(case=cases));
+    }
+    row.names(t)<-NULL;
+    pander(t,caption=paste0(tblno,". Model cases for comparison."));
+    tblno<-tblno+1;
+```
+
+#Objective function components
+```{r plots.OFCs1,results='asis'}
+    plots<-compareModelResults.ObjFunComponents(obj,y='objFun',
+                                                showPlot=FALSE);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+```
+  
+#Objective function component differences
+```{r plots.OFCs2,results='asis'}
+    if (length(cases)>1){
+        plots<-compareModelResults.ObjFunComponents(obj,y="diff",
+                                                    showPlot=FALSE);
+        figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+    } else {
+        cat("No differences plotted: only one model case considered.\n")
+    }
+```
+  
+#Parameter estimates
+```{r plots.Parameters,results='asis'}
+    plots<-compareModelResults.Params(obj,
+                                      showPlot=FALSE);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+```
+  
+#Population processes
+```{r plots.PopProcesses,results='asis'}
+    plots<-compareModelResults.PopProcesses(obj);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+```
+  
+#Population quantities
+```{r plots.PopQuantities,results='asis'}
+    plots<-compareModelResults.PopQuantities(obj,
+                                            numRecent=numRecent);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+```
+  
+#Survey quantities
+```{r plots.SurveyQuantities,results='asis'}
+    plots<-compareModelResults.SurveyQuantities(obj,
+                                                numRecent=numRecent,
+                                                plot1stObs=plot1stObs);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+```
+  
+#Fisheries quantities
+```{r plots.Fisheries,results='asis'}
+    plots<-compareModelResults.FisheryQuantities(obj,
+                                                numRecent=numRecent,
+                                                plot1stObs=plot1stObs);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+```
+

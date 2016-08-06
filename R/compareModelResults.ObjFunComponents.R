@@ -44,6 +44,7 @@ compareModelResults.ObjFunComponents<-function(obj,
     
     cats <- as.character(unique(dfr$category));
     plots<-list();
+    figno<-1;
     for (cat in cats){
         dfrp<-dfr[dfr$category==cat,];
         p <- ggplot(data=dfrp,mapping=aes_string(x="description",y=y[1],fill='case'));
@@ -51,8 +52,9 @@ compareModelResults.ObjFunComponents<-function(obj,
         p <- p + labs(x="component",y=ylab);
         p <- p + ggtitle(cat);
         p <- p + theme(axis.text.x=element_text(angle=30,hjust=1),plot.margin=margin(10,10,10,50));
-        if (showPlot) print(p);
-        plots[[cat]]<-p;
+        cap<-paste0("Figure &&fno. Objective function components related to ",cat,".");
+        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        plots[[cap]]<-p; p<-NULL;
     }
 
     return(invisible(plots));

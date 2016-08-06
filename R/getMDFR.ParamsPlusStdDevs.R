@@ -10,7 +10,19 @@
 #'
 #'@return - dataframe with the parameter estimates and uncertainty info.
 #'
-#'@details Returned parameter info dataframe has columns case, type, param, min, max, init, value, stdvv and scl.
+#'@details Returned dataframe has columns 
+#'\itemize{
+#'  \item{case} 
+#'  \item{type} 
+#'  \item{param}
+#'  \item{phase}
+#'  \item{min}
+#'  \item{max}
+#'  \item{init}
+#'  \item{value}
+#'  \item{stdv}
+#'  \item{check}
+#'}
 #'
 #'@export
 #'
@@ -53,12 +65,13 @@ getMDFR.ParamsPlusStdDevs<-function(obj,
                         rw$type <-'scalar';
                         rw$param<-prm;
                         rw$index<-'';
+                        rw$phase<-prsp$phase[r];
                         rw$min  <-prsp$min[r];
                         rw$max  <-prsp$max[r];
                         rw$init <-prsp$init[r];
                         rw$value<-prsp$value[r];
                         rw$stdv <-0.0;
-                        rw$scl  <-"";
+                        rw$check  <-"";
                         rw$category   <-prsp$category[r];
                         rw$process    <-prsp$process[r];
                         rw$label      <-prsp$label[r];
@@ -74,8 +87,8 @@ getMDFR.ParamsPlusStdDevs<-function(obj,
                             rw$stdv <-stdp[r,4]; #standard dev
                         }#nrs>0
                         if (is.finite(rw$min)){
-                            if (abs(rw$value-rw$min)/(rw$max-rw$min)<dp/100) rw$scl <-"near min";
-                            if (abs(rw$value-rw$max)/(rw$max-rw$min)<dp/100) rw$scl <-"near max";
+                            if (abs(rw$value-rw$min)/(rw$max-rw$min)<dp/100) rw$check <-"--";
+                            if (abs(rw$value-rw$max)/(rw$max-rw$min)<dp/100) rw$check <-"++";
                         }#finite limits
                         pdfr<-rbind(pdfr,as.data.frame(rw,stringsAsFactors=FALSE));
                     }#parameter defined

@@ -21,6 +21,18 @@ This function extracts parameters values and standard deviations, together with 
 (if any) from several TCSAM2013 models.
 }
 \details{
-Returned parameter info dataframe has columns case, type, param, min, max, init, value, stdvv and scl.
+Returned dataframe has columns 
+\itemize{
+ \item{case} 
+ \item{type} 
+ \item{param}
+ \item{phase}
+ \item{min}
+ \item{max}
+ \item{init}
+ \item{value}
+ \item{stdv}
+ \item{check}
+}
 }
 

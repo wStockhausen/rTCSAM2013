@@ -6,8 +6,8 @@
 \usage{
 getMDFR.FisheryQuantities(obj, type = c("bio.retm", "bio.dscm", "bio.totm",
   "prNatZ.ret", "prNatZ.tot", "PRs.ret", "PRs.tot", "mnPrNatZ.ret",
-  "mnPrNatZ.tot", "selfcns", "zscores", "effSS.ret", "effSS.tot"),
-  verbose = FALSE)
+  "mnPrNatZ.tot", "selfcns", "zscores", "effSS.ret", "effSS.tot", "max rates",
+  "mean rates"), verbose = FALSE)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -39,6 +39,8 @@ Potential values for 'type' are:
  \item {'zscores' - annual z-scores for fits to catch biomass}
  \item {'effSS.tot' - effective (and input) sample sizes for total catch size comps}
  \item {'effSS.ret' - effective (and input) sample sizes for retained catch size comps}
+ \item {'max rates' - max fishing mortality, retained mortality, and capture rates}
+ \item {'mean rates' - mean fishing mortality, retained mortality, and capture rates}
 }
 Requires sqldf package.
 }

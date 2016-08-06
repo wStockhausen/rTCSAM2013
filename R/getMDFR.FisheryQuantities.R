@@ -23,6 +23,8 @@
 #'  \item {'zscores' - annual z-scores for fits to catch biomass}
 #'  \item {'effSS.tot' - effective (and input) sample sizes for total catch size comps}
 #'  \item {'effSS.ret' - effective (and input) sample sizes for retained catch size comps}
+#'  \item {'max rates' - max fishing mortality, retained mortality, and capture rates}
+#'  \item {'mean rates' - mean fishing mortality, retained mortality, and capture rates}
 #'}
 #'Requires sqldf package.
 #'
@@ -35,7 +37,8 @@ getMDFR.FisheryQuantities<-function(obj,
                                            "prNatZ.ret","prNatZ.tot",
                                            "PRs.ret","PRs.tot",
                                            "mnPrNatZ.ret","mnPrNatZ.tot",
-                                           "selfcns","zscores","effSS.ret","effSS.tot"),
+                                           "selfcns","zscores","effSS.ret","effSS.tot",
+                                           "max rates","mean rates"),
                                     verbose=FALSE){
 
     lst<-convertToListOfResults(obj);
@@ -506,5 +509,86 @@ getMDFR.FisheryQuantities<-function(obj,
         return(dfr);
     }    
 
+    #----------------------------------
+    # max fishing mortality rates
+    #----------------------------------
+    if (type[1]=="max rates"){
+        dfr<-NULL;
+        for (fsh in c('TCF','SCF','RKF','GTF')){
+            nmmr<-gsub("&&fsh",fsh,"fsh.fmr.max.&&fsh",fixed=TRUE);
+            nmcr<-gsub("&&fsh",fsh,"fsh.fcr.max.&&fsh",fixed=TRUE);
+            for (case in cases){
+                for (x in c('male','female')){
+                    #fishing mortality rates
+                    vals<-(lst[[case]]$rep)[[paste0(nmmr,".",toupper(substr(x,1,1)))]];
+                    if (!is.null(vals)){
+                        dfrp<-data.frame(case=case,category="total mortality",fishery=fsh,
+                                         y=years.m1[[case]],x=x,m="all",s="all",val=vals);
+                        dfr<-rbind(dfr,dfrp);
+                    }
+                    #fishery capture rates
+                    vals<-(lst[[case]]$rep)[[paste0(nmcr,".",toupper(substr(x,1,1)))]];
+                    if (!is.null(vals)){
+                        dfrp<-data.frame(case=case,category="capture",fishery=fsh,
+                                         y=years.m1[[case]],x=x,m="all",s="all",val=vals);
+                        dfr<-rbind(dfr,dfrp);
+                    }
+                }#--x
+            }#--case
+        }#--fsh
+        #retained mortality
+        for (case in cases){
+            for (x in c('male')){
+                #retained mortality rates in TCF
+                vals<-(lst[[case]]$rep)[["fsh.rmr.max"]];
+                dfrp<-data.frame(case=case,category='retained mortality',fishery="TCF",
+                                 y=years.m1[[case]],x=x,m="all",s="all",val=vals);
+                dfr<-rbind(dfr,dfrp);
+            }#--x
+        }#--case
+        return(dfr)
+    }
+    
+    #----------------------------------
+    # mean fishing mortality rates
+    #----------------------------------
+    if (type[1]=="mean rates"){
+        dfr<-NULL;
+        for (fsh in c('TCF','SCF','RKF','GTF')){
+            nmmr<-gsub("&&fsh",fsh,"fsh.fmr.mean.&&fsh",fixed=TRUE);
+            nmcr<-gsub("&&fsh",fsh,"fsh.fcr.mean.&&fsh",fixed=TRUE);
+            for (case in cases){
+                for (x in c('male','female')){
+                    #fishing mortality rates
+                    vals<-(lst[[case]]$rep)[[paste0(nmmr,".",toupper(substr(x,1,1)))]];
+                    if (!is.null(vals)){
+                        dfrp<-data.frame(case=case,category="total mortality",fishery=fsh,
+                                         y=years.m1[[case]],x=x,m="all",s="all",val=vals);
+                        dfr<-rbind(dfr,dfrp);
+                    }
+                    #fishery capture rates
+                    vals<-(lst[[case]]$rep)[[paste0(nmcr,".",toupper(substr(x,1,1)))]];
+                    if (!is.null(vals)){
+                        dfrp<-data.frame(case=case,category="capture",fishery=fsh,
+                                         y=years.m1[[case]],x=x,m="all",s="all",val=vals);
+                        dfr<-rbind(dfr,dfrp);
+                    }
+                }#--x
+            }#--case
+        }#--fsh
+        #retained mortality
+        for (case in cases){
+            for (x in c('male')){
+                #retained mortality rates in TCF
+                vals<-(lst[[case]]$rep)[["fsh.rmr.mean"]];
+                dfrp<-data.frame(case=case,category='retained mortality',fishery="TCF",
+                                 y=years.m1[[case]],x=x,m="all",s="all",val=vals);
+                dfr<-rbind(dfr,dfrp);
+            }#--x
+        }#--case
+        return(dfr)
+    }
+    
     cat("Requested type '",type,"' not found!\n",sep="");
 }
+

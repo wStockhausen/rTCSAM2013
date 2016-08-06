@@ -14,12 +14,13 @@ compareModelResults.GrowthMatrices(obj, showPlot = FALSE, pdf = NULL)
 \item{pdf}{- name for output pdf file}
 }
 \value{
-list of ggplot objects
+list of ggplot objects, by sex
 }
 \description{
 Function to compare growth matrices among several model runs.
 }
 \details{
-None.
+If multiple models are compared, then a set of sex-specific faceted line plots 
+are created. If a single model is plotted, then sex-specific bubble plots are created.
 }
 
