@@ -4,10 +4,19 @@
 \alias{convertToListOfResults}
 \title{Convert object to a list of tcsam2013.resLst objects}
 \usage{
-convertToListOfResults(obj)
+convertToListOfResults(obj = NULL, rep = NULL, prs = NULL, std = NULL,
+  ofc = NULL)
 }
 \arguments{
 \item{obj}{- object to convert (see details)}
+
+\item{rep}{- a tcsam2013.rep object to convert}
+
+\item{prs}{- a tcsam2013.prs object to convert}
+
+\item{std}{- a tcsam2013.std object to convert}
+
+\item{ofc}{- a tcsam2013.ofc object to convert}
 }
 \value{
 List of tcsam2013.resLst objects

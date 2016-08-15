@@ -11,6 +11,8 @@
 #'@param objs - list of results objects to extract results from
 #'@param scaleBy - scale predictions by this
 #'
+#'@details None.
+#'
 #'@export
 #'
 exportModelComparisons.TimeSeries<-function(obsyrs=NULL,

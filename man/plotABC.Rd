@@ -23,4 +23,7 @@ plotABC(x, OFL, ABC.pstar, ABC.buff, buffer = 0.2, title = NULL,
 \description{
 This function plots ABC and OFL from TCSAM2013 projection model output.
 }
+\details{
+None.
+}
 

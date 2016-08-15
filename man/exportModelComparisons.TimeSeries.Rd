@@ -25,4 +25,7 @@ exportModelComparisons.TimeSeries(obsyrs = NULL, obs = NULL, obscv = NULL,
 \description{
 Function to export time series from a set of model runs to csv for comparison.
 }
+\details{
+None.
+}
 

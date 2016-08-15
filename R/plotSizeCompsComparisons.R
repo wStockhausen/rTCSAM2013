@@ -13,6 +13,8 @@
 #'@param maxy - max y value to plot
 #'@param yearlb - year labels, one per plot
 #'
+#'@details Deprecated. Don't use.
+#'
 #'@import graphics
 #'
 #'@export

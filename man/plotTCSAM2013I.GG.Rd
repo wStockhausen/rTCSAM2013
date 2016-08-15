@@ -4,8 +4,8 @@
 \alias{plotTCSAM2013I.GG}
 \title{Plot TCSAM2013 model results.}
 \usage{
-plotTCSAM2013I.GG(obj, numRecent = 15, plot1stObs = TRUE, F35 = 0.73,
-  B35 = 33.54, showPlot = TRUE, pdf = FALSE)
+plotTCSAM2013I.GG(obj, numRecent = 15, plot1stObs = TRUE, showPlot = TRUE,
+  pdf = FALSE)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -13,10 +13,6 @@ plotTCSAM2013I.GG(obj, numRecent = 15, plot1stObs = TRUE, F35 = 0.73,
 \item{numRecent}{- number of "recent" years to include in "zoom" plots}
 
 \item{plot1stObs}{- flag to plot observations from the first case, only}
-
-\item{F35}{- F35 value for control rule plot}
-
-\item{B35}{- B35 value for control rule plot}
 
 \item{showPlot}{- flag (T/F) to print plots to screen (if pdf==FALSE)}
 
@@ -29,6 +25,7 @@ list of ggplot2 objects.
 Function to plot model results from TCSAM2013.
 }
 \details{
-#'
+If pdf is TRUE, the file "TCSAM2013.ModelResults.pdf" is created in the 
+working directory.
 }
 

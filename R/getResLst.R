@@ -15,6 +15,7 @@
 #'  \item{rep - a tcsam2013.rep object}
 #'  \item{prs - a tcsam2013.prs object}
 #'  \item{std - a tcsam2013.std object, or NULL}
+#'  \item{ofc - a tcsam2013.ofc object}
 #'}
 #' 
 #'@export

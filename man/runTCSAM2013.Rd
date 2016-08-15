@@ -34,7 +34,7 @@ runTCSAM2013(os = "osx", path = ".", model = "tcsam2013alta",
 
 \item{seed}{- seed for random number generator (or NULL)}
 
-\item{plotResults}{- T/F to plot results using \code{plotTCSAM2013I}}
+\item{plotResults}{- T/F to plot results using \code{plotTCSAM2013I.GG}}
 
 \item{rmEXE}{- flag to remove model executable from run folder}
 

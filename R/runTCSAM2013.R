@@ -22,7 +22,7 @@
 #'@param maxPhase - max phase for estimation
 #'@param jitter  - T/F to jitter parameters
 #'@param seed    - seed for random number generator (or NULL)
-#'@param plotResults - T/F to plot results using \code{plotTCSAM2013I}
+#'@param plotResults - T/F to plot results using \code{plotTCSAM2013I.GG}
 #'@param rmEXE - flag to remove model executable from run folder
 #'@param cleanup - flag (T/F) to clean up unnecessary files
 #'
@@ -85,7 +85,7 @@ runTCSAM2013<-function(os='osx',
         system("./tmp.sh",wait=TRUE);
     }
 
-    #print timeing-related info
+    #print timing-related info
     etm<-Sys.time();
     elt<-etm-stm;
     cat("start time: ")
@@ -108,15 +108,8 @@ runTCSAM2013<-function(os='osx',
     }
     
     if (plotResults){
-        obj.rep<-getRep('TCSAM_OLDSTYLE.R');
-        obj.std<-getStd(paste(model,'.std',sep=''));
-        obj.prs<-getPrs('all');
-        obj.wts<-getWTS('TCSAM_WTS.final.R')
-        plotTCSAM2013I(obj.rep,
-                       obj.std,
-                       obj.prs,
-                       obj.wts,
-                       mdl=model);
+        lst<-getResLst(inp.dir=getwd());
+        plotTCSAM2013I.GG(lst,pdf=TRUE);
     }
 
     #return dataframe (and return to original folder as working directory)

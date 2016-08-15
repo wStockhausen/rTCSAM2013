@@ -146,8 +146,8 @@ compareModelResults.PopQuantities<-function(obj,
     dfr<-reshape2::dcast(dfr,"case+x+m+z~.",fun.aggregate=sum,value.var='val');
     p <- ggplot(dfr,aes_string(x='z',y='.',colour='case'));
     p <- p + geom_line();
-    p <- p + labs(x='year',y="Abundance (millions)");
-    p <- p + ggtitle("Population Abundance");
+    p <- p + labs(x='size (mm CW)',y="Abundance (millions)");
+    p <- p + ggtitle("Final Population Abundance");
     p <- p + facet_grid(m~x);
     cap<-"\nFigure &&fno. Estimated final abundance, by sex, maturity, shell condition and size.\n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;

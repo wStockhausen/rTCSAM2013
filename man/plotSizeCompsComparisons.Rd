@@ -29,4 +29,7 @@ plotSizeCompsComparisons(data.o, data.p, nr = 4, nc = 4, nplots = nr * nc,
 \description{
 This function compares observed and predicted size comps by year.
 }
+\details{
+Deprecated. Don't use.
+}
 

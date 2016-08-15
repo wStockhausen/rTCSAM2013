@@ -11,6 +11,8 @@
 #'@param title - title for plot
 #'@import graphics
 #'
+#'@details None.
+#'
 #'@export
 #'
 plotABC<-function(x,OFL,ABC.pstar,ABC.buff,buffer=0.2,title=NULL,xlim=c(17.5,37.5)){

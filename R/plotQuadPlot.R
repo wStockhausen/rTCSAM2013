@@ -9,6 +9,8 @@
 #'
 #'@return nothing
 #'
+#'@details None.
+#'
 #'@export
 #'
 plotQuadPlot<-function(obj.rep,
