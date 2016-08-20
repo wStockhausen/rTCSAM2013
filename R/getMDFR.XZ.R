@@ -41,7 +41,7 @@ getMDFR.XZ<-function(obj,rep.m=NULL,rep.f=NULL,std.m=NULL,std.f=NULL,verbose=FAL
             lci <- NA;
             uci <- NA;
             dfrp<-data.frame(case=case,
-                             x='male',z=(lst[[case]]$rep)$mod.zBs,
+                             x='female',z=(lst[[case]]$rep)$mod.zBs,
                              val=val,lci=lci,uci=uci);
             dfr<-rbind(dfr,dfrp);
         } else {

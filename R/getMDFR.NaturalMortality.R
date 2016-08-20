@@ -22,7 +22,7 @@ getMDFR.NaturalMortality<-function(obj,
     cases<-names(lst);
     
     tinfo<-getTimeInfo(lst);
-    years<-tinfo$years;
+    years<-tinfo$years.m1;
 
     
     #----------------------------------

@@ -20,7 +20,7 @@ getMDFR.meanGrowth<-function(obj,
 
     dfr<-getMDFR.XZ(obj,
                     rep.m="pop.grw.mnPMZ.M",
-                    rep.f="pop.grw.mnPMZ.M",
+                    rep.f="pop.grw.mnPMZ.F",
                     std.m="sdrMnGrw_M",
                     std.f="sdrMnGrw_F",
                     verbose=verbose);
