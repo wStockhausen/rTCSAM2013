@@ -2,12 +2,12 @@
 % Please edit documentation in R/runJitter.R
 \name{runJitter}
 \alias{runJitter}
-\title{Function to run TCSAM2013 multiple times using jittered initial parameter values.}
+\title{Function to run TCSAM2013 multiple times using jittered initial parameter values}
 \usage{
 runJitter(os = "osx", path = ".", model = "tcsam2013alta",
-  path2model = "", configFile = "", numRuns = 3, onlyEvalJitter = FALSE,
-  in.csv = "jitterInfo.csv", out.csv = "jitterResults.csv",
-  plotResults = FALSE)
+  path2model = "", configFile = "", minPhase = NULL, maxPhase = NULL,
+  numRuns = 3, onlyEvalJitter = FALSE, in.csv = "jitterInfo.csv",
+  out.csv = "jitterResults.csv", plotResults = FALSE, cleanup = TRUE)
 }
 \arguments{
 \item{os}{- 'win' or 'mac' or 'osx'}
@@ -20,6 +20,10 @@ runJitter(os = "osx", path = ".", model = "tcsam2013alta",
 
 \item{configFile}{- path to model configuration file}
 
+\item{minPhase}{- min phase to start estimation}
+
+\item{maxPhase}{- max phase for estimation}
+
 \item{numRuns}{- number of jitter runs to make}
 
 \item{onlyEvalJitter}{- flag (T/F) to only evaluate a (previous) set of jitter runs, not make new runs}
@@ -29,6 +33,8 @@ runJitter(os = "osx", path = ".", model = "tcsam2013alta",
 \item{out.csv}{- filename for jittered results}
 
 \item{plotResults}{- T/F to plot final results using \code{plotTCSAM2013I}}
+
+\item{cleanup}{- flag (T/F) to clean up unnecessary files}
 }
 \value{
 - list w/ 4 elements:
@@ -40,7 +46,7 @@ runJitter(os = "osx", path = ".", model = "tcsam2013alta",
 }
 \description{
 This functions runs a TCSAM2013 model multiple times, jittering the
-initial staarting values to assess model convergence.
+initial starting values to assess model convergence.
 }
 \details{
 For each model run, this function creates a shell script ('./tmp.sh') in the

@@ -1,8 +1,8 @@
 #'
-#'@title Function to run TCSAM2013 multiple times using jittered initial parameter values.
+#'@title Function to run TCSAM2013 multiple times using jittered initial parameter values
 #'
 #'@description This functions runs a TCSAM2013 model multiple times, jittering the
-#'initial staarting values to assess model convergence.
+#'initial starting values to assess model convergence.
 #'
 #'@details
 #'For each model run, this function creates a shell script ('./tmp.sh') in the
@@ -26,10 +26,13 @@
 #'@param path2model - path to model executable
 #'@param configFile - path to model configuration file
 #'@param numRuns    - number of jitter runs to make
+#'@param minPhase - min phase to start estimation
+#'@param maxPhase - max phase for estimation
 #'@param onlyEvalJitter - flag (T/F) to only evaluate a (previous) set of jitter runs, not make new runs
 #'@param in.csv - filename for jitter info (seed, obj fun value) from ADMB model run
 #'@param out.csv - filename for jittered results
 #'@param plotResults - T/F to plot final results using \code{plotTCSAM2013I}
+#'@param cleanup - flag (T/F) to clean up unnecessary files
 #'
 #'@return - list w/ 4 elements:
 #'  imn  - index of (1st) smallest value for the objective function
@@ -45,11 +48,14 @@ runJitter<-function(os='osx',
                     model='tcsam2013alta',
                     path2model='',
                     configFile='',
+                    minPhase=NULL,
+                    maxPhase=NULL,
                     numRuns=3,
                     onlyEvalJitter=FALSE,
                     in.csv='jitterInfo.csv',
                     out.csv='jitterResults.csv',
-                    plotResults=FALSE){
+                    plotResults=FALSE,
+                    cleanup=TRUE){
     #start timing
     stm<-Sys.time();
 
@@ -69,12 +75,15 @@ runJitter<-function(os='osx',
                               model=model,
                               path2model=path2model,
                               configFile=configFile,
+                              minPhase=minPhase,
+                              maxPhase=maxPhase,
                               pin=FALSE,
                               hess=FALSE,
                               mcmc=FALSE,
                               jitter=TRUE,
                               seed=NULL,
-                              plotResults=FALSE);
+                              plotResults=FALSE,
+                              cleanup=cleanup);
             if (!is.null(par)){
                 rc<-rc+1;
                 objFun  <-par$value[par$name=='objective function'];
@@ -110,12 +119,15 @@ runJitter<-function(os='osx',
                       model=model,
                       path2model=path2model,
                       configFile=configFile,
+                      minPhase=minPhase,
+                      maxPhase=maxPhase,
                       pin=FALSE,
                       hess=TRUE,
                       mcmc=FALSE,
                       jitter=TRUE,
                       seed=seed,
-                      plotResults=plotResults);
+                      plotResults=plotResults,
+                      cleanup=cleanup);
 
     #print timing-related info
     etm<-Sys.time();
