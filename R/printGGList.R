@@ -37,9 +37,10 @@ printGGList<-function(plots,figno=NULL,cap=NULL,show=TRUE){
         return(list(figno=figno,plotlist=plotlist));
     } else {
         #plots is a list
-        for (nm in names(plots)){
-            plot<-plots[[nm]];
-            res<-printGGList(plot,figno=figno,cap=nm);
+        caps<-names(plots);
+        for (p in 1:length(plots)){
+            plot<-plots[[p]];
+            res<-printGGList(plot,figno=figno,cap=caps[p]);
             figno<-res$figno;
             plotlist<-c(plotlist,res$plotlist);
         }

@@ -100,7 +100,7 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                       size=guide_legend(order=1));
     p <- p + facet_grid(x~.)
     p <- p + theme(legend.box='horizontal')
-    cap<-"Figure &&fno. Observed proportions-at-size from the survey.";
+    cap<-"Figure &&fno. Observed proportions-at-size from the survey by sex.";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -167,7 +167,7 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
     p <- p + facet_grid("x~m");
     p <- p + labs(y="proportion",x="size (mm CW)")
-    cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey.";
+    cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey by sex and maturity.";
     if (showPlot) figno<-(printGGList(ps,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -183,7 +183,7 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
     p <- p + facet_grid("x~.");
     p <- p + labs(y="proportion",x="size (mm CW)")
-    cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey.";
+    cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey by sex.";
     if (showPlot) figno<-(printGGList(ps,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     

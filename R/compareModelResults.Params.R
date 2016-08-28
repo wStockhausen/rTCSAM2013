@@ -58,7 +58,7 @@ compareModelResults.Params<-function(obj,
             p <- p + scale_x_continuous(breaks=NULL);
             p <- p + labs(y='parameter value',x='',title=prc);
             p <- p + facet_wrap(~label,ncol=nc,drop=FALSE,scales="free_y");
-            cap<-paste0("Figure &&fno. Estimated parameters for ",prc,".\n");
+            cap<-paste0("Figure &&fno. Estimated ",ctg," parameters for ",prc,".\n");
             if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
             plots[[cap]]<-p; p<-NULL;
         }

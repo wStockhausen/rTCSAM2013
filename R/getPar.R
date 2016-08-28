@@ -15,7 +15,7 @@ getPar<-function(inp=NULL){
     if (is.null(inp)){
         inp<-wtsUtilities::selectFile(ext='par',caption="Select par file");
     }
-    if (!file.exists(inp)) return(NULL);
+    if (!file.exists(inp)) return(NULL);#par file not created
     
     r1<-readLines(con=inp);
     
@@ -23,6 +23,7 @@ getPar<-function(inp=NULL){
     str <- strsplit(r1[1],'[[:blank:]]');#split based on blanks
     num <- as.numeric(str[[1]]);         #convert to numeric, non-numerics will be NAs
     objfun <- num[!is.na(num)];          #extract numeric elements (num par, obj fun, max gradient)
+    if (length(objfun<3)) return(NULL);  #objfun is NaN
     names(objfun)<-c('number of parameters','objective function','max gradient');
     dfr<-data.frame(name=names(objfun),value=objfun,stringsAsFactors=FALSE)
     

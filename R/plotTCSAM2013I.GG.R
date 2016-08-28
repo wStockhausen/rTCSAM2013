@@ -28,6 +28,7 @@ plotTCSAM2013I.GG<-function(obj,
         cat("Aborting...\n");
         return(NULL);
     }
+    obj<-convertToListOfResults(obj);
     
     #----------------------------------
     # create lists for output

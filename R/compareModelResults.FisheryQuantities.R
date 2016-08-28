@@ -69,7 +69,7 @@ compareModelResults.FisheryQuantities<-function(obj,
                                             ylims=NULL,
                                             showPlot=showPlot);
     cap1<-"Figure &&fno. Comparison of observed and predicted retained catch mortality.";
-    cap2<-"Figure &&fno. Comparison of observed and predicted retained catch mortality.";
+    cap2<-"Figure &&fno. Comparison of observed and predicted retained catch mortality. Recent time period.";
     names(ps)<-c(cap1,cap2);
     if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
     plots[[cap1]]<-ps[[1]];
@@ -96,7 +96,7 @@ compareModelResults.FisheryQuantities<-function(obj,
                                             ylims=NULL,
                                             showPlot=showPlot);
     cap1<-"Figure &&fno. Comparison of observed and predicted discard catch mortality.";
-    cap2<-"Figure &&fno. Comparison of observed and predicted discard catch mortality.";
+    cap2<-"Figure &&fno. Comparison of observed and predicted discard catch mortality. Recent time period.";
     names(ps)<-c(cap1,cap2);
     if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
     plots[[cap1]]<-ps[[1]];
@@ -126,7 +126,7 @@ compareModelResults.FisheryQuantities<-function(obj,
                                                 ylims=NULL,
                                                 showPlot=showPlot);
         cap1<-paste0("Figure &&fno. Comparison of observed and predicted total catch biomass for ",fsh,".");
-        cap2<-paste0("Figure &&fno. Comparison of observed and predicted total catch biomass for ",fsh,".");
+        cap2<-paste0("Figure &&fno. Comparison of observed and predicted total catch biomass for ",fsh,". Recent time period.");
         names(ps)<-c(cap1,cap2);
         if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
         plots[[cap1]]<-ps[[1]];
@@ -309,7 +309,7 @@ compareModelResults.FisheryQuantities<-function(obj,
                           size=guide_legend(order=1));
         p <- p + facet_grid(x~fishery);
         p <- p + theme(legend.box='horizontal');
-        cap<-paste0("Figure &&fno. Pearson's residuals for proportions-at-size in ",fsh,".");
+        cap<-paste0("Figure &&fno. Pearson's residuals for total catch proportions-at-size in ",fsh,".");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -440,7 +440,7 @@ compareModelResults.FisheryQuantities<-function(obj,
         p <- p + labs(y="selectivity",x="size (mm CW)");
         p <- p + guides(colour=guide_legend("case"));
         p <- p + facet_wrap(~pc,ncol=3);
-        cap<-paste0("Figure &&fno. Estimated selectivity functions for total catch in",fsh,".");
+        cap<-paste0("Figure &&fno. Estimated selectivity functions for total catch in",fsh,". Recent time period");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
