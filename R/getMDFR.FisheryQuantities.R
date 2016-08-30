@@ -113,14 +113,14 @@ getMDFR.FisheryQuantities<-function(obj,
                         dfr<-rbind(dfr,dfrp);
                     }#--x
                 } else {
-                    #observed
+                    #observed for GTF is males+females
                     val <-(lst[[case]]$rep)[[paste0(nmo,"")]];
                     dfrp<-data.frame(case=case,category='observed',fishery=fsh,
                                       y=(lst[[case]]$rep)[[nmy]],x='all',m='all',s='all',val=val);
                     dfr<-rbind(dfr,dfrp);
                     #predicted
                     idx <- years.m1[[case]] %in% (lst[[case]]$rep)[[nmy]];
-                    val <-(lst[[case]]$rep)[[paste0(nmp,".F")]];
+                    val <-(lst[[case]]$rep)[[paste0(nmp,"")]];
                     dfrp<-data.frame(case=case,category='predicted',fishery=fsh,
                                       y=(years.m1[[case]])[idx],x='all',m='all',s='all',val=val[idx]);
                     dfr<-rbind(dfr,dfrp);

@@ -96,7 +96,7 @@ runTCSAM2013<-function(os='osx',
     print(elt);
 
     #parse par file into dataframe
-    par<-paste(model,'.par',sep='')
+    par<-paste0(model,'.par')
     dfr<-getPar(par);
     
     #get jitter info

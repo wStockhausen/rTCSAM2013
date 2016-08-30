@@ -30,9 +30,9 @@ getResLst<-function(inp.dir=NULL,
     }
     
     if (!dir.exists(inp.dir)) {
-        cat("Warning for getResLst(...).\n");
-        cat("The following folder does not exist:\n\t'",inp.dir,"'\n",sep='');
-        cat("Returning NULL.\n")
+        cat("Warning from getResLst(...).\n");
+        cat("--The following folder does not exist:\n\t'",inp.dir,"'\n",sep='');
+        cat("--Returning NULL.\n")
         return(NULL);
     }
     

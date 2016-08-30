@@ -30,6 +30,7 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     plot1stObs<-as.logical(params$plot1stObs);
     figno<-1;
     tblno<-1;
+    cat("Working dir = '",getwd(),"'\n\n");
 ```
 
 #Input model cases
@@ -42,7 +43,12 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
         obj<-list();
         for (case in names(paths)){
             cat(case,": '",paths[case],"'\n",sep='');
-            obj[[case]]<-getResLst(inp.dir=paths[case]);
+            res<-getResLst(inp.dir=paths[case]);
+            if (!is.null(res)) {
+                obj[[case]]<-res;
+                paths<-paths[names(paths)!=case];
+            }
+            rm(res);
         }
     } else {
         obj<-convertToListOfResults(obj);
@@ -51,9 +57,10 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     ncases<-length(cases);
 ```
 
-```{r printCases,fig}
+```{r printCases}
     if (!is.null(paths)){ 
-        t<-as.data.frame(list(case=cases, path=getSubPaths(paths,last=2)));
+        t<-as.data.frame(list(case=cases, path=getSubPaths(paths,last=3)));
+        t$path<-paste0("'",t$path,"'");
     } else {
         t<-as.data.frame(list(case=cases));
     }

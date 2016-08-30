@@ -4,9 +4,9 @@
 \alias{renderReports}
 \title{Render reports}
 \usage{
-renderReports(paths = NULL, obj = NULL, out.dir = getwd(),
-  figures = TRUE, tables = TRUE, format = "word_document",
-  clean = FALSE)
+renderReports(paths = NULL, obj = NULL, numRecent = 15,
+  plot1stObs = TRUE, out.dir = getwd(), figures = TRUE, tables = TRUE,
+  format = "word_document", clean = FALSE)
 }
 \arguments{
 \item{paths}{- vector of paths to model runs, with case names as names (optional)}

@@ -5,7 +5,7 @@
 \title{Compare estimated/predicted survey quatities among several model runs}
 \usage{
 compareModelResults.SurveyQuantities(obj = NULL, numRecent = 15,
-  plot1stObs = TRUE, showPlot = FALSE, pdf = NULL)
+  plot1stObs = TRUE, ncol = 5, showPlot = FALSE, pdf = NULL)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -13,6 +13,8 @@ compareModelResults.SurveyQuantities(obj = NULL, numRecent = 15,
 \item{numRecent}{- number of recent years to plot}
 
 \item{plot1stObs}{- flag to plot observations from the first case, only}
+
+\item{ncol}{- number of columns/page for size comp plots}
 
 \item{showPlot}{- flag (T/F) to show plot}
 

@@ -311,7 +311,7 @@ getMDFR.SurveyQuantities<-function(obj,
             }
             #predicted
             #idx<-years[[case]] %in% obsyears[[case]];
-            rws$var<-gsub(".obs.",".mod.",rws$var,fixed=TRUE);
+            rws$var<-gsub(".obs.",".mod.",rws$var,fixed=TRUE);#switch to ".mod."
             for (r in 1:nrow(rws)){
                 vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
                 #vals_yz<-vals_yz[idx,];
@@ -322,6 +322,7 @@ getMDFR.SurveyQuantities<-function(obj,
                             x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
                 dfr<-rbind(dfr,dfrp[,c("case","category","y","x","m","s","z","val")]);
             }
+            rws$var<-gsub(".mod.",".obs.",rws$var,fixed=TRUE);#switch back to ".obs."
         }##-cases
         if (type[1]=="prNatZ_yxmsz") return(dfr);
         if (type[1]=="prNatZ_yxmz") {

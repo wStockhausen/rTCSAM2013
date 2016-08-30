@@ -19,7 +19,10 @@
 #'
 #'@export
 #'
-renderReports<-function(paths=NULL,obj=NULL,
+renderReports<-function(paths=NULL,
+                        obj=NULL,
+                        numRecent=15,
+                        plot1stObs=TRUE,
                         out.dir=getwd(),
                         figures=TRUE,
                         tables=TRUE,
@@ -33,16 +36,20 @@ renderReports<-function(paths=NULL,obj=NULL,
         rmarkdown::render(system.file("Rmd/createReport.Figures.Rmd", package="rTCSAM2013"),
                           output_format=format,
                           output_file="TCSAM2013ReportFigures.docx",
-                          output_dir=out.dir,intermediates_dir=out.dir,
-                          params=list(paths=paths,obj=obj),clean=FALSE);
+                          output_dir=out.dir,
+                          intermediates_dir=out.dir,
+                          params=list(paths=paths,obj=obj,numRecent=numRecent,plot1stObs=plot1stObs),
+                          clean=FALSE);
     }
     if (tables){
         cat("out.dir = '",out.dir,"'\n",sep='')
         rmarkdown::render(system.file("Rmd/createReport.Tables.Rmd", package="rTCSAM2013"),
                           output_format=format,
                           output_file="TCSAM2013ReportTables.docx",
-                          output_dir=out.dir,intermediates_dir=out.dir,
-                          params=list(paths=paths,obj=obj),clean=FALSE);
+                          output_dir=out.dir,
+                          intermediates_dir=out.dir,
+                          params=list(paths=paths,obj=obj),
+                          clean=FALSE);
     }
     return(paths);
 }

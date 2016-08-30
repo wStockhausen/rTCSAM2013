@@ -1,7 +1,7 @@
 #'
 #'@title Function to run TCSAM2013 multiple times using jittered initial parameter values
 #'
-#'@description This functions runs a TCSAM2013 model multiple times, jittering the
+#'@description This function runs a TCSAM2013 model multiple times, jittering the
 #'initial starting values to assess model convergence.
 #'
 #'@details

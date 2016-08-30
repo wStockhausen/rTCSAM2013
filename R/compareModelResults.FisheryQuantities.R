@@ -170,47 +170,51 @@ compareModelResults.FisheryQuantities<-function(obj,
     #----------------------------------
     # plot observed retained catch size comps as bubble plots
     #----------------------------------
-    dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.ret");
-    for (fsh in c('TCF')){
-        idxo<-(dfrp$fishery==fsh)&(dfrp$category=="observed")
-        if (plot1stObs) idxo<-idxo & (dfrp$case==cases[1]);
-        dfrpp<-dfrp[idxo,]
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='category'));
-        p <- p + scale_size_area(max_size=10);
-        p <- p + geom_point(alpha=0.8,shape=21,color='black');
-        p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
-        p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh," retained catch: observed proportions"));
-        p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
-                          size=guide_legend(order=1));
-        p <- p + facet_grid(x~.)
-        p <- p + theme(legend.box='horizontal')
-        if (showPlot) print(p);
-        cap<-paste0("Figure &&fno. Observed proportions-at-size for retained catch in ",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
-        plots[[cap]]<-p; p<-NULL;
+    if (length(cases)==1){
+        dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.ret");
+        for (fsh in c('TCF')){
+            idxo<-(dfrp$fishery==fsh)&(dfrp$category=="observed")
+            if (plot1stObs) idxo<-idxo & (dfrp$case==cases[1]);
+            dfrpp<-dfrp[idxo,]
+            p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='category'));
+            p <- p + scale_size_area(max_size=10);
+            p <- p + geom_point(alpha=0.8,shape=21,color='black');
+            p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
+            p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh," retained catch: observed proportions"));
+            p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
+                              size=guide_legend(order=1));
+            p <- p + facet_grid(x~.)
+            p <- p + theme(legend.box='horizontal')
+            if (showPlot) print(p);
+            cap<-paste0("Figure &&fno. Observed proportions-at-size for retained catch in ",fsh,".");
+            if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+            plots[[cap]]<-p; p<-NULL;
+        }
     }
 
     #----------------------------------
     # plot observed total catch size comps as bubble plots
     #----------------------------------
-    dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.tot");
-    for (fsh in c('TCF','SCF','RKF','GTF')){
-        idxo<-(dfrp$fishery==fsh)&(dfrp$category=="observed")
-        if (plot1stObs) idxo<-idxo & (dfrp$case==cases[1]);
-        dfrpp<-dfrp[idxo,]
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='category'));
-        p <- p + scale_size_area(max_size=10);
-        p <- p + geom_point(alpha=0.8,shape=21,color='black');
-        p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
-        p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh," total catch: observed proportions"));
-        p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
-                          size=guide_legend(order=1));
-        p <- p + facet_grid(x~.)
-        p <- p + theme(legend.box='horizontal')
-        if (showPlot) print(p);
-        cap<-paste0("Figure &&fno. Observed proportions-at-size for total catch in ",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
-        plots[[cap]]<-p; p<-NULL;
+    if (length(cases)==1){
+        dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.tot");
+        for (fsh in c('TCF','SCF','RKF','GTF')){
+            idxo<-(dfrp$fishery==fsh)&(dfrp$category=="observed")
+            if (plot1stObs) idxo<-idxo & (dfrp$case==cases[1]);
+            dfrpp<-dfrp[idxo,]
+            p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='category'));
+            p <- p + scale_size_area(max_size=10);
+            p <- p + geom_point(alpha=0.8,shape=21,color='black');
+            p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
+            p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh," total catch: observed proportions"));
+            p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
+                              size=guide_legend(order=1));
+            p <- p + facet_grid(x~.)
+            p <- p + theme(legend.box='horizontal')
+            if (showPlot) print(p);
+            cap<-paste0("Figure &&fno. Observed proportions-at-size for total catch in ",fsh,".");
+            if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+            plots[[cap]]<-p; p<-NULL;
+        }
     }
 
     #----------------------------------
@@ -225,7 +229,7 @@ compareModelResults.FisheryQuantities<-function(obj,
         if (plot1stObs) idxo<-idxo & (dfrpp$case==cases[1]);
         idxp<-dfrpp$category=="predicted";
         
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val',fill='category',colour='category',linetype='case'));
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val',fill='category',colour='case'));
         p <- p + geom_bar(data=dfrpp[idxo,],stat='identity');
         p <- p + geom_line(data=dfrpp[idxp,]);
         p <- p + facet_wrap(~y,ncol=5);
@@ -249,7 +253,7 @@ compareModelResults.FisheryQuantities<-function(obj,
         if (plot1stObs) idxo<-idxo & (dfrpp$case==cases[1]);
         idxp<-dfrpp$category=="predicted";
         
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val',fill='category',colour='category',linetype='case'));
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val',fill='category',colour='case'));
         p <- p + geom_bar(data=dfrpp[idxo&idxm,],stat='identity');
         p <- p + geom_line(data=dfrpp[idxp&idxm,]);
         p <- p + facet_wrap(~y,ncol=5);
@@ -284,7 +288,11 @@ compareModelResults.FisheryQuantities<-function(obj,
         p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh,": retained catch Pearson's residuals"));
         p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
                           size=guide_legend(order=1));
-        p <- p + facet_grid(x~fishery);
+        if (length(cases)==1){
+            p <- p + facet_grid(x~.);
+        } else {
+            p <- p + facet_grid(case~x);
+        }
         p <- p + theme(legend.box='horizontal');
         cap<-paste0("Figure &&fno. Pearson's residuals for retained catch proportions-at-size in ",fsh,".");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
@@ -300,14 +308,18 @@ compareModelResults.FisheryQuantities<-function(obj,
     for (fsh in c('TCF','SCF','RKF','GTF')){
         idx<-(dfrp$fishery==fsh);
         dfrpp<-dfrp[idx,];
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='sign',colour='case',linetype='case'));
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='sign'));
         p <- p + scale_size_area(max_size=10);
         p <- p + geom_point(alpha=0.8,shape=21,color='black');
         p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
         p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh,": total catch Pearson's residuals"));
         p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
                           size=guide_legend(order=1));
-        p <- p + facet_grid(x~fishery);
+        if (length(cases)==1){
+            p <- p + facet_grid(x~.);
+        } else {
+            p <- p + facet_grid(case~x);
+        }
         p <- p + theme(legend.box='horizontal');
         cap<-paste0("Figure &&fno. Pearson's residuals for total catch proportions-at-size in ",fsh,".");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
@@ -318,6 +330,7 @@ compareModelResults.FisheryQuantities<-function(obj,
     # plot observed and predicted mean retained catch size comps
     #----------------------------------
     dfrp<-getMDFR.FisheryQuantities(obj,"mnPrNatZ.ret");
+    dfrp$category<-factor(dfrp$category,c("predicted","observed"))
     if (plot1stObs) {
         idxo<-(dfrp$category=="observed")&(dfrp$case==cases[1]);
         dfrp<-rbind(dfrp[idxo,],dfrp[dfrp$category=="predicted",])
@@ -327,7 +340,7 @@ compareModelResults.FisheryQuantities<-function(obj,
     for (fsh in c('TCF')){
         idx<-(dfrp$fishery==fsh);
         dfrpp<-dfrp[idx,];
-        p <- ggplot(dfrpp,aes_string(x='z',y='val',colour="category",linetype="case"));
+        p <- ggplot(dfrpp,aes_string(x='z',y='val',colour="case",linetype="category"));
         p <- p + geom_line();
         p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
         p <- p + facet_grid("x~fishery");
@@ -345,12 +358,13 @@ compareModelResults.FisheryQuantities<-function(obj,
         idxo<-(dfrp$category=="observed")&(dfrp$case==cases[1]);
         dfrp<-rbind(dfrp[idxo,],dfrp[dfrp$category=="predicted",])
     }
+    dfrp$category<-factor(dfrp$category,c("predicted","observed"))
     dfrp$lci<-dfrp$val-dfrp$stdv;
     dfrp$uci<-dfrp$val+dfrp$stdv;
     for (fsh in c('TCF','SCF','RKF','GTF')){
         idx<-(dfrp$fishery==fsh);
         dfrpp<-dfrp[idx,];
-        p <- ggplot(dfrpp,aes_string(x='z',y='val',colour="category",linetype="case"));
+        p <- ggplot(dfrpp,aes_string(x='z',y='val',colour="case",linetype="category"));
         p <- p + geom_line();
         p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
         p <- p + facet_grid("x~fishery");
@@ -364,10 +378,11 @@ compareModelResults.FisheryQuantities<-function(obj,
     # plot input and effective sample sizes for retained catch size comps
     #----------------------------------
     dfrp<-getMDFR.FisheryQuantities(obj,"effSS.ret");
+    dfrp$category<-factor(dfrp$category,c("McAllister-Ianelli","input"))
     for (fsh in c('TCF')){
         idx<-(dfrp$fishery==fsh);
         dfrpp<-dfrp[idx,];
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="category",linetype="case"));
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",linetype="category"));
         p <- p + geom_point();
         p <- p + geom_line();
         p <- p + facet_grid(x~fishery)
@@ -381,10 +396,11 @@ compareModelResults.FisheryQuantities<-function(obj,
     # plot input and effective sample sizes for total catch size comps
     #----------------------------------
     dfrp<-getMDFR.FisheryQuantities(obj,"effSS.tot");
+    dfrp$category<-factor(dfrp$category,c("McAllister-Ianelli","input"))
     for (fsh in c('TCF','SCF','RKF','GTF')){
         idx<-(dfrp$fishery==fsh);
         dfrpp<-dfrp[idx,];
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="category",linetype="case"));
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",linetype="category"));
         p <- p + geom_point();
         p <- p + geom_line();
         p <- p + facet_grid(x~fishery)

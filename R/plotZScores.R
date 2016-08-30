@@ -43,7 +43,7 @@ plotZScores<-function(dfr,
                       ylims=NULL,
                       showPlot=TRUE){
     p <- ggplot(dfr,aes_string(x=x,y=y));
-    p <- p + geom_hline(yintercept=0.0,color='black',size=2);
+    p <- p + geom_hline(yintercept=0.0,color='black',size=1);
     if (position=='dodge'){
         p <- p + geom_point(aes_string(shape=shape,color=color),size=4,alpha=0.5,
                             position=position_dodge(width=dodge));
