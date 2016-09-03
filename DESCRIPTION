@@ -1,8 +1,8 @@
 Package: rTCSAM2013
 Type: Package
 Title: Functions to run and plot output from TCSAM2013 models.
-Version: 2016.08.30
-Date: 2016-08-30
+Version: 2016.09.03
+Date: 2016-09-03
 Author: William Stockhausen
 Maintainer: William Stockhausen <william.stockahusen@noaa.gov>
 Description: This package includes functions related to the ADMB assessment
@@ -16,5 +16,5 @@ Imports:
     PBSmodelling (>= 2.67.266),
     reshape2 (>= 1.4.1),
     wtsPlots (>= 1.0.3),
-    wtsUtilities (>= 2016.04.21)
+    wtsUtilities (>= 2016.09.02)
 RoxygenNote: 5.0.1

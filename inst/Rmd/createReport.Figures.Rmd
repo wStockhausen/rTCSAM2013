@@ -22,6 +22,7 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     require(ggthemes);
     require(reshape2);
     require(rTCSAM2013);
+    require(wtsUtilities);
     panderOptions("table.caption.prefix","Table ")
     panderOptions("table.split.table",Inf)
     paths<-params$paths;
@@ -44,9 +45,12 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
         for (case in names(paths)){
             cat(case,": '",paths[case],"'\n",sep='');
             res<-getResLst(inp.dir=paths[case]);
-            if (!is.null(res)) {
-                obj[[case]]<-res;
+            if (is.null(res)) {
+                #remove path from paths
                 paths<-paths[names(paths)!=case];
+            } else {
+                #add res to obj list
+                obj[[case]]<-res;
             }
             rm(res);
         }

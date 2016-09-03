@@ -59,7 +59,6 @@ getMDFR.FisheryQuantities<-function(obj,
             nmp<-gsub("&&fsh",fsh,"fsh.mod.ret.bio.&&fsh",fixed=TRUE);
             nmy<-gsub("&&fsh",fsh,"fsh.obs.ret.bio.yrs.&&fsh",fixed=TRUE);
             for (case in cases){
-                for (x in c('male')){
                     #observed
                     idx <- years.m1[[case]] %in% (lst[[case]]$rep)[[nmy]];
                     val <-(lst[[case]]$rep)[[paste0(nmo,".M")]];
@@ -72,7 +71,6 @@ getMDFR.FisheryQuantities<-function(obj,
                     dfrp<-data.frame(case=case,category='predicted',fishery=fsh,
                                       y=(years.m1[[case]])[idx],x='male',m='all',s='all',val=val[idx]);
                     dfr<-rbind(dfr,dfrp);
-                }#--x
             }#--case
         }#--fsh
         return(dfr);
@@ -89,7 +87,6 @@ getMDFR.FisheryQuantities<-function(obj,
             nmy<-gsub("&&fsh",fsh,"fsh.obs.totm.bio.yrs.&&fsh",fixed=TRUE);
             for (case in cases){
                 if (fsh!='GTF'){
-                    for (x in c('female','male')){
                         #observed females
                         val <-(lst[[case]]$rep)[[paste0(nmo,".F")]];
                         dfrp<-data.frame(case=case,category='observed',fishery=fsh,
@@ -111,7 +108,6 @@ getMDFR.FisheryQuantities<-function(obj,
                         dfrp<-data.frame(case=case,category='predicted',fishery=fsh,
                                           y=(years.m1[[case]])[idx],x='male',m='all',s='all',val=val[idx]);
                         dfr<-rbind(dfr,dfrp);
-                    }#--x
                 } else {
                     #observed for GTF is males+females
                     val <-(lst[[case]]$rep)[[paste0(nmo,"")]];
@@ -140,7 +136,6 @@ getMDFR.FisheryQuantities<-function(obj,
             nmp<-gsub("&&fsh",fsh,"fsh.mod.dscm.bio.&&fsh",fixed=TRUE);
             nmy<-gsub("&&fsh",fsh,"fsh.obs.totm.bio.yrs.&&fsh",fixed=TRUE);
             for (case in cases){
-                for (x in c('male')){
                     #observed
                     val <-(lst[[case]]$rep)[[paste0(nmo,".M")]];
                     dfrp<-data.frame(case=case,category='observed',fishery=fsh,
@@ -152,7 +147,6 @@ getMDFR.FisheryQuantities<-function(obj,
                     dfrp<-data.frame(case=case,category='predicted',fishery=fsh,
                                       y=(years.m1[[case]])[idx],x='male',m='all',s='all',val=val[idx]);
                     dfr<-rbind(dfr,dfrp);
-                }#--x
             }#--case
         }#--fsh
         return(dfr);

@@ -19,7 +19,7 @@ renderReports(paths = NULL, obj = NULL, numRecent = 15,
 
 \item{tables}{- flag (T/F) to create}
 
-\item{format}{- output file format ("word_document","pdf_document","html_document")}
+\item{format}{- output file format ("word_document","pdf_document", or "html_document")}
 
 \item{clean}{- flag (T/F) to create}
 }
@@ -32,6 +32,8 @@ renders reports.
 \details{
 Renders createReport.Tables.Rmd and createReport.Figures.Rmd from 
 the inst/Rmd folder in the rTCAM2013 package. 
-Values for 'paths' and 'obj' should not be given simultaneously.
+Values for 'paths' and 'obj' should not be given simultaneously. 
+Output files will be TCSAM2013ReportFigures.ext and TCSAM2013ReportTables.ext,
+where 'ext' is 'pdf' or 'docx', depending on the format chosen.
 }
 
