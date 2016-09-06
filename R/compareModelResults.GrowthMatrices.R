@@ -34,32 +34,20 @@ compareModelResults.GrowthMatrices<-function(obj,
     # plot growth transition matrices
     #----------------------------------
     dfr<-getMDFR.PopProcesses(obj,type="T_cxzz");
-    plots<-list();
-    if (length(cases)>1){
-        for (x in c('male','female')){
-            dfrp<-dfr[dfr$x==x,];
-            p <- ggplot(dfrp,aes_string(x='zp',y='val',colour='case'));
-            p <- p + ggtitle(paste0(x,"s"));
-            p <- p + geom_line();
-            p <- p + labs(y="probability", x="post-molt size (mm CW)");
-            if (showPlot) print(p);
-            plots[[x]]<-p;
-        }
+    dfr$case<-factor(dfr$case,levels=cases);
+    p <- ggplot(dfr,aes_string(y='zp',x='z',size='val',fill='val'));
+    p <- p + geom_abline(slope=1,colour='black',linetype=2)
+    p <- p + geom_point(alpha=0.8,shape=21) + scale_size_area(max_size=10)
+    p <- p + scale_fill_gradientn(colours=wtsUtilities::createColorPalette('jet',100,alpha=0.7))
+    p <- p + labs(x="pre-molt size (mm CW)", y="post-molt size (mm CW)");
+    p <- p + guides(size=guide_legend("probability",order=1));
+    p <- p + guides(fill=guide_colorbar("probability",alpha=1.0,order=2));
+    if (length(cases)==1){
+        p <- p + facet_grid(x~.);
     } else {
-        for (x in c('male','female')){
-            dfrp<-dfr[dfr$x==x,];
-            p <- ggplot(dfrp,aes_string(y='zp',x='z',size='val',fill='val'));
-            p <- p + geom_abline(slope=1,colour='black',linetype=2)
-            p <- p + geom_point(alpha=0.8,shape=21) + scale_size_area(max_size=10)
-            p <- p + scale_fill_gradientn(colours=wtsUtilities::createColorPalette('jet',100,alpha=0.7))
-            p <- p + ggtitle(paste0(x,"s"));
-            p <- p + labs(x="pre-molt size (mm CW)", y="post-molt size (mm CW)");
-            p <- p + guides(size=guide_legend("probability",order=1));
-            p <- p + guides(fill=guide_colorbar("probability",alpha=1.0,order=2));
-            if (showPlot) print(p);
-            plots[[x]]<-p;
-        }
+        p <- p + facet_grid(case~x);
     }
+    if (showPlot) print(p);
 
-    return(plots);
+    return(p);
 }

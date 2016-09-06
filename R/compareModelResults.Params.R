@@ -27,12 +27,17 @@ compareModelResults.Params<-function(obj,
                                      showPlot=FALSE,
                                      pdf=NULL){
     
+    #----------------------------------
+    # 
+    #----------------------------------
+    obj<-convertToListOfResults(obj);
+    cases<-names(obj);
+    
     #extract dataframe with parameter estimates and info
     cat('Extracting params info\n')
     dfr<-getMDFR.ParamsPlusStdDevs(obj,dp=dp);
-    
-    cases<-as.character(unique(dfr$case));
-    
+    dfr$case<-factor(dfr$case,levels=cases);
+
     dfr$label <- gsub("\\n","\n",dfr$label,fixed=TRUE);
     
     #plot parameter estimates

@@ -58,14 +58,11 @@ compareModelResults.PopProcesses<-function(obj,
     #-------------------------------------------#
     #plot growth transition matrices
     #-------------------------------------------#
-    ps<-compareModelResults.GrowthMatrices(obj);
-    cap<-paste0("\nFigure &&fno. Estimated ",names(ps)[1]," growth transition matrix.\n");
+    p<-compareModelResults.GrowthMatrices(obj);
+    cap<-paste0("\nFigure &&fno. Estimated growth transition matrix.\n");
     if (showPlot) figno<-(printGGList(ps[1],figno=figno,cap=cap))$figno;
-    plots[[cap]]<-ps[[1]]; p<-NULL;
-    cap<-paste0("\nFigure &&fno. Estimated ",names(ps)[2]," growth transition matrix.\n");
-    if (showPlot) figno<-(printGGList(ps[2],figno=figno,cap=cap))$figno;
-    plots[[cap]]<-ps[[2]]; p<-NULL;
-    
+    plots[[cap]]<-p; p<-NULL;
+
     #-------------------------------------------#
     #plot recruitment size distribution
     #-------------------------------------------#
