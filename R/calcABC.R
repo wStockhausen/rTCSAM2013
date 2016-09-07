@@ -7,6 +7,7 @@
 #'@param fn - filename of TCSAM2013 projection model run r file
 #'@param pstar - 
 #'@param buffer - buffer for ABC as fraction (i.e., 0.20 = 20 \% yields ABC = 0.8*OFL)
+#'@param xlims - range for x-axis in plot
 #'@param title - title for plot
 #'
 #'@details Uses standard graphics.
@@ -17,6 +18,7 @@ calcABC<-function(res=NULL,
                   fn=NULL,
                   pstar=0.49,
                   buffer=0.1,
+                  xlims=NULL,
                   title=NULL){
     if (is.null(res)){
         if (is.null(fn)) fn<-wtsUtilities::selectFile(ext="R",caption="Select OFL-ABC sim file");
@@ -36,7 +38,7 @@ calcABC<-function(res=NULL,
     
     ABC.buff<-(1-buffer)*OFL;
     
-    plotABC(x,OFL,ABC.pstar,ABC.buff,buffer=buffer,title=title);
+    plotABC(x,OFL,ABC.pstar,ABC.buff,buffer=buffer,title=title,xlims=xlims);
     
     pfn<-file.path(fldr,"OFL_plot.png")
     png(pfn,width=660,height=420,units="px");

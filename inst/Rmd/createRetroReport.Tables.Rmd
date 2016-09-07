@@ -1,0 +1,146 @@
+---
+title: "TCSAM2013 Model Retrospective Results: Tables"
+author: "William Stockhausen"
+date: '`r format(Sys.Date(),"%d %B, %Y")`'
+output: 
+    word_document: 
+        toc: false
+    pdf_document: 
+        toc: false
+orientation: landscape
+params: 
+    paths: none
+    obj: none
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
+                      dpi=300,fig.width=6.5,out.width=6.5)
+```
+
+```{r init}
+    require(pander);
+    require(reshape2);
+    require(rTCSAM2013);
+    panderOptions("table.caption.prefix","Table ")
+    panderOptions("table.split.table",Inf)
+    paths<-params$paths;
+    obj<-params$obj;
+    tblno<-1;
+```
+
+#Input model cases
+```{r getFiles}
+    if (is.null(obj)){
+        if (!is.character(paths)){
+            cat("'paths' parameter is not a character vector!\n");
+            stop();
+        }
+        obj<-list();
+        for (case in names(paths)){
+            cat(case,": '",paths[case],"'\n",sep='');
+            res<-getResLst(inp.dir=paths[case]);
+            if (is.null(res)) {
+                #remove path from paths
+                paths<-paths[names(paths)!=case];
+            } else {
+                #add res to obj list
+                obj[[case]]<-res;
+            }
+            rm(res);
+        }
+    } else {
+        obj<-convertToListOfResults(obj);
+    }
+    cases<-names(obj);
+    ncases<-length(cases);
+```
+
+```{r printCases,fig}
+    if (!is.null(paths)){ 
+        t<-as.data.frame(list(case=cases, path=getSubPaths(paths,last=3)));
+    } else {
+        t<-as.data.frame(list(case=cases));
+    }
+    row.names(t)<-NULL;
+    pander(t,caption=paste0(tblno,". Model cases for comparison."));
+    tblno<-tblno+1;
+```
+
+#Mature biomass-at-mating
+```{r printTable.MB,results='asis'}
+    dfr<-getMDFR.PopQuantities(obj,type='MB_yx');
+    panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
+    #males
+    ddfr<-dcast(dfr[dfr$x=='male',],y~case,value.var='val');
+    names(ddfr)[1]<-'year';
+    just<-'l';
+    for (i in 1:ncases) just<-paste0(just,'r');
+    pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
+           caption=paste0(tblno,". Estimated MMB-at-mating time (1000's t)."));
+    tblno<-tblno+1;
+    #females
+    ddfr<-dcast(dfr[dfr$x=='female',],y~case,value.var='val');
+    names(ddfr)[1]<-'year';
+    just<-'l';
+    for (i in 1:ncases) just<-paste0(just,'r');
+    pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
+           caption=paste0(tblno,". Estimated MFB-at-mating time (1000's t)."));
+    tblno<-tblno+1;
+    panderOptions('knitr.auto.asis',TRUE);
+```
+
+#Recruitment
+```{r printTable.Rec,results='asis'}
+    dfr<-getMDFR.PopQuantities(obj,type='R_y');
+    panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
+    ddfr<-dcast(dfr,y~case,value.var='val');
+    names(ddfr)[1]<-'year';
+    just<-'l';
+    for (i in 1:ncases) just<-paste0(just,'r');
+    pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
+           caption=paste0(tblno,". Estimated recruitment (millions)."));
+    tblno<-tblno+1;
+    panderOptions('knitr.auto.asis',TRUE);
+```
+
+#Mature survey biomass
+```{r printTable.Surveys.MB,results='asis'}
+    dfr<-getMDFR.SurveyQuantities(obj,type='MB_yx');
+    dfrp<-dcast(dfr,x+y~category+case,value.var='val')
+    dfrp<-dfrp[,c(1:3,2+ncases+(1:ncases))];
+    names(dfrp)[2:3]<-c('year','observed');
+    names(dfrp)[3+(1:ncases)]<-gsub("predicted_","",names(dfrp)[3+(1:ncases)],fixed=TRUE);
+    panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
+    just<-'lr'; for (i in 1:ncases) just<-paste0(just,'r');
+    #males
+    ddfr<-dfrp[dfrp$x=='male',2:ncol(dfrp)]; rownames(ddfr)<-NULL;
+    pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
+           caption=paste0(tblno,". Estimated mature male survey biomass (1000's t)."));
+    tblno<-tblno+1;
+    #females
+    ddfr<-dfrp[dfrp$x=='female',2:ncol(dfrp)]; rownames(ddfr)<-NULL;
+    pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
+           caption=paste0(tblno,". Estimated mature female survey biomass (1000's t)."));
+    tblno<-tblno+1;
+    panderOptions('knitr.auto.asis',TRUE);
+```
+
+#Retained catch
+```{r printTable.Fisheries.RetainedCatch,results='asis'}
+    dfr<-getMDFR.FisheryQuantities(obj,type='bio.retm');
+    dfrp<-dcast(dfr,x+y~category+case,value.var='val')
+    dfrp<-dfrp[,c(1:3,2+ncases+(1:ncases))];
+    names(dfrp)[2:3]<-c('year','observed');
+    names(dfrp)[3+(1:ncases)]<-gsub("predicted_","",names(dfrp)[3+(1:ncases)],fixed=TRUE);
+    panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
+    just<-'lr'; for (i in 1:ncases) just<-paste0(just,'r');
+    #males
+    ddfr<-dfrp[dfrp$x=='male',2:ncol(dfrp)]; rownames(ddfr)<-NULL;
+    pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
+           caption=paste0(tblno,". Observed/estimated retained catch (1000's t)."));
+    tblno<-tblno+1;
+    panderOptions('knitr.auto.asis',TRUE);
+```
+
+
