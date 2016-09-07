@@ -10,7 +10,7 @@
 #'@param xlims - range for x-axis in plot
 #'@param title - title for plot
 #'
-#'@details Uses standard graphics.
+#'@details Uses standard graphics. Creates "OFL_plot.png".
 #'
 #'@export
 #'
@@ -38,7 +38,7 @@ calcABC<-function(res=NULL,
     
     ABC.buff<-(1-buffer)*OFL;
     
-    plotABC(x,OFL,ABC.pstar,ABC.buff,buffer=buffer,title=title,xlims=xlims);
+    plotABC(x,OFL,ABC.pstar,ABC.buff,buffer=buffer,title=title,xlims=xlims,save=FALSE);
     
     pfn<-file.path(fldr,"OFL_plot.png")
     png(pfn,width=660,height=420,units="px");

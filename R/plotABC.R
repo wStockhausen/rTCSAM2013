@@ -10,6 +10,7 @@
 #'@param buffer - buffer used for ABC.buff
 #'@param title - title for plot
 #'@param xlims - range for x-axis in plot
+#'@param save - flag (T/F) to save OFL plot to "oflPlot.png".
 #'
 #'@import graphics
 #'
@@ -17,10 +18,14 @@
 #'
 #'@export
 #'
-plotABC<-function(x,OFL,ABC.pstar,ABC.buff,buffer=0.2,title=NULL,xlims=NULL){
+plotABC<-function(x,OFL,ABC.pstar,ABC.buff,buffer=0.2,title=NULL,xlims=NULL,save=FALSE){
     
+    if (save) {
+        png("oflPlot.png",width=800,height=500);
+        on.exit(dev.off());
+    }
     if (is.null(xlims)) xlims<-range(quantile(x,probs=c(0.005,0.995)),ABC.buff-2,na.rm=TRUE);
-    plot(x,xlab="estimated OFL",ylab="empirical cdf",main="",lwd=2,xlim=xlims);
+    plot(x,xlab="estimated OFL (1000's t)",ylab="empirical cdf",main="",lwd=2,xlim=xlims);
     abline(v=OFL,col="red",lwd=3)
     text(1.01*OFL,0.95,"OFL",col='red',adj=0)
     
