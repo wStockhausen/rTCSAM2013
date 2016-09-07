@@ -5,7 +5,7 @@
 \title{Function to calculate ABC and OFL from projection model output}
 \usage{
 calcABC(res = NULL, fn = NULL, pstar = 0.49, buffer = 0.1,
-  title = NULL)
+  xlims = NULL, title = NULL)
 }
 \arguments{
 \item{res}{- r list from TCSAM2013 projection model run}
@@ -15,6 +15,8 @@ calcABC(res = NULL, fn = NULL, pstar = 0.49, buffer = 0.1,
 \item{pstar}{-}
 
 \item{buffer}{- buffer for ABC as fraction (i.e., 0.20 = 20 \% yields ABC = 0.8*OFL)}
+
+\item{xlims}{- range for x-axis in plot}
 
 \item{title}{- title for plot}
 }

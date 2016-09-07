@@ -5,7 +5,7 @@
 \title{Function to plot ABC and OFL calculations from calcABC(...)}
 \usage{
 plotABC(x, OFL, ABC.pstar, ABC.buff, buffer = 0.2, title = NULL,
-  xlim = c(17.5, 37.5))
+  xlims = NULL)
 }
 \arguments{
 \item{x}{- empirical cdf of OFL}
@@ -19,6 +19,8 @@ plotABC(x, OFL, ABC.pstar, ABC.buff, buffer = 0.2, title = NULL,
 \item{buffer}{- buffer used for ABC.buff}
 
 \item{title}{- title for plot}
+
+\item{xlims}{- range for x-axis in plot}
 }
 \description{
 This function plots ABC and OFL from TCSAM2013 projection model output.
