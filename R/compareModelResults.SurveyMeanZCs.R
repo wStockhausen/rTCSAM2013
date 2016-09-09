@@ -15,6 +15,9 @@
 #'
 #'@return non-nested list of ggplot2 objects, with captions as names
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.SurveyMeanZCs<-function(obj=NULL,
@@ -60,7 +63,7 @@ compareModelResults.SurveyMeanZCs<-function(obj=NULL,
     p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
     p <- p + facet_grid("x~m");
     p <- p + labs(y="proportion",x="size (mm CW)")
-    cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey by sex and maturity.";
+    cap<-"  \n  \nFigure &&fno. Observed and predicted proportions-at-size from the survey by sex and maturity.  \n  \n";
     if (showPlot) figno<-(printGGList(ps,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -78,7 +81,7 @@ compareModelResults.SurveyMeanZCs<-function(obj=NULL,
     p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
     p <- p + facet_grid("x~.");
     p <- p + labs(y="proportion",x="size (mm CW)")
-    cap<-"Figure &&fno. Observed and predicted proportions-at-size from the survey by sex.";
+    cap<-"  \n  \nFigure &&fno. Observed and predicted proportions-at-size from the survey by sex.  \n  \n";
     if (showPlot) figno<-(printGGList(ps,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -91,7 +94,7 @@ compareModelResults.SurveyMeanZCs<-function(obj=NULL,
     p <- ggplot(data=dfrp,mapping=aes_string(x='y',y='val',colour="case",linetype="category"));
     p <- p + geom_line();
     p <- p + labs(y="sample size",x="year")
-    cap<-"Figure &&fno. Input and effective sample sizes for proportions-at-size from the survey.";
+    cap<-"  \n  \nFigure &&fno. Input and effective sample sizes for proportions-at-size from the survey.  \n  \n";
     if (showPlot) figno<-(printGGList(ps,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     

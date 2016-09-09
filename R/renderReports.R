@@ -41,7 +41,7 @@ renderReports<-function(paths=NULL,
                           output_dir=out.dir,
                           intermediates_dir=out.dir,
                           params=list(paths=paths,obj=obj,numRecent=numRecent,plot1stObs=plot1stObs),
-                          clean=FALSE);
+                          clean=clean);
     }
     if (tables){
         cat("out.dir = '",out.dir,"'\n",sep='')
@@ -50,8 +50,8 @@ renderReports<-function(paths=NULL,
                           output_file=paste0("TCSAM2013ReportTables",ifelse(format[1]=='word_document','.docx','.pdf')),
                           output_dir=out.dir,
                           intermediates_dir=out.dir,
-                          params=list(paths=paths,obj=obj),
-                          clean=FALSE);
+                          params=list(paths=paths,obj=obj,out.dir=out.dir),
+                          clean=clean);
     }
     return(paths);
 }

@@ -10,7 +10,12 @@
 #'
 #'@details Uses \code{getMDFR.FisheryQuantities}.
 #'
+#'@importFrom wtsUtilities printGGList
+#'
 #'@return list of ggplot2 objects
+#'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
 #'
 #'@export
 #'
@@ -63,7 +68,7 @@ compareModelResults.FisherySelFcns<-function(obj,
                         shape=guide_legend("time period"),
                         linetype=guide_legend("time period"));
         p <- p + facet_grid(x~fishery);
-        cap<-paste0("Figure &&fno. Estimated selectivity functions for total catch in",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Estimated selectivity functions for total catch in",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -77,7 +82,7 @@ compareModelResults.FisherySelFcns<-function(obj,
         p <- p + labs(y="selectivity",x="size (mm CW)");
         p <- p + guides(colour=guide_legend("case"));
         p <- p + facet_grid(x~fishery);
-        cap<-paste0("Figure &&fno. Estimated selectivity functions for total catch in",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Estimated selectivity functions for total catch in",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -92,7 +97,7 @@ compareModelResults.FisherySelFcns<-function(obj,
         p <- p + labs(y="selectivity",x="size (mm CW)");
         p <- p + guides(colour=guide_legend("case"));
         p <- p + facet_wrap(~pc,ncol=3);
-        cap<-paste0("Figure &&fno. Estimated selectivity functions for total catch in",fsh,". Recent time period");
+        cap<-paste0("  \n  \nFigure &&fno. Estimated selectivity functions for total catch in",fsh,". Recent time period.  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -109,7 +114,7 @@ compareModelResults.FisherySelFcns<-function(obj,
                         shape=guide_legend("time period"),
                         linetype=guide_legend("time period"));
         p <- p + facet_grid(x~fishery);
-        cap<-paste0("Figure &&fno. Estimated retention functions for total catch in",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Estimated retention functions for total catch in",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }

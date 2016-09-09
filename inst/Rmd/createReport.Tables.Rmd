@@ -11,6 +11,7 @@ orientation: landscape
 params: 
     paths: none
     obj: none
+    out.dir: "~"
 ---
 
 ```{r setup, echo=FALSE}
@@ -26,6 +27,7 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     panderOptions("table.split.table",Inf)
     paths<-params$paths;
     obj<-params$obj;
+    out.dir<-params$out.dir;
     tblno<-1;
 ```
 
@@ -70,6 +72,17 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
 #Objective function components
 ```{r printTable.OFCs,results='asis'}
     dfr<-getMDFR.ObjFunComponents(obj);
+    if (ncases==1){
+        #single model case
+        cols<-c("category","description","weight","likelihood","objFun");
+        fn<-file.path(out.dir,"ModelComparison.OFCs.csv");
+        write.csv(dfr[,cols],file=fn);
+    } else {
+        dfro<-reshape2::dcast(dfr,formula="category+description~case",fun.aggregate=sum,value.var="objFun");
+        fn<-file.path(out.dir,"ModelComparison.OFCs.csv");
+        write.csv(dfro,row.names=FALSE,file=fn);
+        rm(fn,dfro);
+    }
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
     cats<-as.character(unique(dfr$category))
     for (i in 1:length(cats)){
@@ -93,6 +106,9 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     }
     if (ncases>1){
         ##multiple models, differences tables
+        dfrd<-reshape2::dcast(dfr,formula="category+description~case",fun.aggregate=sum,value.var="diff")[,-3];
+        names(dfrd)[1+2:ncases]<-paste0(cases[2:ncases],"-",cases[1]);
+        write.csv(dfrd,row.names=FALSE,file=file.path(out.dir,"ModelComparison.OFCs.diffs.csv"));
         for (i in 1:length(cats)){
             dfrp<-dfr[dfr$category==cats[i],];
             row.names(dfrp)<-NULL;
@@ -113,6 +129,18 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     dfr$param<-gsub("\\[..\\]","",dfr$param,perl=TRUE);#remove [XX] from parameter vectors
     dfr$index<-as.character(dfr$index);
     dfr$phase<-as.character(dfr$phase);
+    if (ncases==1){
+        cols<-c("category","description","param","index","phase",
+                "min","max","init","value","stdv","check");
+        fn<-file.path(out.dir,"ModelComparison.Params.csv");
+        write.csv(dfr[,cols],row.names=FALSE,file=fn);
+    } else {
+        mdfr<-melt(dfr,id.vars=c("category","process","case","description","param","index","phase"),measure.vars=c("value","stdv"));
+        ddfr<-dcast(mdfr,category+process+description+param+index+phase~variable+case,value.var='value');
+        names(ddfr)<-gsub("_","\n",names(ddfr),fixed=TRUE);
+        fn<-file.path(out.dir,"ModelComparison.Params..csv");
+        write.csv(ddfr,row.names=FALSE,file=fn);
+    }
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
     cats<-as.character(unique(dfr$category))
     for (i in 1:length(cats)){
@@ -145,6 +173,10 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
 #Mature biomass-at-mating
 ```{r printTable.MB,results='asis'}
     dfr<-getMDFR.PopQuantities(obj,type='MB_yx');
+    ddfr<-dcast(dfr,y~x+case,value.var='val');
+    names(ddfr)[1]<-'year';
+    fn<-file.path(out.dir,paste0("ModelComparison.MatureBiomassAtMating.csv"));
+    write.csv(ddfr,row.names=FALSE,file=fn);
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
     #males
     ddfr<-dcast(dfr[dfr$x=='male',],y~case,value.var='val');
@@ -171,6 +203,8 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
     ddfr<-dcast(dfr,y~case,value.var='val');
     names(ddfr)[1]<-'year';
+    fn<-file.path(out.dir,paste0("ModelComparison.Recruitment.csv"));
+    write.csv(ddfr,row.names=FALSE,file=fn);
     just<-'l';
     for (i in 1:ncases) just<-paste0(just,'r');
     pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
@@ -186,17 +220,19 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     dfrp<-dfrp[,c(1:3,2+ncases+(1:ncases))];
     names(dfrp)[2:3]<-c('year','observed');
     names(dfrp)[3+(1:ncases)]<-gsub("predicted_","",names(dfrp)[3+(1:ncases)],fixed=TRUE);
+    fn<-file.path(out.dir,paste0("ModelComparison.MatureSurveyBiomass.csv"));
+    write.csv(dfrp,row.names=FALSE,file=fn);
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
     just<-'lr'; for (i in 1:ncases) just<-paste0(just,'r');
     #males
     ddfr<-dfrp[dfrp$x=='male',2:ncol(dfrp)]; rownames(ddfr)<-NULL;
     pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
-           caption=paste0(tblno,". Estimated mature male survey biomass (1000's t)."));
+           caption=paste0(tblno,". Observed and estimated mature male survey biomass (1000's t)."));
     tblno<-tblno+1;
     #females
     ddfr<-dfrp[dfrp$x=='female',2:ncol(dfrp)]; rownames(ddfr)<-NULL;
     pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
-           caption=paste0(tblno,". Estimated mature female survey biomass (1000's t)."));
+           caption=paste0(tblno,". Observed and estimated mature female survey biomass (1000's t)."));
     tblno<-tblno+1;
     panderOptions('knitr.auto.asis',TRUE);
 ```
@@ -212,8 +248,10 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     just<-'lr'; for (i in 1:ncases) just<-paste0(just,'r');
     #males
     ddfr<-dfrp[dfrp$x=='male',2:ncol(dfrp)]; rownames(ddfr)<-NULL;
+    fn<-file.path(out.dir,paste0("ModelComparison.RetainedCatch.csv"));
+    write.csv(ddfr,row.names=FALSE,file=fn);
     pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
-           caption=paste0(tblno,". Observed/estimated retained catch (1000's t)."));
+           caption=paste0(tblno,". Observed and estimated retained catch (1000's t)."));
     tblno<-tblno+1;
     panderOptions('knitr.auto.asis',TRUE);
 ```
@@ -230,8 +268,11 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
         just<-'lr'; for (i in 1:ncases) just<-paste0(just,'r');
         for (x in c('male','female')){ 
             ddfr<-dfrp[dfrp$x==x,2:ncol(dfrp)]; rownames(ddfr)<-NULL;
+            fn<-file.path(out.dir,paste("ModelComparison.TotalCatch",f,x,"csv",sep='.'));
+            cat(fn,"\n")
+            write.csv(ddfr,file=fn);
             pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
-                   caption=paste0(tblno,". Observed/estimated total ",x," catch mortality biomass (1000's t) in ",f,"."));
+                   caption=paste0(tblno,". Observed and estimated total ",x," catch mortality biomass (1000's t) in ",f,"."));
             tblno<-tblno+1;
         }#x
     }#f

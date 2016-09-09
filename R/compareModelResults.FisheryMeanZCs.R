@@ -15,6 +15,9 @@
 #'
 #'@return list of ggplot2 objects
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.FisheryMeanZCs<-function(obj,
@@ -71,8 +74,8 @@ compareModelResults.FisheryMeanZCs<-function(obj,
         p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
         p <- p + facet_grid("x~fishery");
         p <- p + labs(y="proportion",x="size (mm CW)")
-        cap<-paste0("Figure &&fno. Observed and predicted mean proportions-at-size for retained catch in ",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Observed and predicted mean proportions-at-size for retained catch in ",fsh,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 
@@ -96,8 +99,8 @@ compareModelResults.FisheryMeanZCs<-function(obj,
         p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
         p <- p + facet_grid("x~fishery");
         p <- p + labs(y="proportion",x="size (mm CW)")
-        cap<-paste0("Figure &&fno. Observed and predicted mean proportions-at-size for total catch in ",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Observed and predicted mean proportions-at-size for total catch in ",fsh,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 
@@ -115,8 +118,8 @@ compareModelResults.FisheryMeanZCs<-function(obj,
         p <- p + geom_line();
         p <- p + facet_grid(x~fishery)
         p <- p + labs(y="sample size",x="year")
-        cap<-paste0("Figure &&fno. Input and effective sample sizes for retained catch proportions-at-size in",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Input and effective sample sizes for retained catch proportions-at-size in",fsh,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 
@@ -134,8 +137,8 @@ compareModelResults.FisheryMeanZCs<-function(obj,
         p <- p + geom_line();
         p <- p + facet_grid(x~fishery)
         p <- p + labs(y="sample size",x="year")
-        cap<-paste0("Figure &&fno. Input and effective sample sizes for total catch proportions-at-size in",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Input and effective sample sizes for total catch proportions-at-size in",fsh,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 

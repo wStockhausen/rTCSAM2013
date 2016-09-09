@@ -93,11 +93,91 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
 ```
   
 #Parameter estimates
-```{r plots.Parameters,results='asis',fig.height=8}
+```{r doPlots.Parameters,results='asis'}
     plots<-compareModelResults.Params(obj,
                                       showPlot=FALSE);
-    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
-    rm(plots);
+```
+  
+```{r plots.Params.Population.Recruitment,results='asis'}
+    ps<-plots[["population"]][["recruitment"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.Population.RecDevs,results='asis',fig.height=20,fig.width=12}
+    ps<-plots[["population"]][["recruitment devs"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["population"]][["initial recruitment devs"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.Population.Other,results='asis'}
+    ps<-plots[["population"]][["natural mortality multipliers"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["population"]][["growth"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.Population.PrM2M,results='asis',fig.height=20,fig.width=12}
+    ps<-plots[["population"]][["molt-to-maturity: females"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["population"]][["molt-to-maturity: males"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.Surveys,results='asis',fig.height=10}
+    ps<-plots$surveys[["surveys"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.SurveySelectivity,results='asis'}
+    ps<-plots[["surveys"]][["survey selectivity"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.TCFMaleSelectivity,results='asis',fig.height=20,fig.width=12}
+    ps<-plots[["fisheries"]][["TCF selectivity"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.TCFRetention,results='asis'}
+    ps<-plots[["fisheries"]][["TCF retention"]];
+    figno<-(printGGList(ps[[1]],figno=figno,cap=names(ps),show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.FisherySelectivity,results='asis',fig.height=20,fig.width=12}
+    ps<-plots[["fisheries"]][["SCF selectivity"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["fisheries"]][["RKF selectivity"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["fisheries"]][["GTF selectivity"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.FisheryRates,results='asis',fig.height=10}
+    ps<-plots[["fisheries"]][["mortality or capture rate"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps);
+```
+  
+```{r plots.Params.FisheryDevs,results='asis',fig.height=20,fig.width=12}
+    ps<-plots[["fisheries"]][["TCF mortality or capture rate devs"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["fisheries"]][["SCF mortality or capture rate devs"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["fisheries"]][["RKF mortality or capture rate devs"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    ps<-plots[["fisheries"]][["GTF mortality or capture rate devs"]];
+    figno<-(printGGList(ps,figno=figno,show=TRUE))$figno;
+    rm(ps,plots);
 ```
   
 #Population processes
@@ -125,7 +205,7 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
 ```
   
 #Survey size comps
-```{r plots.SurveyZCs,results='asis',fig.height=8}
+```{r plots.SurveyZCs,results='asis',fig.height=20,fig.width=12}
     plots<-compareModelResults.SurveyZCs(obj,
                                          numRecent=numRecent,
                                          plot1stObs=plot1stObs);
@@ -159,7 +239,7 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
 ```
 
 #Fishery size comps
-```{r plots.FisheryZCs,results='asis',fig.height=8}
+```{r plots.FisheryZCs,results='asis',,fig.height=20,fig.width=12}
     plots<-compareModelResults.FisheryZCs(obj,
                                           numRecent=numRecent,
                                           plot1stObs=plot1stObs);

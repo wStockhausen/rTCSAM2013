@@ -18,6 +18,7 @@
 #'  \item{fisheries}
 #'}
 #'
+#'@importFrom wtsUtilities printGGList
 #'@import ggplot2
 #'
 #'@export
@@ -41,11 +42,12 @@ compareModelResults.Params<-function(obj,
     dfr$label <- gsub("\\n","\n",dfr$label,fixed=TRUE);
     
     #plot parameter estimates
-    plots<-list();
     figno<-1;
     dodge<-position_dodge(width=1/length(cases));
+    plots.ctg<-list();
     for (ctg in c('population','surveys','fisheries')){
         dfrp<-dfr[dfr$category==ctg,];
+        plots.prc<-list();
         for (prc in as.character(unique(dfrp$process))){
             dfrpp<-dfrp[dfrp$process==prc,];
             dfrpp$uci<-dfrpp$value+dfrpp$stdv;
@@ -63,11 +65,14 @@ compareModelResults.Params<-function(obj,
             p <- p + scale_x_continuous(breaks=NULL);
             p <- p + labs(y='parameter value',x='',title=prc);
             p <- p + facet_wrap(~label,ncol=nc,drop=FALSE,scales="free_y");
-            cap<-paste0("Figure &&fno. Estimated ",ctg," parameters for ",prc,".\n");
-            if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
-            plots[[cap]]<-p; p<-NULL;
-        }
+            prc<-gsub("/"," or ",prc,fixed=TRUE);
+            cap<-paste0("  \n  \nFigure &&fno. Estimated ",ctg," parameters for ",prc,".  \n  \n");
+            if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
+            lst<-list(); lst[[cap]]<-p; p<-NULL;
+            plots.prc[[prc]]<-lst; lst<-NULL;
+        }#prc's
+        plots.ctg[[ctg]]<-plots.prc;
     } #ctg's
 
-    return(invisible(plots));
+    return(invisible(plots.ctg));
 }

@@ -15,6 +15,9 @@
 #'
 #'@return list of ggplot2 objects
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.FisheryZCs<-function(obj,
@@ -70,7 +73,7 @@ compareModelResults.FisheryZCs<-function(obj,
             p <- p + facet_grid(x~.)
             p <- p + theme(legend.box='horizontal')
             if (showPlot) print(p);
-            cap<-paste0("Figure &&fno. Observed proportions-at-size for retained catch in ",fsh,".");
+            cap<-paste0("  \n  \nFigure &&fno. Observed proportions-at-size for retained catch in ",fsh,".  \n  \n");
             if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
             plots[[cap]]<-p; p<-NULL;
         }
@@ -95,7 +98,7 @@ compareModelResults.FisheryZCs<-function(obj,
             p <- p + facet_grid(x~.)
             p <- p + theme(legend.box='horizontal')
             if (showPlot) print(p);
-            cap<-paste0("Figure &&fno. Observed proportions-at-size for total catch in ",fsh,".");
+            cap<-paste0("  \n  \nFigure &&fno. Observed proportions-at-size for total catch in ",fsh,".  \n  \n");
             if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
             plots[[cap]]<-p; p<-NULL;
         }
@@ -119,7 +122,7 @@ compareModelResults.FisheryZCs<-function(obj,
         p <- p + geom_line(data=dfrpp[idxp,],mapping=aes_string(colour='case'));
         p <- p + facet_wrap(~y,ncol=5);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Retained catch in ",fsh));
-        cap<-paste0("Figure &&fno. Observed proportions-at-size for retained catch in ",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Observed proportions-at-size for retained catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -144,7 +147,7 @@ compareModelResults.FisheryZCs<-function(obj,
         p <- p + geom_line(data=dfrpp[idxp&idxm,],mapping=aes_string(colour='case'));
         p <- p + facet_wrap(~y,ncol=5);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Male total catch in ",fsh));
-        cap<-paste0("Figure &&fno. Observed and predicted proportions-at-size for male total catch in ",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Observed and predicted proportions-at-size for male total catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
         
@@ -153,7 +156,7 @@ compareModelResults.FisheryZCs<-function(obj,
         p <- p + geom_line(data=dfrpp[idxp&idxf,],mapping=aes_string(colour='case'));
         p <- p + facet_wrap(~y,ncol=5);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Female total catch in ",fsh));
-        cap<-paste0("Figure &&fno. Observed and predicted proportions-at-size for female total catch in ",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Observed and predicted proportions-at-size for female total catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -181,7 +184,7 @@ compareModelResults.FisheryZCs<-function(obj,
             p <- p + facet_grid(case~x);
         }
         p <- p + theme(legend.box='horizontal');
-        cap<-paste0("Figure &&fno. Pearson's residuals for retained catch proportions-at-size in ",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Pearson's residuals for retained catch proportions-at-size in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -209,7 +212,7 @@ compareModelResults.FisheryZCs<-function(obj,
             p <- p + facet_grid(case~x);
         }
         p <- p + theme(legend.box='horizontal');
-        cap<-paste0("Figure &&fno. Pearson's residuals for total catch proportions-at-size in ",fsh,".");
+        cap<-paste0("  \n  \nFigure &&fno. Pearson's residuals for total catch proportions-at-size in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }

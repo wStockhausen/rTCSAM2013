@@ -14,6 +14,9 @@
 #'
 #'@return list of ggplot2 objects
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.FisheryRates<-function(obj,
@@ -65,8 +68,8 @@ compareModelResults.FisheryRates<-function(obj,
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
         p <- p + facet_grid(x~fishery);
-        cap<-paste0("Figure &&fno. Estimated max fishery rates in ",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
         #zoomed to recent
         dfrpp<-dfrp[idx&(dfrp$y>=(max(dfrp$y)-15)-numRecent),];
@@ -78,8 +81,8 @@ compareModelResults.FisheryRates<-function(obj,
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
         p <- p + facet_grid(x~fishery);
-        cap<-paste0("Figure &&fno. Estimated max fishery rates in ",fsh," (zoomed to recent years).");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh," (zoomed to recent years).  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 
@@ -99,8 +102,8 @@ compareModelResults.FisheryRates<-function(obj,
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
         p <- p + facet_grid(x~fishery);
-        cap<-paste0("Figure &&fno. Estimated mean fishery rates in ",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Estimated mean fishery rates in ",fsh,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
         #zoom to recent
         dfrpp<-dfrp[idx&(dfrp$y>=(max(dfrp$y)-15)-numRecent),];
@@ -112,8 +115,8 @@ compareModelResults.FisheryRates<-function(obj,
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
         p <- p + facet_grid(x~fishery);
-        cap<-paste0("Figure &&fno. Estimated mean fishery rates in ",fsh," (zoomed to recent years).");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Estimated mean fishery rates in ",fsh," (zoomed to recent years).  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 

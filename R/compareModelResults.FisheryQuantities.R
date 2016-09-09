@@ -14,6 +14,9 @@
 #'
 #'@return list of ggplot2 objects
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.FisheryQuantities<-function(obj,
@@ -69,10 +72,10 @@ compareModelResults.FisheryQuantities<-function(obj,
                                             xlims=NULL,
                                             ylims=NULL,
                                             showPlot=showPlot);
-    cap1<-"Figure &&fno. Comparison of observed and predicted retained catch mortality.";
-    cap2<-"Figure &&fno. Comparison of observed and predicted retained catch mortality. Recent time period.";
+    cap1<-"  \n  \nFigure &&fno. Comparison of observed and predicted retained catch mortality.  \n  \n";
+    cap2<-"  \n  \nFigure &&fno. Comparison of observed and predicted retained catch mortality. Recent time period.  \n  \n";
     names(ps)<-c(cap1,cap2);
-    if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
+    if (showPlot) figno<-(wtsUtilities::printGGList(ps,figno=figno))$figno;
     plots[[cap1]]<-ps[[1]];
     plots[[cap2]]<-ps[[2]];
     ps<-NULL;
@@ -97,10 +100,10 @@ compareModelResults.FisheryQuantities<-function(obj,
                                             xlims=NULL,
                                             ylims=NULL,
                                             showPlot=showPlot);
-    cap1<-"Figure &&fno. Comparison of observed and predicted discard catch mortality.";
-    cap2<-"Figure &&fno. Comparison of observed and predicted discard catch mortality. Recent time period.";
+    cap1<-"  \n  \nFigure &&fno. Comparison of observed and predicted discard catch mortality.  \n  \n";
+    cap2<-"  \n  \nFigure &&fno. Comparison of observed and predicted discard catch mortality. Recent time period.  \n  \n";
     names(ps)<-c(cap1,cap2);
-    if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
+    if (showPlot) figno<-(wtsUtilities::printGGList(ps,figno=figno))$figno;
     plots[[cap1]]<-ps[[1]];
     plots[[cap2]]<-ps[[2]];
     ps<-NULL;
@@ -128,10 +131,10 @@ compareModelResults.FisheryQuantities<-function(obj,
                                                 xlims=NULL,
                                                 ylims=NULL,
                                                 showPlot=showPlot);
-        cap1<-paste0("Figure &&fno. Comparison of observed and predicted total catch biomass for ",fsh,".");
-        cap2<-paste0("Figure &&fno. Comparison of observed and predicted total catch biomass for ",fsh,". Recent time period.");
+        cap1<-paste0("  \n  \nFigure &&fno. Comparison of observed and predicted total catch biomass for ",fsh,".  \n  \n");
+        cap2<-paste0("  \n  \nFigure &&fno. Comparison of observed and predicted total catch biomass for ",fsh,". Recent time period.  \n  \n");
         names(ps)<-c(cap1,cap2);
-        if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
+        if (showPlot) figno<-(wtsUtilities::printGGList(ps,figno=figno))$figno;
         plots[[cap1]]<-ps[[1]];
         plots[[cap2]]<-ps[[2]];
         ps<-NULL;
@@ -152,8 +155,8 @@ compareModelResults.FisheryQuantities<-function(obj,
                        facets="x~fishery",facet.scales='free_y',position='dodge',
                        ylab='z-score (retained catch)',title=NULL,
                        showPlot=showPlot);
-        cap<-"Figure &&fno. Z-scores for retained catch.";
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-"  \n  \nFigure &&fno. Z-scores for retained catch.  \n  \n";
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
     #--total catch
@@ -166,8 +169,8 @@ compareModelResults.FisheryQuantities<-function(obj,
                        facets="x~fishery",facet.scales='free_y',position='dodge',
                        ylab='z-score (total catch)',title=NULL,
                        showPlot=showPlot);
-        cap<-paste0("Figure &&fno. Z-scores for total catch in ",fsh,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Z-scores for total catch in ",fsh,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 

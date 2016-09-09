@@ -17,6 +17,7 @@
 #'
 #'@return list of ggplot2 objects
 #'
+#'@importFrom wtsUtilities printGGList
 #'@import ggplot2
 #'
 #'@export
@@ -52,8 +53,8 @@ compareModelResults.ObjFunComponents<-function(obj,
         p <- p + labs(x="component",y=ylab);
         p <- p + ggtitle(cat);
         p <- p + theme(axis.text.x=element_text(angle=30,hjust=1),plot.margin=margin(10,10,10,50));
-        cap<-paste0("Figure &&fno. Objective function components related to ",cat,".");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
+        cap<-paste0("  \n  \nFigure &&fno. Objective function components related to ",cat,".  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
 

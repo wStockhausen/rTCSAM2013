@@ -11,6 +11,7 @@ orientation: landscape
 params: 
     paths: none
     obj: none
+    out.dir: "~"
 ---
 
 ```{r setup, echo=FALSE}
@@ -26,6 +27,7 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     panderOptions("table.split.table",Inf)
     paths<-params$paths;
     obj<-params$obj;
+    out.dir<-params$out.dir;
     tblno<-1;
 ```
 
@@ -74,6 +76,8 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     #males
     ddfr<-dcast(dfr[dfr$x=='male',],y~case,value.var='val');
     names(ddfr)[1]<-'year';
+    fn<-file.path(out.dir,paste0("RetroModelComparison.MatureBiomassAtMating.csv"));
+    write.csv(ddfr,row.names=FALSE,file=fn);
     just<-'l';
     for (i in 1:ncases) just<-paste0(just,'r');
     pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
@@ -96,6 +100,8 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
     ddfr<-dcast(dfr,y~case,value.var='val');
     names(ddfr)[1]<-'year';
+    fn<-file.path(out.dir,paste0("RetroModelComparison.Recruitment.csv"));
+    write.csv(ddfr,row.names=FALSE,file=fn);
     just<-'l';
     for (i in 1:ncases) just<-paste0(just,'r');
     pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
@@ -111,6 +117,8 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     dfrp<-dfrp[,c(1:3,2+ncases+(1:ncases))];
     names(dfrp)[2:3]<-c('year','observed');
     names(dfrp)[3+(1:ncases)]<-gsub("predicted_","",names(dfrp)[3+(1:ncases)],fixed=TRUE);
+    fn<-file.path(out.dir,paste0("RetroModelComparison.MatureSurveyBiomass.csv"));
+    write.csv(dfrp,row.names=FALSE,file=fn);
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
     just<-'lr'; for (i in 1:ncases) just<-paste0(just,'r');
     #males
@@ -137,6 +145,8 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     just<-'lr'; for (i in 1:ncases) just<-paste0(just,'r');
     #males
     ddfr<-dfrp[dfrp$x=='male',2:ncol(dfrp)]; rownames(ddfr)<-NULL;
+    fn<-file.path(out.dir,paste0("RetroModelComparison.RetainedCatch.csv"));
+    write.csv(ddfr,row.names=FALSE,file=fn);
     pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
            caption=paste0(tblno,". Observed/estimated retained catch (1000's t)."));
     tblno<-tblno+1;

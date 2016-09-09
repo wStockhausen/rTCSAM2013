@@ -14,6 +14,9 @@
 #'
 #'@return non-nested list of ggplot2 objects, with captions as names
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.SurveyQuantities<-function(obj=NULL,
@@ -61,8 +64,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                                             xlims=NULL,
                                             ylims=NULL,
                                             showPlot=FALSE);
-    cap1<-"Figure &&fno. Comparison of observed and predicted mature biomass from the survey.";
-    cap2<-"Figure &&fno. Comparison of observed and predicted mature biomass from the survey (zoomed to recent).";
+    cap1<-"  \n  \nFigure &&fno. Comparison of observed and predicted mature biomass from the survey.  \n  \n";
+    cap2<-"  \n  \nFigure &&fno. Comparison of observed and predicted mature biomass from the survey (zoomed to recent).  \n  \n";
     names(ps)<-c(cap1,cap2);
     if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
     plots[[cap1]]<-ps[[1]];
@@ -81,7 +84,7 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                    ylab='z-score',title='fits to mature survey biomass',
                    xlims=c(1974,xmax+1),
                    showPlot=FALSE);
-    cap<-"Figure &&fno. Z-scores for mature biomass from the survey.";
+    cap<-"Figure &&fno. Z-scores for mature biomass from the survey.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -105,8 +108,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                                             xlims=NULL,
                                             ylims=NULL,
                                             showPlot=FALSE);
-    cap1<-"Figure &&fno. Comparison of observed and predicted legal male abundance from the survey.";
-    cap2<-"Figure &&fno. Comparison of observed and predicted legal male abundance from the survey (zoomed to recent).";
+    cap1<-"  \n  \nFigure &&fno. Comparison of observed and predicted legal male abundance from the survey.  \n  \n";
+    cap2<-"  \n  \nFigure &&fno. Comparison of observed and predicted legal male abundance from the survey (zoomed to recent).  \n  \n";
     names(ps)<-c(cap1,cap2);
     if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
     plots[[cap1]]<-ps[[1]];
@@ -133,8 +136,8 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
                                             xlims=NULL,
                                             ylims=NULL,
                                             showPlot=FALSE);
-    cap1<-"Figure &&fno. Comparison of observed and predicted legal male biomass from the survey.";
-    cap2<-"Figure &&fno. Comparison of observed and predicted legal male biomass from the survey (zoomed to recent).";
+    cap1<-"  \n  \nFigure &&fno. Comparison of observed and predicted legal male biomass from the survey.  \n  \n";
+    cap2<-"  \n  \nFigure &&fno. Comparison of observed and predicted legal male biomass from the survey (zoomed to recent).  \n  \n";
     names(ps)<-c(cap1,cap2);
     if (showPlot) figno<-(printGGList(ps,figno=figno))$figno;
     plots[[cap1]]<-ps[[1]];

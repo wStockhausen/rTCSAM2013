@@ -14,6 +14,7 @@
 #'
 #'@return (nested) list of ggplot2 objects, returned invisibly.
 #'
+#'@importFrom wtsUtilities printGGList
 #'@import ggplot2
 #'
 #'@export
@@ -51,13 +52,13 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Mature Biomass (1000's t)");
     p <- p + ggtitle("Mature Biomass");
     p <- p + facet_grid(x~.);
-    cap<-"\nFigure &&fno. Estimated mature biomass at mating time.\n";
+    cap<-"  \n  \nFigure &&fno. Estimated mature biomass at mating time.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
     
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    cap<-"\nFigure &&fno. Estimated mature biomass at mating time (recent years only).\n";
+    cap<-"  \n  \nFigure &&fno. Estimated mature biomass at mating time (recent years only).  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -78,7 +79,7 @@ compareModelResults.PopQuantities<-function(obj,
     
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    cap<-"\nFigure &&fno. Estimated annual recruitment (recent years only).\n";
+    cap<-"  \n  \nFigure &&fno. Estimated annual recruitment (recent years only).  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -97,7 +98,7 @@ compareModelResults.PopQuantities<-function(obj,
     
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    cap<-"\nFigure &&fno. Estimated annual abundance (recent years only).\n";
+    cap<-"  \n  \nFigure &&fno. Estimated annual abundance (recent years only).  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
@@ -116,7 +117,7 @@ compareModelResults.PopQuantities<-function(obj,
     
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    cap<-"\nFigure &&fno. Estimated annual abundance, by sex and maturity (recent years only).\n";
+    cap<-"  \n  \nFigure &&fno. Estimated annual abundance, by sex and maturity (recent years only).  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
     
@@ -135,7 +136,7 @@ compareModelResults.PopQuantities<-function(obj,
     
     dfrp<-dfr[dfr$y>=max(dfr$y)-numRecent,];
     p <- p %+% dfrp;
-    cap<-"\nFigure &&fno. Estimated annual abundance, by sex, maturity, and shell condition (recent yeaers only).\n";
+    cap<-"  \n  \nFigure &&fno. Estimated annual abundance, by sex, maturity, and shell condition (recent yeaers only).  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
     
@@ -149,7 +150,7 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='size (mm CW)',y="Abundance (millions)");
     p <- p + ggtitle("Final Population Abundance");
     p <- p + facet_grid(m~x);
-    cap<-"\nFigure &&fno. Estimated final abundance, by sex, maturity, shell condition and size.\n";
+    cap<-"  \n  \nFigure &&fno. Estimated final abundance, by sex, maturity, shell condition and size.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
 

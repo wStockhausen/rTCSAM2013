@@ -12,6 +12,9 @@
 #'
 #'@return non-nested list of ggplot2 objects, with captions as names
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.SurveySelFcns<-function(obj=NULL,
@@ -48,7 +51,7 @@ compareModelResults.SurveySelFcns<-function(obj=NULL,
     p <- p + labs(y="selectivity",x="size (mm CW)");
     p <- p + guides(linetype=guide_legend("time period"));
     p <- p + facet_grid(x~.);
-    cap<-"Figure &&fno. Estimated selectivity functions for the survey.";
+    cap<-"  \n  \nFigure &&fno. Estimated selectivity functions for the survey.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     

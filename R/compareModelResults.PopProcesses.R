@@ -12,6 +12,7 @@
 #'
 #'@return list of ggplot2 objects, returned invisibly.
 #'
+#'@importFrom wtsUtilities printGGList
 #'@import ggplot2
 #'
 #'@export
@@ -34,7 +35,7 @@ compareModelResults.PopProcesses<-function(obj,
     #plot natural mortality
     #-------------------------------------------#
     p<-compareModelResults.NatMort(obj,showPlot=FALSE);
-    cap<-"\nFigure &&fno.Estimated natural mortality rates.\n";
+    cap<-"  \n  \nFigure &&fno.Estimated natural mortality rates.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
 
@@ -42,7 +43,7 @@ compareModelResults.PopProcesses<-function(obj,
     #plot prM2M
     #-------------------------------------------#
     p<-compareModelResults.PrM2M(obj,showPlot=FALSE);
-    cap<-"\nFigure &&fno. Estimated probabilities of molt-to-maturity at size (mm CW).\n";
+    cap<-"  \n  \nFigure &&fno. Estimated probabilities of molt-to-maturity at size (mm CW).  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
 
@@ -51,7 +52,7 @@ compareModelResults.PopProcesses<-function(obj,
     #-------------------------------------------#
     p<-compareModelResults.MeanGrowth(obj,showPlot=FALSE);
     if (showPlot) print(p);
-    cap<-"\nFigure &&fno. Estimated mean growth patterns.\n";
+    cap<-"  \n  \nFigure &&fno. Estimated mean growth patterns.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
 
@@ -59,7 +60,7 @@ compareModelResults.PopProcesses<-function(obj,
     #plot growth transition matrices
     #-------------------------------------------#
     p<-compareModelResults.GrowthMatrices(obj);
-    cap<-paste0("\nFigure &&fno. Estimated growth transition matrix.\n");
+    cap<-paste0("  \n  \nFigure &&fno. Estimated growth transition matrix.  \n  \n");
     if (showPlot) figno<-(printGGList(ps[1],figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
 
@@ -72,7 +73,7 @@ compareModelResults.PopProcesses<-function(obj,
     p <- p + geom_point();
     p <- p + ylim(c(0,NA));
     p <- p + labs(x="size (mm CW)",y="recruitment size distribution");
-    cap<-"\nFigure &&fno. Estimated/assumed size distribution at recruitment to the model.\n";
+    cap<-"  \n  \nFigure &&fno. Estimated/assumed size distribution at recruitment to the model.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     

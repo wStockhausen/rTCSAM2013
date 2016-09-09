@@ -15,6 +15,9 @@
 #'
 #'@return non-nested list of ggplot2 objects, with captions as names
 #'
+#'@importFrom wtsUtilities printGGList
+#'@import ggplot2
+#'
 #'@export
 #'
 compareModelResults.SurveyZCs<-function(obj=NULL,
@@ -61,7 +64,7 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
                           size=guide_legend(order=1));
         p <- p + facet_grid(x~.)
         p <- p + theme(legend.box='horizontal')
-        cap<-"Figure &&fno. Observed proportions-at-size from the survey by sex.";
+        cap<-"  \n  \nFigure &&fno. Observed proportions-at-size from the survey by sex.  \n  \n";
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
@@ -82,7 +85,7 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
     p1 <- p1 + geom_line(data=dfrp[idxp&idxm,],mapping=aes_string(colour='case'));
     p1 <- p1 + facet_wrap(~y,ncol=ncol);
     p1 <- p1 + labs(x="size (mm CW)",y="proportion") + ggtitle("males");
-    cap1<-"Figure &&fno. Observed and predicted proportions-at-size for males from the survey.";
+    cap1<-"  \n  \nFigure &&fno. Observed and predicted proportions-at-size for males from the survey.  \n  \n";
     if (showPlot) figno<-(printGGList(p1,figno=figno,cap=cap1))$figno;
     plots[[cap1]]<-p1; p1<-NULL;
     
@@ -91,7 +94,7 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
     p2 <- p2 + geom_line(data=dfrp[idxp&idxf,],mapping=aes_string(colour='case'));
     p2 <- p2 + facet_wrap(~y,ncol=ncol);
     p2 <- p2 + labs(x="size (mm CW)",y="proportion") + ggtitle("females");
-    cap2<-"Figure &&fno. Observed and predicted proportions-at-size for females from the survey.";
+    cap2<-"  \n  \nFigure &&fno. Observed and predicted proportions-at-size for females from the survey.  \n  \n";
     if (showPlot) figno<-(printGGList(p2,figno=figno,cap=cap2))$figno;
     plots[[cap2]]<-p2; p2<-NULL;
     
@@ -116,7 +119,7 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
         p <- p + facet_grid(case~x);
     }
     p <- p + theme(legend.box='horizontal')
-    cap<-"Figure &&fno. Pearson's residuals for proportions-at-size from the survey.";
+    cap<-"  \n  \nFigure &&fno. Pearson's residuals for proportions-at-size from the survey.  \n  \n";
     if (showPlot) figno<-(printGGList(ps,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
     
