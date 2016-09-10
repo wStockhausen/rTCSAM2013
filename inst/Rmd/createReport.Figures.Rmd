@@ -12,7 +12,7 @@ params:
 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
-                      dpi=300,fig.width=6.5,fig.height=5)
+                      dpi=300,fig.width=6.5,fig.height=3.9)
 ```
 
 ```{r init}
