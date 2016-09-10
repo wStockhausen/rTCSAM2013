@@ -45,6 +45,7 @@ compareModelResults.PopQuantities<-function(obj,
     #plot mature biomass
     #-------------------------------------------#
     dfr<-getMDFR.MatureBiomass(lst);
+    dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
     p <- p + geom_point();
@@ -66,6 +67,7 @@ compareModelResults.PopQuantities<-function(obj,
     #plot recruitment
     #-------------------------------------------#
     dfr<-getMDFR.Recruitment(lst);
+    dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
     p <- p + geom_point();
@@ -87,6 +89,7 @@ compareModelResults.PopQuantities<-function(obj,
     #plot annual abundance by x
     #-------------------------------------------#
     dfr<-getMDFR.PopQuantities(lst,type="N_yx");
+    dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
     p <- p + labs(x='year',y="Abundance (millions)");
@@ -106,6 +109,7 @@ compareModelResults.PopQuantities<-function(obj,
     #plot annual abundance by xm
     #-------------------------------------------#
     dfr<-getMDFR.PopQuantities(lst,type="N_yxm");
+    dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
     p <- p + labs(x='year',y="Abundance (millions)");
@@ -125,6 +129,7 @@ compareModelResults.PopQuantities<-function(obj,
     #plot annual abundance by xms
     #-------------------------------------------#
     dfr<-getMDFR.PopQuantities(lst,type="N_yxms");
+    dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
     p <- p + labs(x='year',y="Abundance (millions)");
@@ -145,6 +150,7 @@ compareModelResults.PopQuantities<-function(obj,
     #-------------------------------------------#
     dfr<-getMDFR.PopQuantities(lst,type="fN_xmsz");
     dfr<-reshape2::dcast(dfr,"case+x+m+z~.",fun.aggregate=sum,value.var='val');
+    dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='z',y='.',colour='case'));
     p <- p + geom_line();
     p <- p + labs(x='size (mm CW)',y="Abundance (millions)");

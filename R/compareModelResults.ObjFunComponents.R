@@ -28,9 +28,15 @@ compareModelResults.ObjFunComponents<-function(obj,
                                                showPlot=FALSE,
                                                pdf=NULL){
     
-    dfr<-getMDFR.ObjFunComponents(obj,base=base);
+    #----------------------------------
+    # 
+    #----------------------------------
+    obj<-convertToListOfResults(obj);
+    cases<-names(obj);
     
-    cases<-as.character(unique(dfr$case));
+    dfr<-getMDFR.ObjFunComponents(obj,base=base);
+    dfr$case<-factor(dfr$case,levels=cases);
+    
     if (length(cases)==1) y<-"objFun";
 
     if (y[1]=='diff') {

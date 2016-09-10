@@ -33,6 +33,7 @@ compareModelResults.PrM2M<-function(obj,
     # plot probability of molt-to-maturity
     #----------------------------------
     dfr<-getMDFR.PrM2M(lst);
+    dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='z',y='val',colour='case'));
     p <- p + geom_line();
     p <- p + geom_point();
