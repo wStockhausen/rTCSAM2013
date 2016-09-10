@@ -279,4 +279,13 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     panderOptions('knitr.auto.asis',TRUE);
 ```
 
-
+```{r effSS,results='asis'}
+    dfr.ft<-getMDFR.FisheryQuantities(obj,type="effSS.tot");
+    dfr.ft$type<-'total catch';
+    dfr.fr<-getMDFR.FisheryQuantities(obj,type="effSS.ret");
+    dfr.fr$type<-'retained catch';
+    dfr.f<-rbind(dfr.fr,dfr.ft);
+    write.csv(dfr.f,file.path(out.dir,"ModelComparison.FisherySampleSizes.csv"));
+    dfr.s <-getMDFR.SurveyQuantities(obj,type="effSS_y");
+    write.csv(dfr.s,file.path(out.dir,"ModelComparison.SurveySampleSizes.csv"));
+```
