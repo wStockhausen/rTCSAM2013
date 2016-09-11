@@ -39,7 +39,7 @@ compareModelResults.MeanGrowth<-function(obj,
     p <- p + geom_point();
     if (any(!is.na(dfr$lci))) p <- p + geom_errorbar(aes_string(ymin='lci',ymax='uci'));
     p <- p + geom_abline(slope=1,linetype=2);
-    p <- p + labs(x='year',y="mean growth (mm CW)");
+    p <- p + labs(x='pre-molt size (mm CW)',y="post-molt size (mm CW)");
     p <- p + ggtitle("Mean Growth");
     p <- p + facet_grid(x~.);
     if (showPlot) print(p);

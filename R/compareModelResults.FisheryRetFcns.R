@@ -1,7 +1,7 @@
 #'
-#'@title Compare estimated/predicted fishery selectivity functions among several model runs
+#'@title Compare estimated/predicted fishery retention functions among several model runs
 #'
-#'@description Function to compare estimated/predicted fishery selectivity functions among 
+#'@description Function to compare estimated/predicted fishery retention functions among 
 #'several model runs.
 #'
 #'@param obj - object that can be converted into a list of tcsam2013.resLst objects
@@ -19,7 +19,7 @@
 #'
 #'@export
 #'
-compareModelResults.FisherySelFcns<-function(obj,
+compareModelResults.FisheryRetFcns<-function(obj,
                                              showPlot=FALSE,
                                              pdf=NULL){
     
@@ -51,41 +51,11 @@ compareModelResults.FisherySelFcns<-function(obj,
     figno<-1;
     
     #----------------------------------
-    # plot selectivity functions
+    # plot retention functions
     #----------------------------------
     dfrp<-getMDFR.FisheryQuantities(obj,'selfcns');
     dfrp$case<-factor(dfrp$case,levels=cases);
     dfrp$pc<-as.character(dfrp$pc);
-    idc<-(dfrp$category=="selectivity");
-    for (fsh in c('SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
-        dfrpp<-dfrp[idx&idc,];
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val',colour="case",shape="pc",linetype="pc"));
-        p <- p + geom_line();
-        p <- p + geom_point();
-        p <- p + labs(y="selectivity",x="size (mm CW)");
-        p <- p + guides(colour=guide_legend("case"),
-                        shape=guide_legend("time period"),
-                        linetype=guide_legend("time period"));
-        p <- p + facet_grid(x~fishery);
-        cap<-paste0("  \n  \nFigure &&fno. Estimated selectivity functions for total catch in",fsh,".  \n  \n");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
-        plots[[cap]]<-p; p<-NULL;
-    }
-    for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh);
-        idt<-(dfrp$pc %in% c('1','1949'))
-        dfrpp<-dfrp[idx&idc&idt,];
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val',colour="case"));
-        p <- p + geom_line();
-        p <- p + geom_point();
-        p <- p + labs(y="selectivity",x="size (mm CW)");
-        p <- p + guides(colour=guide_legend("case"));
-        p <- p + facet_grid(x~fishery);
-        cap<-paste0("  \n  \nFigure &&fno. Estimated selectivity functions for total catch in",fsh,".  \n  \n");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
-        plots[[cap]]<-p; p<-NULL;
-    }
     idc<-(dfrp$category=="retention");
     for (fsh in c('TCF')){
         idx<-(dfrp$fishery==fsh);

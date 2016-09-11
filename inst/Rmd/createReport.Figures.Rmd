@@ -263,6 +263,20 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     rm(plots);
 ```
   
+#Fishery selectivity functions
+```{r plots.FisheryTCFMaleSelFcns,results='asis',fig.height=9}
+    plots<-compareModelResults.FisheryTCFMaleSelFcns(obj);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+    rm(plots);
+```
+  
+#Fishery retention functions
+```{r plots.FisheryRetFcns,results='asis',fig.height=3}
+    plots<-compareModelResults.FisheryRetFcns(obj);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+    rm(plots);
+```
+  
 #Fishery capture/mortality rates
 ```{r plots.FisheryRates,results='asis'}
     plots<-compareModelResults.FisheryRates(obj,
