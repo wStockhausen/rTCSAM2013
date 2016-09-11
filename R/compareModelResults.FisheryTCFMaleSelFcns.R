@@ -19,7 +19,7 @@
 #'
 #'@export
 #'
-compareModelResults.FisheryTCFMMaleSelFcns<-function(obj,
+compareModelResults.FisheryTCFMaleSelFcns<-function(obj,
                                                      showPlot=FALSE,
                                                      pdf=NULL){
     
