@@ -135,10 +135,10 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
         fn<-file.path(out.dir,"ModelComparison.Params.csv");
         write.csv(dfr[,cols],row.names=FALSE,file=fn);
     } else {
-        mdfr<-melt(dfr,id.vars=c("category","process","case","description","param","index","phase"),measure.vars=c("value","stdv"));
-        ddfr<-dcast(mdfr,category+process+description+param+index+phase~variable+case,value.var='value');
+        mdfr<-melt(dfr,id.vars=c("category","process","case","description","param","index"),measure.vars=c("value","stdv"));
+        ddfr<-dcast(mdfr,category+process+description+param+index~variable+case,value.var='value');
         names(ddfr)<-gsub("_","\n",names(ddfr),fixed=TRUE);
-        fn<-file.path(out.dir,"ModelComparison.Params..csv");
+        fn<-file.path(out.dir,"ModelComparison.Params.csv");
         write.csv(ddfr,row.names=FALSE,file=fn);
     }
     panderOptions('knitr.auto.asis',FALSE);##need to do this for loops below
@@ -156,8 +156,8 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
                        caption=paste0(tblno,". Parameter estimates for ",cats[i]," ",prcs[j]," ."));
                 tblno<-tblno+1;
             } else {
-                mdfr<-melt(dfrpp,id.vars=c("case","description","param","index","phase"),measure.vars=c("value","stdv"));
-                ddfr<-dcast(mdfr,description+param+index+phase~variable+case,value.var='value');
+                mdfr<-melt(dfrpp,id.vars=c("case","description","param","index"),measure.vars=c("value","stdv"));
+                ddfr<-dcast(mdfr,description+param+index~variable+case,value.var='value');
                 just<-'llcc';
                 for (k in 1:ncases) just<-paste0(just,'rr');
                 names(ddfr)<-gsub("_","\n",names(ddfr),fixed=TRUE);
