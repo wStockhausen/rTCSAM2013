@@ -158,7 +158,7 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
             } else {
                 mdfr<-melt(dfrpp,id.vars=c("case","description","param","index"),measure.vars=c("value","stdv"));
                 ddfr<-dcast(mdfr,description+param+index~variable+case,value.var='value');
-                just<-'llcc';
+                just<-'llc';
                 for (k in 1:ncases) just<-paste0(just,'rr');
                 names(ddfr)<-gsub("_","\n",names(ddfr),fixed=TRUE);
                 pandoc.table(ddfr,keep.trailing.zeros=FALSE,justify=just,
