@@ -17,12 +17,13 @@ plotQuadPlot<-function(obj.rep,
                        F35=NA,
                        B35=NA){
     if (!is.na(F35)){
-        styr<-obj.rep$styr;
-        endyr<-obj.rep$endyr;
+        tInfo<-getTimeInfo(obj.rep)
+        styr<-tInfo$styr[[1]];
+        endyr<-tInfo$endyr[[1]];
         par(oma=c(1,1,1,1),mar=c(4,4,2,1)+0.2,mfrow=c(1,1))
         yrs<-styr:(endyr-1)
-        mmb<-obj.rep$"Mating.time.Male.Spawning.Biomass";
-        tfm<-obj.rep$"max.TOT.male.NS.mortality.rate";
+        mmb<-obj.rep$"pop.MMB";
+        tfm<-obj.rep$"fsh.fcr.max.TCF.M";
         idx<-(yrs>=1965)&(tfm>0);
         yrs<-yrs[idx];
         mmb<-mmb[idx];
