@@ -81,7 +81,13 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
     if (plot1stObs) idxo<-idxo&(dfrp$case==cases[1]);
 
     p1 <- ggplot(mapping=aes_string(x='z',y='val'));
-    p1 <- p1 + geom_bar(data=dfrp[idxo&idxm,],stat='identity',position='identity',mapping=aes_string(fill='category'),colour=NA);
+    if (plot1stObs){
+        p1 <- p1 + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+                          fill='dark grey',colour='black',alpha=0.8);
+    } else {
+        p1 <- p1 + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+                          mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
+    }
     p1 <- p1 + geom_line(data=dfrp[idxp&idxm,],mapping=aes_string(colour='case'));
     p1 <- p1 + facet_wrap(~y,ncol=ncol);
     p1 <- p1 + labs(x="size (mm CW)",y="proportion") + ggtitle("males");
@@ -97,31 +103,6 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
     cap2<-"  \n  \nFigure &&fno. Observed and predicted proportions-at-size for females from the survey.  \n  \n";
     if (showPlot) figno<-(printGGList(p2,figno=figno,cap=cap2))$figno;
     plots[[cap2]]<-p2; p2<-NULL;
-    
-    #----------------------------------
-    # plot size comp residuals from the survey 
-    #----------------------------------
-    dfrp<-getMDFR.SurveyQuantities(obj,type="PRs_yxz");
-    dfrp$case<-factor(dfrp$case,levels=cases);
-    dfrp$sign<-ifelse(test=dfrp$val>0,yes=">0",no="<0");
-    dfrp$val <- abs(dfrp$val);
 
-    p <- ggplot(data=dfrp,mapping=aes_string(x='y',y='z',size='val',fill='sign'));
-    p <- p + scale_size_area(max_size=10);
-    p <- p + geom_point(alpha=0.8,shape=21,color='black');
-    p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
-    p <- p + labs(y="size (mm CW)",x="year") + ggtitle("Pearson's residuals");
-    p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
-                      size=guide_legend(order=1));
-    if (length(cases)==1){
-        p <- p + facet_grid(x~.);
-    } else {
-        p <- p + facet_grid(case~x);
-    }
-    p <- p + theme(legend.box='horizontal')
-    cap<-"  \n  \nFigure &&fno. Pearson's residuals for proportions-at-size from the survey.  \n  \n";
-    if (showPlot) figno<-(printGGList(ps,figno=figno,cap=cap))$figno;
-    plots[[cap]]<-p; p<-NULL;
-    
     return(invisible(plots));
 }

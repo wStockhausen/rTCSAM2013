@@ -213,6 +213,15 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
     rm(plots);
 ```
   
+#Pearson's residuals from survey size comps
+```{r plots.SurveyPRs,results='asis',fig.height=8,fig.width=6.5}
+    plots<-compareModelResults.SurveyPRs(obj,
+                                         numRecent=numRecent,
+                                         plot1stObs=plot1stObs);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+    rm(plots);
+```
+  
 #Survey mean size comps and effective sample sizes
 ```{r plots.SurveyMeanZCs,results='asis'}
     plots<-compareModelResults.SurveyMeanZCs(obj,
@@ -241,6 +250,15 @@ knitr::opts_chunk$set(echo=FALSE, error=FALSE, message=FALSE, warning=FALSE,
 #Fishery size comps
 ```{r plots.FisheryZCs,results='asis',,fig.height=20,fig.width=12}
     plots<-compareModelResults.FisheryZCs(obj,
+                                          numRecent=numRecent,
+                                          plot1stObs=plot1stObs);
+    figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
+    rm(plots);
+```
+
+#Pearson's residuals from fishery size comps
+```{r plots.FisheryPRs,results='asis',,fig.height=8,fig.width=6.5}
+    plots<-compareModelResults.FisheryPRs(obj,
                                           numRecent=numRecent,
                                           plot1stObs=plot1stObs);
     figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;

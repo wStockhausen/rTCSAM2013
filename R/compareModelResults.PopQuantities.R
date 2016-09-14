@@ -75,7 +75,7 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Recruitment (millions)");
     p <- p + ggtitle("Recruitment");
     p <- p + facet_grid(x~.);
-    cap<-"\nFigure &&fno. Estimated annual recruitment.";
+    cap<-"  \n  \nFigure &&fno. Estimated annual recruitment.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
     
@@ -95,7 +95,7 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Abundance (millions)");
     p <- p + ggtitle("Population Abundance");
     p <- p + facet_grid(x~.);
-    cap<-"\nFigure &&fno. Estimated annual abundance.\n";
+    cap<-"  \n  \nFigure &&fno. Estimated annual abundance.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
     
@@ -115,7 +115,7 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Abundance (millions)");
     p <- p + ggtitle("Population Abundance");
     p <- p + facet_grid(m~x);
-    cap<-"\nFigure &&fno. Estimated annual abundance, by sex and maturity.\n";
+    cap<-"\n  \nFigure &&fno. Estimated annual abundance, by sex and maturity.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
     
@@ -135,7 +135,7 @@ compareModelResults.PopQuantities<-function(obj,
     p <- p + labs(x='year',y="Abundance (millions)");
     p <- p + ggtitle("Population Abundance");
     p <- p + facet_grid(m+s~x);
-    cap<-"\nFigure &&fno. Estimated annual abundance, by sex, maturity, and shell condition.\n";
+    cap<-"  \n  \nFigure &&fno. Estimated annual abundance, by sex, maturity, and shell condition.  \n  \n";
     if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; 
     

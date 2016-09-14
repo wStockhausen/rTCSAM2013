@@ -399,7 +399,7 @@ getMDFR.FisheryQuantities<-function(obj,
                     idx<-years[[case]] %in% (lst[[case]]$rep)[[nmy]];#select only years with observations
                     #females
                     val <-(lst[[case]]$rep)[[paste0(nmv,".F")]][idx];
-                    dfrf<-data.frame(case=case,category='total catch',fishery=fsh,
+                    dfrf<-data.frame(case=case,category='catch',fishery=fsh,
                                       y=years[[case]][idx],x='female',m='all',s='all',val=val);
                     #males
                     val <-(lst[[case]]$rep)[[paste0(nmv,".M")]][idx];

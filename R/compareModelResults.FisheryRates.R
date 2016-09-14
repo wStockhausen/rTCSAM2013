@@ -87,6 +87,40 @@ compareModelResults.FisheryRates<-function(obj,
     }
 
     #----------------------------------
+    # plot max fishing mortality/capture rates w/ different scales
+    #----------------------------------
+    dfrp<-getMDFR.FisheryQuantities(obj,'max rates');
+    dfrp$case<-factor(dfrp$case,levels=cases);
+    for (fsh in c('TCF','SCF','RKF','GTF')){
+        idx<-(dfrp$fishery==fsh);
+        dfrpp<-dfrp[idx,];
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
+        p <- p + geom_line();
+        p <- p + geom_point();
+        p <- p + labs(y="max rate",x="year");
+        p <- p + guides(colour=guide_legend("case"),
+                        shape=guide_legend("category"),
+                        linetype=guide_legend("category"));
+        p <- p + facet_grid(x~fishery,scales="free_y");
+        cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh,". Y-axis scales differ.  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
+        plots[[cap]]<-p; p<-NULL;
+        #zoomed to recent
+        dfrpp<-dfrp[idx&(dfrp$y>=(max(dfrp$y)-15)-numRecent),];
+        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
+        p <- p + geom_line();
+        p <- p + geom_point();
+        p <- p + labs(y="max rate",x="year");
+        p <- p + guides(colour=guide_legend("case"),
+                        shape=guide_legend("category"),
+                        linetype=guide_legend("category"));
+        p <- p + facet_grid(x~fishery,scales="free_y");
+        cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh," (zoomed to recent years). Y-axis scales differ.  \n  \n");
+        if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
+        plots[[cap]]<-p; p<-NULL;
+    }
+
+    #----------------------------------
     # plot mean fishing mortality/capture rates
     #----------------------------------
     dfrp<-getMDFR.FisheryQuantities(obj,'mean rates');

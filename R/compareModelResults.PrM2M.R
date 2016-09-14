@@ -38,7 +38,7 @@ compareModelResults.PrM2M<-function(obj,
     p <- p + geom_line();
     p <- p + geom_point();
     if (any(!is.na(dfr$lci))) p <- p + geom_errorbar(aes_string(ymin='lci',ymax='uci'));
-    p <- p + labs(x='year',y="pr(molt-to-maturity)");
+    p <- p + labs(x='size (mm CW)',y="pr(molt-to-maturity)");
     p <- p + ggtitle("pr(Molt-to-Maturity)");
     p <- p + facet_grid(x~.);
     if (showPlot) print(p);

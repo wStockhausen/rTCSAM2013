@@ -118,7 +118,13 @@ compareModelResults.FisheryZCs<-function(obj,
         idxp<-dfrpp$category=="predicted";
         
         p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val'));
-        p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',mapping=aes_string(fill='category'),colour=NA);
+        if (plot1stObs){
+            p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+                              fill='dark grey',colour='black',alpha=0.8);
+        } else {
+            p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+                              mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
+        }
         p <- p + geom_line(data=dfrpp[idxp,],mapping=aes_string(colour='case'));
         p <- p + facet_wrap(~y,ncol=5);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Retained catch in ",fsh));
@@ -143,8 +149,15 @@ compareModelResults.FisheryZCs<-function(obj,
         idxp<-dfrpp$category=="predicted";
         
         p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val'));
-        p <- p + geom_bar(data=dfrpp[idxo&idxm,],stat='identity',position='identity',mapping=aes_string(fill='category'),colour=NA);
-        p <- p + geom_line(data=dfrpp[idxp&idxm,],mapping=aes_string(colour='case'));
+        p <- p + geom_bar(data=dfrpp[idxo&idxm,],stat='identity',position='identity',
+                          mapping=aes_string(fill='category'),colour=NA);
+        if (plot1stObs){
+            p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+                              fill='dark grey',colour='black',alpha=0.8);
+        } else {
+            p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+                              mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
+        }
         p <- p + facet_wrap(~y,ncol=5);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Male total catch in ",fsh));
         cap<-paste0("  \n  \nFigure &&fno. Observed and predicted proportions-at-size for male total catch in ",fsh,".  \n  \n");
@@ -157,62 +170,6 @@ compareModelResults.FisheryZCs<-function(obj,
         p <- p + facet_wrap(~y,ncol=5);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Female total catch in ",fsh));
         cap<-paste0("  \n  \nFigure &&fno. Observed and predicted proportions-at-size for female total catch in ",fsh,".  \n  \n");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
-        plots[[cap]]<-p; p<-NULL;
-    }
-
-    #----------------------------------
-    # plot retained catch size comp residuals 
-    #----------------------------------
-    dfrp<-getMDFR.FisheryQuantities(obj,type="PRs.ret");
-    dfrp$case<-factor(dfrp$case,levels=cases);
-    dfrp$sign<-ifelse(test=dfrp$val>0,yes=">0",no="<0");
-    dfrp$val <- abs(dfrp$val);
-    for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh);
-        dfrpp<-dfrp[idx,];
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='sign',colour='case',linetype='case'));
-        p <- p + scale_size_area(max_size=10);
-        p <- p + geom_point(alpha=0.8,shape=21,color='black');
-        p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
-        p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh,": retained catch Pearson's residuals"));
-        p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
-                          size=guide_legend(order=1));
-        if (length(cases)==1){
-            p <- p + facet_grid(x~.);
-        } else {
-            p <- p + facet_grid(case~x);
-        }
-        p <- p + theme(legend.box='horizontal');
-        cap<-paste0("  \n  \nFigure &&fno. Pearson's residuals for retained catch proportions-at-size in ",fsh,".  \n  \n");
-        if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
-        plots[[cap]]<-p; p<-NULL;
-    }
-
-    #----------------------------------
-    # plot total catch size comp residuals 
-    #----------------------------------
-    dfrp<-getMDFR.FisheryQuantities(obj,type="PRs.tot");
-    dfrp$case<-factor(dfrp$case,levels=cases);
-    dfrp$sign<-ifelse(test=dfrp$val>0,yes=">0",no="<0");
-    dfrp$val <- abs(dfrp$val);
-    for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
-        dfrpp<-dfrp[idx,];
-        p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='sign'));
-        p <- p + scale_size_area(max_size=10);
-        p <- p + geom_point(alpha=0.8,shape=21,color='black');
-        p <- p + geom_point(alpha=1.0,shape=21,color='black',fill=NA);
-        p <- p + labs(y="size (mm CW)",x="year") + ggtitle(paste0(fsh,": total catch Pearson's residuals"));
-        p <- p + guides(fill=guide_legend(override.aes=list(alpha=1.0,size=6),order=2),
-                          size=guide_legend(order=1));
-        if (length(cases)==1){
-            p <- p + facet_grid(x~.);
-        } else {
-            p <- p + facet_grid(case~x);
-        }
-        p <- p + theme(legend.box='horizontal');
-        cap<-paste0("  \n  \nFigure &&fno. Pearson's residuals for total catch proportions-at-size in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
     }
