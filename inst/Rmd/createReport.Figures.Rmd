@@ -191,6 +191,8 @@ If available, parameter confidence intervals are +/- one standard deviation. Tri
 ```
   
 #Fishery retention functions
+Retained mortality or retention (GMacs FMM) functions for males in the directed fishery, pre-1991 and post-1990.
+  
 ```{r plots.FisheryRetFcns,results='asis',fig.height=3}
     plots<-compareModelResults.FisheryRetFcns(obj);
     figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
@@ -198,6 +200,8 @@ If available, parameter confidence intervals are +/- one standard deviation. Tri
 ```
   
 #Fishery selectivity functions
+Bycatch selectivity functions for females in the directed fishery and males and females in the snow crab, BBRKC fisheries, and groundfish fisheries. Capture and/or total fishing mortality selectivity functions for males in the directed fishery prior to 1991.
+  
 ```{r plots.FisherySelFcns,results='asis'}
     plots<-compareModelResults.FisherySelFcns(obj);
     figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
@@ -205,6 +209,10 @@ If available, parameter confidence intervals are +/- one standard deviation. Tri
 ```
   
 #Fishery selectivity functions
+Annual male total-catch capture and/or fishing mortality selectivity functions for the directed fishery 
+starting in 1991/92. The directed fishery was closed during 1997/98-2004/05 and 2010/11-2012/13. During these time periods, the "mean" selectivity function that forms the 
+basis for the annual deviations is shown.
+  
 ```{r plots.FisheryTCFMaleSelFcns,results='asis',fig.height=9}
     plots<-compareModelResults.FisheryTCFMaleSelFcns(obj);
     figno<-(printGGList(plots,figno=figno,show=TRUE))$figno;
