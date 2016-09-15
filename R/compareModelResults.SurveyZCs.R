@@ -82,10 +82,10 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
 
     p1 <- ggplot(mapping=aes_string(x='z',y='val'));
     if (plot1stObs){
-        p1 <- p1 + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
-                          fill='dark grey',colour='black',alpha=0.8);
+        p1 <- p1 + geom_bar(data=dfrp[idxo&idxm,],stat='identity',position='identity',
+                          fill='black',colour=NA,alpha=0.8);
     } else {
-        p1 <- p1 + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+        p1 <- p1 + geom_bar(data=dfrp[idxo&idxm,],stat='identity',position='identity',
                           mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
     }
     p1 <- p1 + geom_line(data=dfrp[idxp&idxm,],mapping=aes_string(colour='case'));
@@ -96,7 +96,13 @@ compareModelResults.SurveyZCs<-function(obj=NULL,
     plots[[cap1]]<-p1; p1<-NULL;
     
     p2 <- ggplot(data=dfrp,mapping=aes_string(x='z',y='val'));
-    p2 <- p2 + geom_bar(data=dfrp[idxo&idxf,],stat='identity',position='identity',mapping=aes_string(fill='category'),colour=NA);
+    if (plot1stObs){
+        p2 <- p2 + geom_bar(data=dfrp[idxo&idxf,],stat='identity',position='identity',
+                          fill='black',colour=NA,alpha=0.8);
+    } else {
+        p2 <- p2 + geom_bar(data=dfrp[idxo&idxf,],stat='identity',position='identity',
+                          mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
+    }
     p2 <- p2 + geom_line(data=dfrp[idxp&idxf,],mapping=aes_string(colour='case'));
     p2 <- p2 + facet_wrap(~y,ncol=ncol);
     p2 <- p2 + labs(x="size (mm CW)",y="proportion") + ggtitle("females");

@@ -120,13 +120,13 @@ compareModelResults.FisheryZCs<-function(obj,
         p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val'));
         if (plot1stObs){
             p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
-                              fill='dark grey',colour='black',alpha=0.8);
+                              fill='black',colour=NA,alpha=0.8);
         } else {
             p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
                               mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
         }
         p <- p + geom_line(data=dfrpp[idxp,],mapping=aes_string(colour='case'));
-        p <- p + facet_wrap(~y,ncol=5);
+        p <- p + facet_wrap(~y,ncol=ncol);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Retained catch in ",fsh));
         cap<-paste0("  \n  \nFigure &&fno. Observed proportions-at-size for retained catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
@@ -149,25 +149,30 @@ compareModelResults.FisheryZCs<-function(obj,
         idxp<-dfrpp$category=="predicted";
         
         p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val'));
-        p <- p + geom_bar(data=dfrpp[idxo&idxm,],stat='identity',position='identity',
-                          mapping=aes_string(fill='category'),colour=NA);
         if (plot1stObs){
-            p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
-                              fill='dark grey',colour='black',alpha=0.8);
+            p <- p + geom_bar(data=dfrpp[idxo&idxm,],stat='identity',position='identity',
+                              fill='black',colour=NA,alpha=0.8);
         } else {
-            p <- p + geom_bar(data=dfrpp[idxo,],stat='identity',position='identity',
+            p <- p + geom_bar(data=dfrpp[idxo&idxm,],stat='identity',position='identity',
                               mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
         }
-        p <- p + facet_wrap(~y,ncol=5);
+        p <- p + geom_line(data=dfrpp[idxp&idxm,],mapping=aes_string(colour='case'));
+        p <- p + facet_wrap(~y,ncol=ncol);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Male total catch in ",fsh));
         cap<-paste0("  \n  \nFigure &&fno. Observed and predicted proportions-at-size for male total catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
         
         p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val'));
-        p <- p + geom_bar(data=dfrpp[idxo&idxf,],stat='identity',position='identity',mapping=aes_string(fill='category'),colour=NA);
+        if (plot1stObs){
+            p <- p + geom_bar(data=dfrpp[idxo&idxf,],stat='identity',position='identity',
+                              fill='black',colour=NA,alpha=0.8);
+        } else {
+            p <- p + geom_bar(data=dfrpp[idxo&idxf,],stat='identity',position='identity',
+                              mapping=aes_string(fill='category'),colour=NA,alpha=0.5);
+        }
         p <- p + geom_line(data=dfrpp[idxp&idxf,],mapping=aes_string(colour='case'));
-        p <- p + facet_wrap(~y,ncol=5);
+        p <- p + facet_wrap(~y,ncol=ncol);
         p <- p + labs(x="size (mm CW)",y="proportion") + ggtitle(paste0("Female total catch in ",fsh));
         cap<-paste0("  \n  \nFigure &&fno. Observed and predicted proportions-at-size for female total catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;

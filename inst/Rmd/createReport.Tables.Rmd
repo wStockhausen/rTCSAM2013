@@ -8,6 +8,7 @@ output:
     pdf_document: 
         toc: false
 orientation: landscape
+fontsize: 8pt
 params: 
     paths: none
     obj: none
