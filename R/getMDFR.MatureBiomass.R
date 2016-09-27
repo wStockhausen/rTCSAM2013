@@ -11,7 +11,7 @@
 #'object, then results will be extracted from the tcsam2013.std object for a given case, if it exists; 
 #'otherwise they will be extracted from the tcsam2013.rep object.
 #'
-#'@return dataframe
+#'@return dataframe in canonical format
 #'
 #'@export
 #'
@@ -39,7 +39,7 @@ getMDFR.MatureBiomass<-function(obj,
             lci <- NA;
             uci <- NA;
             dfrp<-data.frame(case=case,
-                             y=years.m1[[case]],x='male',
+                             y=years.m1[[case]],x='male',m='mature',
                              val=val,lci=lci,uci=uci);
             dfr<-rbind(dfr,dfrp);
             #--females
@@ -47,7 +47,7 @@ getMDFR.MatureBiomass<-function(obj,
             lci <- NA;
             uci <- NA;
             dfrp<-data.frame(case=case,
-                             y=years.m1[[case]],x='female',
+                             y=years.m1[[case]],x='female',m='mature',
                              val=val,lci=lci,uci=uci);
             dfr<-rbind(dfr,dfrp);
         } else {
@@ -58,7 +58,7 @@ getMDFR.MatureBiomass<-function(obj,
             lci <- val - (lst[[case]]$std$stdv)[idx];
             uci <- val + (lst[[case]]$std$stdv)[idx];
             dfrp<-data.frame(case=case,
-                             y=years.m1[[case]],x='male',
+                             y=years.m1[[case]],x='male',m='mature',
                              val=val,lci=lci,uci=uci);
             dfr<-rbind(dfr,dfrp);
             #--females
@@ -68,10 +68,12 @@ getMDFR.MatureBiomass<-function(obj,
             lci <- val - (lst[[case]]$std$stdv)[idx];
             uci <- val + (lst[[case]]$std$stdv)[idx];
             dfrp<-data.frame(case=case,
-                             y=years.m1[[case]],x='female',
+                             y=years.m1[[case]],x='female',m='mature',
                              val=val,lci=lci,uci=uci);
             dfr<-rbind(dfr,dfrp);
         }
     }#--case
+    dfr<-getMDFR.CanonicalFormat(dfr);
+    dfr$fleet<-"population";
     return(dfr);
 }

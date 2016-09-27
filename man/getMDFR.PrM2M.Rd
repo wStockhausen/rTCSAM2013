@@ -12,7 +12,7 @@ getMDFR.PrM2M(obj, verbose = FALSE)
 \item{verbose}{- flag (T/F) to print debug info}
 }
 \value{
-dataframe
+dataframe in canonical format
 }
 \description{
 Function to get predicted pr(M2M) from 

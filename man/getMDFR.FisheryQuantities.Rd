@@ -17,7 +17,7 @@ getMDFR.FisheryQuantities(obj, type = c("bio.retm", "bio.dscm", "bio.totm",
 \item{verbose}{- flag (T/F) to print debug info}
 }
 \value{
-dataframe
+dataframe in canonical format
 }
 \description{
 Function to get estimated/predicted fishery-related quantities from 
@@ -33,7 +33,7 @@ Potential values for 'type' are:
  \item {'prNatZ.tot' - annual total catch proportions-at-size}
  \item {'PRs.ret'      - pearsons residuals for retained catch proportions-at-size}
  \item {'PRs.tot'      - pearsons residuals for total catch proportions-at-size}
- \item {'mnPrNatZ_ret' - mean proportions-at-size for retained catch data}
+ \item {'mnPrNatZ.ret' - mean proportions-at-size for retained catch data}
  \item {'mnPrNatZ.tot' - mean proportions-at-size for total catch data}
  \item {'selfcns' - fishery selectivity and retention functions, by time period and sex}
  \item {'zscores' - annual z-scores for fits to catch biomass}

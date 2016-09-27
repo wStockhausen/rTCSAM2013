@@ -11,7 +11,7 @@
 #'then results will be extracted from the tcsam2013.std object for a given case, if it exists; 
 #'otherwise they will be extracted from the tcsam2013.rep object.
 #'
-#'@return dataframe
+#'@return dataframe in canonical format
 #'
 #'@export
 #'
@@ -63,5 +63,7 @@ getMDFR.NaturalMortality<-function(obj,
             }
         }
     }#--case
+    dfr<-getMDFR.CanonicalFormat(dfr);
+    dfr$fleet<-"population";
     return(dfr);
 }

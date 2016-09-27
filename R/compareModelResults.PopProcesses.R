@@ -63,7 +63,7 @@ compareModelResults.PopProcesses<-function(obj,
     #-------------------------------------------#
     p<-compareModelResults.GrowthMatrices(obj);
     cap<-paste0("  \n  \nFigure &&fno. Estimated growth transition matrix.  \n  \n");
-    if (showPlot) figno<-(printGGList(ps[1],figno=figno,cap=cap))$figno;
+    if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
     plots[[cap]]<-p; p<-NULL;
 
     #-------------------------------------------#

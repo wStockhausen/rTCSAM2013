@@ -16,8 +16,9 @@
 #'  \item {'fN_xmsz' - final (July 1) abundance by x,m,s,z (millions)}
 #'  \item {'N_yxmsz' - annual (July 1) abundance by x,m,s,z (millions)}
 #'  \item {'N_yxmz'  - annual (July 1) abundance by x,m,z (millions)}
+#'  \item {'N_yxz'   - annual (July 1) abundance by x,z (millions)}
 #'  \item {'N_yxms'  - annual (July 1) abundance by x,m,s (millions)}
-#'  \item {'N_yxz'   - annual (July 1) abundance by x,m (millions)}
+#'  \item {'N_yxm'   - annual (July 1) abundance by x,m (millions)}
 #'  \item {'N_yx'    - annual (July 1) abundance by x (millions)}
 #'}
 #'
@@ -135,39 +136,36 @@ getMDFR.PopQuantities<-function(obj,
                         x="male",m="mature",s="old shell",dfrp);
             dfr<-rbind(dfr,dfrp[,c('case','y','x','m','s','z','val')]);
         }
-        if (type[1]=="iN_xmsz") return(dfr);
-        if (type[1]=="fN_xmsz") return(dfr);
-        if (type[1]=="N_yxmsz") return(dfr);
+        if (type[1]=="iN_xmsz") dfrp<-dfr;
+        if (type[1]=="fN_xmsz") dfrp<-dfr;
+        if (type[1]=="N_yxmsz") dfrp<-dfr;
         if (type[1]=="N_yxmz"){
             dfrp<-NULL;
             dfrp<-reshape2::dcast(dfr,"case+y+x+m+z~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[6]<-'val';
-            dfrp$s<-'all';
-            return(dfrp[,c('case','y','x','m','s','z','val')]);
+        }
+        if (type[1]=="N_yxz"){
+            dfrp<-NULL;
+            dfrp<-reshape2::dcast(dfr,"case+y+x+z~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[5]<-'val';
         }
         if (type[1]=="N_yxms"){
             dfrp<-NULL;
             dfrp<-reshape2::dcast(dfr,"case+y+x+m+s~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[6]<-'val';
-            dfrp$z<-'all';
-            return(dfrp[,c('case','y','x','m','s','z','val')]);
         }
         if (type[1]=="N_yxm"){
             dfrp<-NULL;
             dfrp<-reshape2::dcast(dfr,"case+y+x+m~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[5]<-'val';
-            dfrp$s<-'all';
-            dfrp$z<-'all';
-            return(dfrp[,c('case','y','x','m','s','z','val')]);
         }
         if (type[1]=="N_yx"){
             dfrp<-NULL;
             dfrp<-reshape2::dcast(dfr,"case+y+x~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[4]<-'val';
-            dfrp$m<-'all';
-            dfrp$s<-'all';
-            dfrp$z<-'all';
-            return(dfrp[,c('case','y','x','m','s','z','val')]);
         }
+        dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfrp$fleet<-'population';
+        return(dfrp);
     }
 }

@@ -61,7 +61,7 @@ compareModelResults.FisheryQuantities<-function(obj,
     ps<-plot2.ModelComparisonsGG.TimeSeries(dfrp,
                                             numRecent=numRecent,
                                             plot1stObs=plot1stObs,
-                                            facets='x~fishery',
+                                            facets='x~fleet',
                                             plotObs=TRUE,
                                             plotMod=TRUE,
                                             ci=0.95,
@@ -89,7 +89,7 @@ compareModelResults.FisheryQuantities<-function(obj,
     ps<-plot2.ModelComparisonsGG.TimeSeries(dfrp,
                                             numRecent=numRecent,
                                             plot1stObs=plot1stObs,
-                                            facets='x~fishery',
+                                            facets='x~fleet',
                                             plotObs=TRUE,
                                             plotMod=TRUE,
                                             ci=0.95,
@@ -115,11 +115,11 @@ compareModelResults.FisheryQuantities<-function(obj,
     dfrp$case<-factor(dfrp$case,levels=cases);
     #make 4-plot from observations & case results
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx <- dfrp$fishery==fsh;
+        idx <- dfrp$fleet==fsh;
         ps<-plot2.ModelComparisonsGG.TimeSeries(dfrp[idx,],
                                                 numRecent=numRecent,
                                                 plot1stObs=plot1stObs,
-                                                facets='x~fishery',
+                                                facets='x~fleet',
                                                 plotObs=TRUE,
                                                 plotMod=TRUE,
                                                 ci=0.95,
@@ -147,12 +147,12 @@ compareModelResults.FisheryQuantities<-function(obj,
     dfrp$case<-factor(dfrp$case,levels=cases);
     #--retained catch
     for (fsh in c('TCF')){
-        idx   <- (dfrp$fishery==fsh)&(dfrp$category=="retained catch");
+        idx   <- (dfrp$fleet==fsh)&(dfrp$category=="retained catch");
         dfrpp <- dfrp[idx,];
         xmax  <- max(dfrpp$y,na.rm=TRUE);
         p<-plotZScores(dfrpp,x='y',y='val',
                        color='case',shape='case',legend='case',
-                       facets="x~fishery",facet.scales='free_y',position='dodge',
+                       facets="x~fleet",facet.scales='free_y',position='dodge',
                        ylab='z-score (retained catch)',title=NULL,
                        showPlot=showPlot);
         cap<-"  \n  \nFigure &&fno. Z-scores for retained catch.  \n  \n";
@@ -161,12 +161,12 @@ compareModelResults.FisheryQuantities<-function(obj,
     }
     #--total catch
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx   <- (dfrp$fishery==fsh)&(dfrp$category=="catch");
+        idx   <- (dfrp$fleet==fsh)&(dfrp$category=="catch");
         dfrpp <- dfrp[idx,];
         xmax  <- max(dfrpp$y,na.rm=TRUE);
         p<-plotZScores(dfrpp,x='y',y='val',
                        color='case',shape='case',legend='case',
-                       facets="x~fishery",facet.scales='free_y',position='dodge',
+                       facets="x~fleet",facet.scales='free_y',position='dodge',
                        ylab='z-score (total catch)',title=NULL,
                        showPlot=showPlot);
         cap<-paste0("  \n  \nFigure &&fno. Z-scores for total catch in ",fsh,".  \n  \n");

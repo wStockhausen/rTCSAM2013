@@ -17,14 +17,13 @@
 #'
 #'@return dataframe
 #'
+#'@export
+#'
 getMDFR.XZ<-function(obj,rep.m=NULL,rep.f=NULL,std.m=NULL,std.f=NULL,verbose=FALSE){
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
     
-    #----------------------------------
-    #mean growth
-    #----------------------------------
     dfr<-NULL;
     for (case in cases){
         if (is.null(lst[[case]]$std)) {

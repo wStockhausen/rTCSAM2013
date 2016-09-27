@@ -4,10 +4,11 @@
 \alias{getMDFR.SurveyQuantities}
 \title{Get estimated/predicted survey-related quantities from several model runs}
 \usage{
-getMDFR.SurveyQuantities(obj, type = c("MB_yx", "B_yx", "lglN_y", "lblB_y",
+getMDFR.SurveyQuantities(obj, type = c("MB_yx", "B_yx", "lglN_y", "lglB_y",
   "N_yxms", "N_yxm", "N_yx", "NatZ_yxz", "prNatZ_yxmsz", "prNatZ_yxmz",
-  "prNatZ_yxz", "PRs_yxz", "mnPrNatZ_xmz", "mnPrNatZ_xz", "zscrs_yx",
-  "effSS_y"), verbose = FALSE)
+  "prNatZ_yxz", "PRs_yxmsz", "PRs_yxmz", "PRs_yxz", "mnPrNatZ_xmz",
+  "mnPrNatZ_xz", "zscrs_yx", "effSS_y"), pdfType = c("lognormal", "normal"),
+  ci = 0.8, verbose = FALSE)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -17,7 +18,7 @@ getMDFR.SurveyQuantities(obj, type = c("MB_yx", "B_yx", "lglN_y", "lblB_y",
 \item{verbose}{- flag (T/F) to print debug info}
 }
 \value{
-dataframe
+dataframe with columns in canonical format
 }
 \description{
 Function to get estimated/predicted survey-related quantities from 
@@ -37,6 +38,8 @@ Potential values for 'type' are:
  \item {'prNatZ_yxmsz' - annual proportions-at-size by x,m,s}
  \item {'prNatZ_yxmz'  - annual proportions-at-size by x,m}
  \item {'prNatZ_yxz'   - annual proportions-at-size by x}
+ \item {'PRs_yxmsz'    - pearsons residuals for annual proportions-at-size by x,m,s}
+ \item {'PRs_yxmz'     - pearsons residuals for annual proportions-at-size by x,m}
  \item {'PRs_yxz'      - pearsons residuals for annual proportions-at-size by x}
  \item {'mnPrNatZ_xmz' - mean proportions-at-size by x,m}
  \item {'mnPrNatZ_xz'  - mean proportions-at-size by x}

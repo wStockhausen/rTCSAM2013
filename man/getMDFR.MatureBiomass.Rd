@@ -12,7 +12,7 @@ getMDFR.MatureBiomass(obj, verbose = FALSE)
 \item{verbose}{- flag (T/F) to print debug info}
 }
 \value{
-dataframe
+dataframe in canonical format
 }
 \description{
 Function to get predicted mature biomass (time series) from 

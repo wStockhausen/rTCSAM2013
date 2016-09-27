@@ -5,9 +5,6 @@
 #'several model runs.
 #'
 #'@param obj - object that can be converted into a list of tcsam2013.resLst objects
-#'@param numRecent - number of recent years to plot
-#'@param plot1stObs - flag to plot observations from the first case, only
-#'@param ncol - number of columns/page for size comp plots
 #'@param showPlot - flag (T/F) to show plot
 #'@param pdf - name for output pdf file
 #'
@@ -21,9 +18,6 @@
 #'@export
 #'
 compareModelResults.FisheryPRs<-function(obj,
-                                         numRecent=15,
-                                         plot1stObs=TRUE,
-                                         ncol=5,
                                          showPlot=FALSE,
                                          pdf=NULL){
     
@@ -62,7 +56,7 @@ compareModelResults.FisheryPRs<-function(obj,
     dfrp$sign<-ifelse(test=dfrp$val>0,yes=">0",no="<0");
     dfrp$val <- abs(dfrp$val);
     for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='sign',colour='case',linetype='case'));
         p <- p + scale_size_area(max_size=10);
@@ -90,7 +84,7 @@ compareModelResults.FisheryPRs<-function(obj,
     dfrp$sign<-ifelse(test=dfrp$val>0,yes=">0",no="<0");
     dfrp$val <- abs(dfrp$val);
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='sign'));
         p <- p + scale_size_area(max_size=10);

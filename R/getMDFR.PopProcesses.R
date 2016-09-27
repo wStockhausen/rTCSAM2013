@@ -18,8 +18,9 @@
 #'}
 #'Uses \code{reshape2::melt}.
 #'
-#'@return dataframe with columns 'case',
-#''y','x','m' or 'z', and 'val' (or 'zp' and 'val').
+#'@return dataframe in canonical format, unless type is T_cyxzz, 
+#'in which case the columns are: 'case','category','fleet',
+#''y','x','m' or 'z', 'zp' and 'val'.
 #'
 #'@export
 #'
@@ -75,7 +76,8 @@ getMDFR.PopProcesses<-function(obj,
                 dimnames(val)<-list(z =as.character(lst[[case]]$rep$mod.zBs),
                                     zp=as.character(lst[[case]]$rep$mod.zBs));
                 dfrp<-reshape2::melt(val,value.name='val')
-                dfrp<-cbind(case=case,y=pc,x=rw$x,dfrp);
+                dfrp<-cbind(case=case,category='',fleet='population',
+                            pc=pc,y=pc,x=rw$x,m='immature',s='all',dfrp);
                 dfr<-rbind(dfr,dfrp);
             }
         }
@@ -89,10 +91,13 @@ getMDFR.PopProcesses<-function(obj,
         dfr<-NULL;
         for (case in cases){
             pc<-paste0(styr[[case]],"-",endyr[[case]]);
-            dfrp<-data.frame(case=case,y=pc,x='all',z=lst[[case]]$rep$mod.zBs,
+            dfrp<-data.frame(case=case,pc=pc,y=pc,x='all',m='immature',s='new shell',
+                             z=lst[[case]]$rep$mod.zBs,
                              val=(lst[[case]]$rep)[["pop.prR_z"]]);
             dfr<-rbind(dfr,dfrp);
         }
+        dfr<-getMDFR.CanonicalFormat(dfr);
+        dfr$fleet<-"population";
         return(dfr);
     }
 

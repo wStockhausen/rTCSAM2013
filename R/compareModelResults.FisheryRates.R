@@ -6,7 +6,6 @@
 #'
 #'@param obj - object that can be converted into a list of tcsam2013.resLst objects
 #'@param numRecent - number of recent years to plot
-#'@param plot1stObs - flag to plot observations from the first case, only
 #'@param showPlot - flag (T/F) to show plot
 #'@param pdf - name for output pdf file
 #'
@@ -21,7 +20,6 @@
 #'
 compareModelResults.FisheryRates<-function(obj,
                                            numRecent=15,
-                                           plot1stObs=TRUE,
                                            showPlot=FALSE,
                                            pdf=NULL){
     
@@ -58,7 +56,7 @@ compareModelResults.FisheryRates<-function(obj,
     dfrp<-getMDFR.FisheryQuantities(obj,'max rates');
     dfrp$case<-factor(dfrp$case,levels=cases);
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
         p <- p + geom_line();
@@ -67,7 +65,7 @@ compareModelResults.FisheryRates<-function(obj,
         p <- p + guides(colour=guide_legend("case"),
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
-        p <- p + facet_grid(x~fishery);
+        p <- p + facet_grid(x~fleet);
         cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh,".  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
@@ -80,7 +78,7 @@ compareModelResults.FisheryRates<-function(obj,
         p <- p + guides(colour=guide_legend("case"),
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
-        p <- p + facet_grid(x~fishery);
+        p <- p + facet_grid(x~fleet);
         cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh," (zoomed to recent years).  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
@@ -92,7 +90,7 @@ compareModelResults.FisheryRates<-function(obj,
     dfrp<-getMDFR.FisheryQuantities(obj,'max rates');
     dfrp$case<-factor(dfrp$case,levels=cases);
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
         p <- p + geom_line();
@@ -101,7 +99,7 @@ compareModelResults.FisheryRates<-function(obj,
         p <- p + guides(colour=guide_legend("case"),
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
-        p <- p + facet_grid(x~fishery,scales="free_y");
+        p <- p + facet_grid(x~fleet,scales="free_y");
         cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh,". Y-axis scales differ.  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
@@ -114,7 +112,7 @@ compareModelResults.FisheryRates<-function(obj,
         p <- p + guides(colour=guide_legend("case"),
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
-        p <- p + facet_grid(x~fishery,scales="free_y");
+        p <- p + facet_grid(x~fleet,scales="free_y");
         cap<-paste0("  \n  \nFigure &&fno. Estimated max fishery rates in ",fsh," (zoomed to recent years). Y-axis scales differ.  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
@@ -126,7 +124,7 @@ compareModelResults.FisheryRates<-function(obj,
     dfrp<-getMDFR.FisheryQuantities(obj,'mean rates');
     dfrp$case<-factor(dfrp$case,levels=cases);
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",shape="category",linetype="category"));
         p <- p + geom_line();
@@ -135,7 +133,7 @@ compareModelResults.FisheryRates<-function(obj,
         p <- p + guides(colour=guide_legend("case"),
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
-        p <- p + facet_grid(x~fishery);
+        p <- p + facet_grid(x~fleet);
         cap<-paste0("  \n  \nFigure &&fno. Estimated mean fishery rates in ",fsh,".  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
@@ -148,7 +146,7 @@ compareModelResults.FisheryRates<-function(obj,
         p <- p + guides(colour=guide_legend("case"),
                         shape=guide_legend("category"),
                         linetype=guide_legend("category"));
-        p <- p + facet_grid(x~fishery);
+        p <- p + facet_grid(x~fleet);
         cap<-paste0("  \n  \nFigure &&fno. Estimated mean fishery rates in ",fsh," (zoomed to recent years).  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;

@@ -11,7 +11,7 @@
 #'object, then results will be extracted from the tcsam2013.std object for a given case, if it exists; 
 #'otherwise they will be extracted from the tcsam2013.rep object.
 #'
-#'@return dataframe
+#'@return dataframe in canonical format
 #'
 #'@export
 #'
@@ -24,5 +24,9 @@ getMDFR.meanGrowth<-function(obj,
                     std.m="sdrMnGrw_M",
                     std.f="sdrMnGrw_F",
                     verbose=verbose);
+    dfr<-getMDFR.CanonicalFormat(dfr);
+    dfr$fleet<-"population";
+    dfr$m<-'immature';
+    dfr$s<-'all';
     return(dfr);
 }

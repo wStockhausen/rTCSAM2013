@@ -11,7 +11,7 @@
 #'object, then results will be extracted from the tcsam2013.std object for a given case, if it exists; 
 #'otherwise they will be extracted from the tcsam2013.rep object.
 #'
-#'@return dataframe
+#'@return dataframe in canonical format
 #'
 #'@export
 #'
@@ -24,5 +24,8 @@ getMDFR.PrM2M<-function(obj,
                     std.m="sdrPrM2M_M",
                     std.f="sdrPrM2M_F",
                     verbose=verbose);
-    return(dfr);
+    dfrp<-getMDFR.CanonicalFormat(dfr);
+    dfrp$fleet<-'population';
+    dfrp$m<-'immature';
+    return(dfrp);
 }

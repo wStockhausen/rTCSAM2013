@@ -53,5 +53,9 @@ getMDFR.Recruitment<-function(obj,
             dfr<-rbind(dfr,dfrp);
         }
     }#--case
-    return(dfr);
+    dfrp<-getMDFR.CanonicalFormat(dfr);
+    dfrp$fleet<-'population';
+    dfrp$m<-'immature';
+    dfrp$s<-'new shell';
+    return(dfrp);
 }

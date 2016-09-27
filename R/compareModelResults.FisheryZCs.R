@@ -60,7 +60,7 @@ compareModelResults.FisheryZCs<-function(obj,
     if (length(cases)==1){
         dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.ret");
         for (fsh in c('TCF')){
-            idxo<-(dfrp$fishery==fsh)&(dfrp$category=="observed")
+            idxo<-(dfrp$fleet==fsh)&(dfrp$category=="observed")
             if (plot1stObs) idxo<-idxo & (dfrp$case==cases[1]);
             dfrpp<-dfrp[idxo,]
             p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='category'));
@@ -85,7 +85,7 @@ compareModelResults.FisheryZCs<-function(obj,
     if (length(cases)==1){
         dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.tot");
         for (fsh in c('TCF','SCF','RKF','GTF')){
-            idxo<-(dfrp$fishery==fsh)&(dfrp$category=="observed")
+            idxo<-(dfrp$fleet==fsh)&(dfrp$category=="observed")
             if (plot1stObs) idxo<-idxo & (dfrp$case==cases[1]);
             dfrpp<-dfrp[idxo,]
             p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='z',size='val',fill='category'));
@@ -110,7 +110,7 @@ compareModelResults.FisheryZCs<-function(obj,
     dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.ret");
     dfrp$case<-factor(dfrp$case,levels=cases);
     for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh)
+        idx<-(dfrp$fleet==fsh)
         dfrpp<-dfrp[idx,];
         
         idxo<-dfrpp$category=="observed";
@@ -139,7 +139,7 @@ compareModelResults.FisheryZCs<-function(obj,
     dfrp<-getMDFR.FisheryQuantities(obj,type="prNatZ.tot");
     dfrp$case<-factor(dfrp$case,levels=cases);
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh)
+        idx<-(dfrp$fleet==fsh)
         dfrpp<-dfrp[idx,];
         
         idxm<-dfrpp$x=="male";

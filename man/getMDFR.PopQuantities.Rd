@@ -30,8 +30,9 @@ Potential values for 'type' are:
  \item {'fN_xmsz' - final (July 1) abundance by x,m,s,z (millions)}
  \item {'N_yxmsz' - annual (July 1) abundance by x,m,s,z (millions)}
  \item {'N_yxmz'  - annual (July 1) abundance by x,m,z (millions)}
+ \item {'N_yxz'   - annual (July 1) abundance by x,z (millions)}
  \item {'N_yxms'  - annual (July 1) abundance by x,m,s (millions)}
- \item {'N_yxz'   - annual (July 1) abundance by x,m (millions)}
+ \item {'N_yxm'   - annual (July 1) abundance by x,m (millions)}
  \item {'N_yx'    - annual (July 1) abundance by x (millions)}
 }
 

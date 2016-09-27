@@ -58,7 +58,7 @@ compareModelResults.FisheryTCFMaleSelFcns<-function(obj,
     dfrp$pc<-as.character(dfrp$pc);
     idc<-(dfrp$category=="selectivity");
     for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         idt<-(dfrp$pc %in% as.character(1991:2030))
         dfrpp<-dfrp[idx&idc&idt,];
         dfrppp<-dfrp[idx&idc&(dfrp$pc=='1990'),c("z","val","case")];

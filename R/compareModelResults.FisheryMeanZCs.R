@@ -5,9 +5,7 @@
 #'several model runs.
 #'
 #'@param obj - object that can be converted into a list of tcsam2013.resLst objects
-#'@param numRecent - number of recent years to plot
 #'@param plot1stObs - flag to plot observations from the first case, only
-#'@param ncol - number of columns/page for size comp plots
 #'@param showPlot - flag (T/F) to show plot
 #'@param pdf - name for output pdf file
 #'
@@ -21,9 +19,7 @@
 #'@export
 #'
 compareModelResults.FisheryMeanZCs<-function(obj,
-                                             numRecent=15,
                                              plot1stObs=TRUE,
-                                             ncol=5,
                                              showPlot=FALSE,
                                              pdf=NULL){
     
@@ -64,15 +60,13 @@ compareModelResults.FisheryMeanZCs<-function(obj,
         idxo<-(dfrp$category=="observed")&(dfrp$case==cases[1]);
         dfrp<-rbind(dfrp[idxo,],dfrp[dfrp$category=="predicted",])
     }
-    dfrp$lci<-dfrp$val-dfrp$stdv;
-    dfrp$uci<-dfrp$val+dfrp$stdv;
     for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(dfrpp,aes_string(x='z',y='val',colour="case",linetype="category"));
         p <- p + geom_line();
         p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
-        p <- p + facet_grid("x~fishery");
+        p <- p + facet_grid("x~fleet");
         p <- p + labs(y="proportion",x="size (mm CW)")
         cap<-paste0("  \n  \nFigure &&fno. Observed and predicted mean proportions-at-size for retained catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
@@ -89,15 +83,13 @@ compareModelResults.FisheryMeanZCs<-function(obj,
         dfrp<-rbind(dfrp[idxo,],dfrp[dfrp$category=="predicted",])
     }
     dfrp$category<-factor(dfrp$category,c("predicted","observed"))
-    dfrp$lci<-dfrp$val-dfrp$stdv;
-    dfrp$uci<-dfrp$val+dfrp$stdv;
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(dfrpp,aes_string(x='z',y='val',colour="case",linetype="category"));
         p <- p + geom_line();
         p <- p + geom_errorbar(mapping=aes_string(ymin='lci',ymax='uci'))
-        p <- p + facet_grid("x~fishery");
+        p <- p + facet_grid("x~fleet");
         p <- p + labs(y="proportion",x="size (mm CW)")
         cap<-paste0("  \n  \nFigure &&fno. Observed and predicted mean proportions-at-size for total catch in ",fsh,".  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
@@ -111,12 +103,12 @@ compareModelResults.FisheryMeanZCs<-function(obj,
     dfrp$case<-factor(dfrp$case,levels=cases);
     dfrp$category<-factor(dfrp$category,c("McAllister-Ianelli","input"))
     for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",linetype="category"));
         p <- p + geom_point();
         p <- p + geom_line();
-        p <- p + facet_grid(x~fishery)
+        p <- p + facet_grid(x~fleet)
         p <- p + labs(y="sample size",x="year")
         cap<-paste0("  \n  \nFigure &&fno. Input and effective sample sizes for retained catch proportions-at-size in",fsh,".  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;
@@ -130,12 +122,12 @@ compareModelResults.FisheryMeanZCs<-function(obj,
     dfrp$case<-factor(dfrp$case,levels=cases);
     dfrp$category<-factor(dfrp$category,c("McAllister-Ianelli","input"))
     for (fsh in c('TCF','SCF','RKF','GTF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         dfrpp<-dfrp[idx,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='y',y='val',colour="case",linetype="category"));
         p <- p + geom_point();
         p <- p + geom_line();
-        p <- p + facet_grid(x~fishery)
+        p <- p + facet_grid(x~fleet)
         p <- p + labs(y="sample size",x="year")
         cap<-paste0("  \n  \nFigure &&fno. Input and effective sample sizes for total catch proportions-at-size in",fsh,".  \n  \n");
         if (showPlot) figno<-(wtsUtilities::printGGList(p,figno=figno,cap=cap))$figno;

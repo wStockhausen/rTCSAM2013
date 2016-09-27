@@ -12,7 +12,7 @@ getMDFR.NaturalMortality(obj, verbose = FALSE)
 \item{verbose}{- flag (T/F) to print debug info}
 }
 \value{
-dataframe
+dataframe in canonical format
 }
 \description{
 Function to get predicted natural mortality (time series) from 

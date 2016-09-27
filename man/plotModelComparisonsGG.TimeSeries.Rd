@@ -6,7 +6,7 @@
 \usage{
 plotModelComparisonsGG.TimeSeries(dfr, plot1stObs = TRUE, x = "y",
   y = "val", lci = "lci", uci = "uci", case = "case",
-  category = "category", facets = NULL, position = "dodge",
+  category = "category", facets = NULL, position = position_dodge(0.2),
   scales = "fixed", plotObs = TRUE, plotMod = TRUE, ci = 0.95,
   pdfType = "lognormal", xlab = "year", ylab = NULL, title = NULL,
   xlims = NULL, ylims = NULL, showPlot = TRUE)

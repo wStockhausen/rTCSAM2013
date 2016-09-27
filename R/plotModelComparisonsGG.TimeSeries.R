@@ -42,7 +42,7 @@ plotModelComparisonsGG.TimeSeries<-function(dfr,
                                             case="case",
                                             category="category",
                                             facets=NULL,
-                                            position='dodge',
+                                            position=position_dodge(0.2),
                                             scales='fixed',
                                             plotObs=TRUE,
                                             plotMod=TRUE,
@@ -54,7 +54,8 @@ plotModelComparisonsGG.TimeSeries<-function(dfr,
                                             xlims=NULL,
                                             ylims=NULL,
                                             showPlot=TRUE){
-    if ((plotObs)&(!is.null(dfr$cv))&any(!is.na(dfr$cv))){
+    if ((plotObs)&&(!is.null(dfr$cv))&&any(!is.na(dfr$cv))){
+        cat("Calculating cis\n")
         cis<-calcCIs(dfr$val,dfr$cv,pdfType=pdfType,ci=ci);
         dfr<-cbind(dfr,cis);#adds columns lci and uci
         lci<-'lci';
@@ -74,11 +75,12 @@ plotModelComparisonsGG.TimeSeries<-function(dfr,
     p <- ggplot(dfr,aes_string(x=x,y=y,color=case));
     if (plotObs){
         p <- p + geom_point(aes_string(shape=case),data=dfro,size=4,alpha=0.5,position=position);
-        if (!is.null(dfro$lci)){
+        if (!is.null(dfro$lci)&&!all(is.na(dfro$lci))){
+            cat("Plotting cis\n")
             p <- p + geom_errorbar(aes_string(ymin=lci,ymax=uci),data=dfro,position=position);
         }
     }
-    if (plotMod) p <- p + geom_line(data=dfrp);
+    if (plotMod) p <- p + geom_line(data=dfrp,position=position);
     p <- p + coord_cartesian(xlim=xlims,ylim=ylims)
     p <- p + labs(x=xlab,y=ylab);
     p <- p + ggtitle(title);

@@ -58,7 +58,7 @@ compareModelResults.FisheryRetFcns<-function(obj,
     dfrp$pc<-as.character(dfrp$pc);
     idc<-(dfrp$category=="retention");
     for (fsh in c('TCF')){
-        idx<-(dfrp$fishery==fsh);
+        idx<-(dfrp$fleet==fsh);
         idt<-(dfrp$pc %in% c('1990', '1991'))
         dfrpp<-dfrp[idx&idc&idt,];
         p <- ggplot(data=dfrpp,mapping=aes_string(x='z',y='val',colour="case",shape="pc",linetype="pc"));
@@ -68,7 +68,7 @@ compareModelResults.FisheryRetFcns<-function(obj,
         p <- p + guides(colour=guide_legend("case"),
                         shape=guide_legend("time period"),
                         linetype=guide_legend("time period"));
-        p <- p + facet_grid(x~fishery);
+        p <- p + facet_grid(x~fleet);
         cap<-paste0("  \n  \nFigure &&fno. Estimated retention functions for total catch in",fsh,".  \n  \n");
         if (showPlot) figno<-(printGGList(p,figno=figno,cap=cap))$figno;
         plots[[cap]]<-p; p<-NULL;
