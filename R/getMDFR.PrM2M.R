@@ -25,7 +25,7 @@ getMDFR.PrM2M<-function(obj,
                     std.f="sdrPrM2M_F",
                     verbose=verbose);
     dfrp<-getMDFR.CanonicalFormat(dfr);
-    dfrp$fleet<-'population';
+    dfrp$type<-'population';
     dfrp$m<-'immature';
     return(dfrp);
 }

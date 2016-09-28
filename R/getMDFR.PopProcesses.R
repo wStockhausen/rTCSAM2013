@@ -4,7 +4,7 @@
 #'@description Function to get predicted population processes from 
 #'several model runs.
 #'
-#'@param reps - tcsam2013.rep object (derived from OLDSTYLE R files) for the models to be compared
+#'@param obj - object with results for the models to be compared that can be converted to a list of tcsam2013.resLst objects
 #'@param type - population process to retrieve
 #'@param verbose - flag (T/F) to print debug info
 #'
@@ -18,9 +18,7 @@
 #'}
 #'Uses \code{reshape2::melt}.
 #'
-#'@return dataframe in canonical format, unless type is T_cyxzz, 
-#'in which case the columns are: 'case','category','fleet',
-#''y','x','m' or 'z', 'zp' and 'val'.
+#'@return dataframe in canonical format.
 #'
 #'@export
 #'
@@ -76,11 +74,13 @@ getMDFR.PopProcesses<-function(obj,
                 dimnames(val)<-list(z =as.character(lst[[case]]$rep$mod.zBs),
                                     zp=as.character(lst[[case]]$rep$mod.zBs));
                 dfrp<-reshape2::melt(val,value.name='val')
-                dfrp<-cbind(case=case,category='',fleet='population',
+                dfrp<-cbind(case=case,
                             pc=pc,y=pc,x=rw$x,m='immature',s='all',dfrp);
                 dfr<-rbind(dfr,dfrp);
             }
         }
+        dfr<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-"population";
         return(dfr);
     }
     
@@ -97,7 +97,7 @@ getMDFR.PopProcesses<-function(obj,
             dfr<-rbind(dfr,dfrp);
         }
         dfr<-getMDFR.CanonicalFormat(dfr);
-        dfr$fleet<-"population";
+        dfr$type<-"population";
         return(dfr);
     }
 

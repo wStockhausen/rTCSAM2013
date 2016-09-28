@@ -165,7 +165,7 @@ getMDFR.PopQuantities<-function(obj,
             names(dfrp)[4]<-'val';
         }
         dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfrp$fleet<-'population';
+        dfrp$type<-'population';
         return(dfrp);
     }
 }

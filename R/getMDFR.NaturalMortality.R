@@ -64,6 +64,6 @@ getMDFR.NaturalMortality<-function(obj,
         }
     }#--case
     dfr<-getMDFR.CanonicalFormat(dfr);
-    dfr$fleet<-"population";
+    dfr$type<-"population";
     return(dfr);
 }

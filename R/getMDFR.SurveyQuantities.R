@@ -90,6 +90,7 @@ getMDFR.SurveyQuantities<-function(obj,
             dfr<-rbind(dfr,dfrof,dfrom,dfrmf,dfrmm);
         }
         dfr<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-'survey';
         dfr$fleet<-fleet;
         return(dfr);
     }    
@@ -118,6 +119,7 @@ getMDFR.SurveyQuantities<-function(obj,
             dfr<-rbind(dfr,dfrof,dfrom,dfrmf,dfrmm);
         }
         dfr<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-'survey';
         dfr$fleet<-fleet;
         return(dfr);
     }    
@@ -210,6 +212,7 @@ getMDFR.SurveyQuantities<-function(obj,
             names(dfrp)[5]<-'val';
         }
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    
@@ -232,6 +235,7 @@ getMDFR.SurveyQuantities<-function(obj,
             dfr<-rbind(dfr,dfro,dfrm);
         }
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -254,6 +258,7 @@ getMDFR.SurveyQuantities<-function(obj,
             dfr<-rbind(dfr,dfro,dfrm);
         }
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -297,6 +302,7 @@ getMDFR.SurveyQuantities<-function(obj,
             }
         }##-cases
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    
@@ -350,6 +356,7 @@ getMDFR.SurveyQuantities<-function(obj,
             names(dfrp)[6]<-'val';
         }
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    
@@ -379,6 +386,7 @@ getMDFR.SurveyQuantities<-function(obj,
         cis<-calcCIs(dfrp1$val,sdvs=dfrp2$stdv/sqrt(dfrp3$N),pdfType='normal',ci=0.80)
         dfrp<-cbind(dfrp1,lci=cis$lci,uci=cis$uci)
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -433,6 +441,7 @@ getMDFR.SurveyQuantities<-function(obj,
             dfrp<-sqldf::sqldf(qry);
         }
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -461,8 +470,9 @@ getMDFR.SurveyQuantities<-function(obj,
             dfr<-rbind(dfr,dfrp[,c("case","pc","x","z","val")]);
         }
         dfrp<-getMDFR.CanonicalFormat(dfr);
-        dfrp$category<-'selectivity';
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
+        dfrp$category<-'selectivity';
         return(dfrp);
     }
     
@@ -484,6 +494,7 @@ getMDFR.SurveyQuantities<-function(obj,
             dfr<-rbind(dfr,dfrf,dfrm);
         }
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    
@@ -506,6 +517,7 @@ getMDFR.SurveyQuantities<-function(obj,
             dfr<-rbind(dfr,dfri,dfre);
         }
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    

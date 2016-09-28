@@ -74,6 +74,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -123,6 +124,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -149,6 +151,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -183,6 +186,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--cases
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -217,6 +221,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--cases
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -240,8 +245,10 @@ getMDFR.FisheryQuantities<-function(obj,
         dfrp3<-reshape2::dcast(dfrp,formula="case+category+fleet+x+m+z~.",fun.aggregate=length,value.var='val');
         names(dfrp3)[7]<-'N';
         cis<-calcCIs(dfrp1$val,sdvs=dfrp2$stdv/sqrt(dfrp3$N),pdfType='normal',ci=0.80)
-        dfrp<-cbind(dfrp1,lci=cis$lci,uci=cis$uci)
+        dfrp<-cbind(dfrp1,lci=cis$lci,uci=cis$uci);
+        
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfrp$type<-'fishery';
         return(dfrp);
     }
 
@@ -265,8 +272,10 @@ getMDFR.FisheryQuantities<-function(obj,
         dfrp3<-reshape2::dcast(dfrp,formula="case+category+fleet+x+m+z~.",fun.aggregate=length,value.var='val');
         names(dfrp3)[7]<-'N';
         cis<-calcCIs(dfrp1$val,sdvs=dfrp2$stdv/sqrt(dfrp3$N),pdfType='normal',ci=0.80)
-        dfrp<-cbind(dfrp1,lci=cis$lci,uci=cis$uci)
+        dfrp<-cbind(dfrp1,lci=cis$lci,uci=cis$uci);
+        
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfrp$type<-'fishery';
         return(dfrp);
     }
 
@@ -310,7 +319,9 @@ getMDFR.FisheryQuantities<-function(obj,
                 s.category="input";'
         dfrppp2<-sqldf::sqldf(qry);
         dfrp<-rbind(dfrppp1,dfrppp2);
+        
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfrp$type<-'fishery';
         return(dfrp);
     }
 
@@ -334,7 +345,9 @@ getMDFR.FisheryQuantities<-function(obj,
                 s.x=p.x and
                 s.category="input";'
         dfrp<-sqldf::sqldf(qry);
+        
         dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfrp$type<-'fishery';
         return(dfrp);
     }
 
@@ -403,6 +416,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }
     
@@ -443,6 +457,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -496,6 +511,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -523,6 +539,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }    
 
@@ -564,6 +581,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--x
         }#--case
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }
     
@@ -605,6 +623,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--x
         }#--case
         dfrp<-getMDFR.CanonicalFormat(dfr);
+        dfrp$type<-'fishery';
         return(dfrp);
     }
     

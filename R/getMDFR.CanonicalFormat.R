@@ -15,6 +15,7 @@ getMDFR.CanonicalFormat<-function(mdfr){
     #check existing columns and add missing ones
     nms<-names(mdfr);
     if (!('case' %in% nms))     mdfr[['case']]    <-"";
+    if (!('type' %in% nms))     mdfr[['type']]    <-"";
     if (!('category' %in% nms)) mdfr[['category']]<-"";
     if (!('fleet' %in% nms))    mdfr[['fleet']]   <-"";
     if (!('pc' %in% nms))       mdfr[['pc']]      <-"";
@@ -31,9 +32,9 @@ getMDFR.CanonicalFormat<-function(mdfr){
     
     #re-order to canconical format
     if ('zp' %in% nms){
-        mdfr<-mdfr[,c('case','category','fleet','pc','y','x','m','s','z','zp','val')]
+        mdfr<-mdfr[,c('case','type','fleet','category','pc','y','x','m','s','z','zp','val')]
     } else {
-        mdfr<-mdfr[,c('case','category','fleet','pc','y','x','m','s','z','val','lci','uci')]
+        mdfr<-mdfr[,c('case','type','fleet','category','pc','y','x','m','s','z','val','lci','uci')]
     }
 
     return(mdfr);

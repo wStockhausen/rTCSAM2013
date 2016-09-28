@@ -25,8 +25,7 @@ getMDFR.meanGrowth<-function(obj,
                     std.f="sdrMnGrw_F",
                     verbose=verbose);
     dfr<-getMDFR.CanonicalFormat(dfr);
-    dfr$fleet<-"population";
+    dfr$type<-"population";
     dfr$m<-'immature';
-    dfr$s<-'all';
     return(dfr);
 }
