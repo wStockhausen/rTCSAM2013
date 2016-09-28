@@ -24,11 +24,17 @@ getMDFR.CanonicalFormat<-function(mdfr){
     if (!('s' %in% nms)) mdfr[['s']]<-"all";
     if (!('z' %in% nms)) mdfr[['z']]<-"all";
     if (!('val' %in% nms)) mdfr[['val']]<-NA;
-    if (!('lci' %in% nms)) mdfr[['lci']]<-NA;
-    if (!('uci' %in% nms)) mdfr[['uci']]<-NA;
+    if (!('zp' %in% nms)) {
+        if (!('lci' %in% nms)) mdfr[['lci']]<-NA;
+        if (!('uci' %in% nms)) mdfr[['uci']]<-NA;
+    }
     
     #re-order to canconical format
-    mdfr<-mdfr[,c('case','category','fleet','pc','y','x','m','s','z','val','lci','uci')]
+    if ('zp' %in% nms){
+        mdfr<-mdfr[,c('case','category','fleet','pc','y','x','m','s','z','zp','val')]
+    } else {
+        mdfr<-mdfr[,c('case','category','fleet','pc','y','x','m','s','z','val','lci','uci')]
+    }
 
     return(mdfr);
 }
