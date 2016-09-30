@@ -15,7 +15,7 @@
 #'
 #'@export
 #'
-getMDFR.PrM2M<-function(obj,
+getMDFR.Pop.PrM2M<-function(obj,
                        verbose=FALSE){
 
     dfr<-getMDFR.XZ(obj,

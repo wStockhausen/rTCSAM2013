@@ -33,11 +33,11 @@ getMDFR.PopQuantities<-function(obj,
                                 verbose=FALSE){
 
     if (type[1]=="MB_yx"){
-        dfr<-getMDFR.MatureBiomass(obj);
+        dfr<-getMDFR.Pop.MatureBiomass(obj);
         return(dfr);
     }
     if (type[1]=="R_y"){
-        dfr<-getMDFR.Recruitment(obj);
+        dfr<-getMDFR.Pop.Recruitment(obj);
         return(dfr);
     }
 

@@ -30,7 +30,7 @@ getMDFR.PopProcesses<-function(obj,
     #natural mortality rates
     #----------------------------------
     if (type[1]=="M_yxm"){
-        dfr<-getMDFR.NaturalMortality(obj);
+        dfr<-getMDFR.Pop.NaturalMortality(obj);
         return(dfr);
     }
     
@@ -38,14 +38,14 @@ getMDFR.PopProcesses<-function(obj,
     #pr(molt-to-maturity|z)
     #----------------------------------
     if (type[1]=="prM2M_cxz"){
-        dfr<-getMDFR.PrM2M(obj);
+        dfr<-getMDFR.Pop.PrM2M(obj);
         return(dfr);
     }
     #----------------------------------
     #mean growth increments
     #----------------------------------
     if (type[1]=="mnZAM_cxz"){
-        dfr<-getMDFR.meanGrowth(obj);
+        dfr<-getMDFR.Pop.MeanGrowth(obj);
         return(dfr);
     }
     

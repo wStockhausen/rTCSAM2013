@@ -15,7 +15,7 @@
 #'
 #'@export
 #'
-getMDFR.NaturalMortality<-function(obj,
+getMDFR.Pop.NaturalMortality<-function(obj,
                                    verbose=FALSE){
 
     lst<-convertToListOfResults(obj);

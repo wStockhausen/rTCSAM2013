@@ -15,7 +15,7 @@
 #'
 #'@export
 #'
-getMDFR.MatureBiomass<-function(obj,
+getMDFR.Pop.MatureBiomass<-function(obj,
                                 verbose=FALSE){
 
     lst<-convertToListOfResults(obj);

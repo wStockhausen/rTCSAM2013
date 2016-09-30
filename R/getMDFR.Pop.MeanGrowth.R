@@ -15,7 +15,7 @@
 #'
 #'@export
 #'
-getMDFR.meanGrowth<-function(obj,
+getMDFR.Pop.MeanGrowth<-function(obj,
                              verbose=FALSE){
 
     dfr<-getMDFR.XZ(obj,

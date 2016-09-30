@@ -15,7 +15,7 @@
 #'
 #'@export
 #'
-getMDFR.Recruitment<-function(obj,
+getMDFR.Pop.Recruitment<-function(obj,
                                 verbose=FALSE){
 
     lst<-convertToListOfResults(obj);
