@@ -4,15 +4,15 @@
 \alias{getResLst}
 \title{Create a tcsam2013.resLst object from a model run}
 \usage{
-getResLst(inp.dir = NULL, model = "tcsam2013alta",
-  rep = "TCSAM2013.OLDSTYLE.final.R")
+getResLst(inp.dir = NULL, rep = "TCSAM2013.OLDSTYLE.final.R",
+  model = "tcsam2013alta")
 }
 \arguments{
 \item{inp.dir}{- folder with model output}
 
-\item{model}{- name of model executable}
-
 \item{rep}{- filename to read for rep object}
+
+\item{model}{- name of model executable}
 }
 \value{
 a tcsam2013.resLst object.

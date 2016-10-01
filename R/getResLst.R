@@ -21,8 +21,8 @@
 #'@export
 #' 
 getResLst<-function(inp.dir=NULL,
-                    model='tcsam2013alta',
-                    rep="TCSAM2013.OLDSTYLE.final.R"){
+                    rep="TCSAM2013.OLDSTYLE.final.R",
+                    model='tcsam2013alta'){
     if (is.null(inp.dir)){
         inp.dir<-wtsUtilities::selectFile(ext='par',caption="Select par file");
         if (!file.exists(inp.dir)) return(NULL);
