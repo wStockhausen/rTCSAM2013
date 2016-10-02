@@ -5,7 +5,7 @@
 \title{Create a tcsam2013.resLst object from a model run}
 \usage{
 getResLst(inp.dir = NULL, rep = "TCSAM2013.OLDSTYLE.final.R",
-  model = "tcsam2013alta")
+  model = "tcsam2013alta", prsType = c("all", "active"))
 }
 \arguments{
 \item{inp.dir}{- folder with model output}
