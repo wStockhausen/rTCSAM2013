@@ -52,6 +52,7 @@ getMDFR.PopQuantities<-function(obj,
     #----------------------------------
     #population abundance (millions)
     #----------------------------------
+    dfrp<-NULL;
     if ((substr(type[1],1,4)=="N_yx")||(type[1]=="iN_xmsz")||(type[1]=="fN_xmsz")){
         dfr<-NULL;
         for (case in cases){
@@ -164,8 +165,10 @@ getMDFR.PopQuantities<-function(obj,
             dfrp<-reshape2::dcast(dfr,"case+y+x~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[4]<-'val';
         }
-        dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfrp$type<-'population';
+        if (!is.null(dfrp)){
+            dfrp<-getMDFR.CanonicalFormat(dfrp);
+            dfrp$type<-'population';
+        }
         return(dfrp);
     }
 }

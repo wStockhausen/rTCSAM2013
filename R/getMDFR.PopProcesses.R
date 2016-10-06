@@ -30,7 +30,7 @@ getMDFR.PopProcesses<-function(obj,
     #natural mortality rates
     #----------------------------------
     if (type[1]=="M_yxm"){
-        dfr<-getMDFR.Pop.NaturalMortality(obj);
+        dfr<-getMDFR.Pop.NaturalMortality(obj,verbose);
         return(dfr);
     }
     
@@ -38,49 +38,22 @@ getMDFR.PopProcesses<-function(obj,
     #pr(molt-to-maturity|z)
     #----------------------------------
     if (type[1]=="prM2M_cxz"){
-        dfr<-getMDFR.Pop.PrM2M(obj);
+        dfr<-getMDFR.Pop.PrM2M(obj,verbose);
         return(dfr);
     }
     #----------------------------------
     #mean growth increments
     #----------------------------------
     if (type[1]=="mnZAM_cxz"){
-        dfr<-getMDFR.Pop.MeanGrowth(obj);
+        dfr<-getMDFR.Pop.MeanGrowth(obj,verbose);
         return(dfr);
     }
     
-    lst<-convertToListOfResults(obj);
-    cases<-names(lst);
-    
-    tinfo<-getTimeInfo(lst);
-    styr<-tinfo$styr;
-    endyr<-tinfo$endyr;
-    years<-tinfo$years;
-    years.m1<-tinfo$years.m1;
-
     #----------------------------------
     #growth transition matrices
     #----------------------------------
     if (type[1]=="T_cxzz"){
-        rws<-list();
-        rws[["M"]]<-list(x=  'male');
-        rws[["F"]]<-list(x='female');
-        dfr<-NULL;
-        for (case in cases){
-            pc<-paste0(styr[[case]],"-",endyr[[case]]);
-            for (nm in names(rws)) {
-                rw<-rws[[nm]];
-                val=(lst[[case]]$rep)[[paste0("pop.grw.prGr_xzz.",nm)]];
-                dimnames(val)<-list(z =as.character(lst[[case]]$rep$mod.zBs),
-                                    zp=as.character(lst[[case]]$rep$mod.zBs));
-                dfrp<-reshape2::melt(val,value.name='val')
-                dfrp<-cbind(case=case,
-                            pc=pc,y=pc,x=rw$x,m='immature',s='all',dfrp);
-                dfr<-rbind(dfr,dfrp);
-            }
-        }
-        dfr<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-"population";
+        dfr<-getMDFR.Pop.GrowthMatrices(obj,verbose);
         return(dfr);
     }
     
@@ -88,16 +61,7 @@ getMDFR.PopProcesses<-function(obj,
     #recruitment size distribution
     #----------------------------------
     if (type[1]=="R_cz"){
-        dfr<-NULL;
-        for (case in cases){
-            pc<-paste0(styr[[case]],"-",endyr[[case]]);
-            dfrp<-data.frame(case=case,pc=pc,y=pc,x='all',m='immature',s='new shell',
-                             z=lst[[case]]$rep$mod.zBs,
-                             val=(lst[[case]]$rep)[["pop.prR_z"]]);
-            dfr<-rbind(dfr,dfrp);
-        }
-        dfr<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-"population";
+        dfr<-getMDFR.Pop.RecSizeDistribution(obj,verbose);
         return(dfr);
     }
 

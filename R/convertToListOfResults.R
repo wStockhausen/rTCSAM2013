@@ -49,7 +49,7 @@ convertToListOfResults<-function(obj=NULL,
             #convert to list with a tcsam2013.resLst object
             lst<-list(tcsam2013=obj);
             cases<-names(lst);
-        } else if (class(obj)=='list'){
+        } else if (class(obj)[1]=='list'){
             if (inherits(obj[[1]],"tcsam2013.rep")){
                 #obj is a list of tcsam2013.rep objects
                 #convert to a list of tcsam2013.resLst objects
@@ -73,9 +73,11 @@ convertToListOfResults<-function(obj=NULL,
                 #good to go
                 lst<-obj;
             }  else {
-                cat("In convertToListOfResults.\n");
-                cat("class(obj[[1]]) is invalid: '",class(obj[[1]]),"'.\n",sep='');
-                cat("Returning NULL.\n");
+                cat("---------------------------------------------------------\n");
+                cat("--rTCSAM2013::convertToListOfResults:\n");
+                cat("--class(obj[[1]]) is invalid: '",class(obj[[1]])[1],"'.\n",sep='');
+                cat("--Returning NULL.\n");
+                cat("---------------------------------------------------------\n");
                 return(NULL);
             }
         } else {

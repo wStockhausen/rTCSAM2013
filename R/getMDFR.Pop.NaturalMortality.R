@@ -16,7 +16,7 @@
 #'@export
 #'
 getMDFR.Pop.NaturalMortality<-function(obj,
-                                   verbose=FALSE){
+                                       verbose=FALSE){
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
@@ -24,7 +24,6 @@ getMDFR.Pop.NaturalMortality<-function(obj,
     tinfo<-getTimeInfo(lst);
     years<-tinfo$years.m1;
 
-    
     #----------------------------------
     #Natural Mortality
     #----------------------------------
