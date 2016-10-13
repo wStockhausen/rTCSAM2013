@@ -62,7 +62,7 @@ getMDFR.Pop.NaturalMortality<-function(obj,
             }
         }
     }#--case
-    dfr<-getMDFR.CanonicalFormat(dfr);
-    dfr$type<-"population";
+    dfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+    dfr$process<-"population";
     return(dfr);
 }

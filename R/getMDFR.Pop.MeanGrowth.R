@@ -24,8 +24,8 @@ getMDFR.Pop.MeanGrowth<-function(obj,
                     std.m="sdrMnGrw_M",
                     std.f="sdrMnGrw_F",
                     verbose=verbose);
-    dfr<-getMDFR.CanonicalFormat(dfr);
-    dfr$type<-"population";
+    dfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+    dfr$process<-"population";
     dfr$m<-'immature';
     return(dfr);
 }

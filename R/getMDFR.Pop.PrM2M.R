@@ -24,8 +24,8 @@ getMDFR.Pop.PrM2M<-function(obj,
                     std.m="sdrPrM2M_M",
                     std.f="sdrPrM2M_F",
                     verbose=verbose);
-    dfrp<-getMDFR.CanonicalFormat(dfr);
-    dfrp$type<-'population';
+    dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+    dfrp$process<-'population';
     dfrp$m<-'immature';
     return(dfrp);
 }

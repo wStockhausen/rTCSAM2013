@@ -73,7 +73,7 @@ getMDFR.Pop.MatureBiomass<-function(obj,
             dfr<-rbind(dfr,dfrp);
         }
     }#--case
-    dfr<-getMDFR.CanonicalFormat(dfr);
-    dfr$type<-"population";
+    dfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+    dfr$process<-"population";
     return(dfr);
 }

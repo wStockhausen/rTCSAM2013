@@ -12,12 +12,18 @@
 #'\itemize{
 #'  \item {'MB_yx' - mature biomass at survey time, by sex (1000's t)}
 #'  \item {'B_yx' - total biomass at survey time, by sex (1000's t)}
-#'  \item {'N_yxms'  - annual abundance by x,m,s (millions)}
-#'  \item {'N_yxm'   - annual abundance by x,m (millions)}
-#'  \item {'N_yx'    - annual abundance by x (millions)}
-#'  \item {'lglN_y'  - legal male annual abundance (millions)}
-#'  \item {'lglB_y'  - legal male annual abundance (millions)}
-#'  \item {'NatZ_yxz'   - annual abundance-at-size by x (millions)}
+#'  \item {'N_yxmsz'  - annual survey abundance-at-size by x,m,s (millions)}
+#'  \item {'N_yxmz'  - annual survey abundance-at-size by x,m (millions)}
+#'  \item {'N_yxz'  - annual survey abundance-at-size by x (millions)}
+#'  \item {'N_yxms'  - annual survey abundance by x,m,s (millions)}
+#'  \item {'N_yxm'   - annual survey abundance by x,m (millions)}
+#'  \item {'N_yx'    - annual survey abundance by x (millions)}
+#'  \item {'B_yxmsz'  - annual survey biomass-at-size by x,m,s (1000's t)}
+#'  \item {'B_yxms'  - annual survey biomass by x,m,s (1000's t)}
+#'  \item {'B_yxm'   - annual survey biomass by x,m (1000's t)}
+#'  \item {'B_yx'    - annual survey biomass by x (1000's t)}
+#'  \item {'lglN_y'  - legal male annual survey abundance (millions)}
+#'  \item {'lglB_y'  - legal male annual survey biomass (1000's t)}
 #'  \item {'prNatZ_yxmsz' - annual proportions-at-size by x,m,s}
 #'  \item {'prNatZ_yxmz'  - annual proportions-at-size by x,m}
 #'  \item {'prNatZ_yxz'   - annual proportions-at-size by x}
@@ -37,10 +43,12 @@
 #'@export
 #'
 getMDFR.SurveyQuantities<-function(obj,
-                                   type=c("MB_yx","B_yx",
+                                   type=c("MB_yx",
                                           "lglN_y","lglB_y",
+                                          "N_yxmsz","N_yxmz","N_yxz",
                                           "N_yxms","N_yxm","N_yx",
-                                          "NatZ_yxz",
+                                          "B_yxmsz","B_yxmz","B_yxz",
+                                          "B_yxms","B_yxm","B_yx",
                                           "prNatZ_yxmsz","prNatZ_yxmz","prNatZ_yxz",
                                           "PRs_yxmsz","PRs_yxmz","PRs_yxz",
                                           "mnPrNatZ_xmz","mnPrNatZ_xz",
@@ -96,128 +104,6 @@ getMDFR.SurveyQuantities<-function(obj,
     }    
 
     #----------------------------------
-    # observed and predicted total biomass from survey (1000's t)
-    #----------------------------------
-    if (type[1]=="B_yx"){
-        dfr<-NULL;
-        for (case in cases){
-            idx<-years[[case]] %in% obsyears[[case]];
-            #observed
-            obs <-(lst[[case]]$rep)[["srv.obs.bio.F"]][idx];
-            dfrof<-data.frame(case=case,category='observed',
-                              y=years[[case]][idx],x='female',m='all',s='all',val=obs);
-            obs <-(lst[[case]]$rep)[["srv.obs.bio.M"]][idx];
-            dfrom<-data.frame(case=case,category='observed',
-                              y=years[[case]][idx],x='male',m='all',s='all',val=obs);
-            #predicted
-            mod <-(lst[[case]]$rep)[["srv.mod.bio.F"]][idx];
-            dfrmf<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='female',m='all',s='all',val=mod);
-            mod <-(lst[[case]]$rep)[["srv.mod.bio.M"]][idx];
-            dfrmm<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='male',m='all',s='all',val=mod);
-            dfr<-rbind(dfr,dfrof,dfrom,dfrmf,dfrmm);
-        }
-        dfr<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-'survey';
-        dfr$fleet<-fleet;
-        return(dfr);
-    }    
-
-    #----------------------------------
-    # observed and predicted abundance from survey (millions)
-    #----------------------------------
-    if (substr(type[1],1,2)=="N_"){
-        dfr<-NULL;
-        for (case in cases){
-            #observed
-            idx<-years[[case]] %in% obsyears[[case]];
-            #--females
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='female',m='immature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.INF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='female',m='immature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.IOF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='female',m='mature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.MNF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='female',m='mature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.MOF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            #--males
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='male',m='immature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.INM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='male',m='immature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.IOM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='male',m='mature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.MNM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='observed',
-                             y=years[[case]][idx],x='male',m='mature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.obs.num.MOM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            #predicted
-            #--females
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='female',m='immature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.INF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='female',m='immature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.IOF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='female',m='mature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.MNF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='female',m='mature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.MOF"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            #--males
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='male',m='immature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.INM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='male',m='immature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.IOM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='male',m='mature',s='new shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.MNM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-            dfrp<-data.frame(case=case,category='predicted',
-                             y=years[[case]][idx],x='male',m='mature',s='old shell',
-                             val=(lst[[case]]$rep)[["srv.mod.num.MOM"]][idx]);
-            dfr<-rbind(dfr,dfrp);
-        }##-cases
-        if (type[1]=="N_yxms") dfrp<-dfr;
-        if (type[1]=="N_yxm") {
-            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+m~.",fun.aggregate=sum,value.var='val');
-            names(dfrp)[6]<-'val';
-        }
-        if (type[1]=="N_yx") {
-            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x~.",fun.aggregate=sum,value.var='val');
-            names(dfrp)[5]<-'val';
-        }
-        dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfr$type<-'survey';
-        dfrp$fleet<-fleet;
-        return(dfrp);
-    }    
-
-    #----------------------------------
     #legal male abundance at survey time (millions)
     #----------------------------------
     if (type[1]=="lglN_y"){
@@ -264,44 +150,132 @@ getMDFR.SurveyQuantities<-function(obj,
     }
     
     #----------------------------------
-    # observed and predicted abundance-at-size from survey (millions)
+    # observed and predicted abundance from survey
     #----------------------------------
-    if (substr(type[1],1,5)=="NatZ_"){
+    if (substr(type[1],1,3)=="N_y"){
+        rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="srv.obs.NatZ.INF",stringsAsFactors=FALSE),
+                         list(x='female',m='immature',s='old shell',var="srv.obs.NatZ.IOF"),
+                         list(x='female',m=  'mature',s='new shell',var="srv.obs.NatZ.MNF"),
+                         list(x='female',m=  'mature',s='old shell',var="srv.obs.NatZ.MOF"),
+                         list(x=  'male',m='immature',s='new shell',var="srv.obs.NatZ.INM"),
+                         list(x=  'male',m='immature',s='old shell',var="srv.obs.NatZ.IOM"),
+                         list(x=  'male',m=  'mature',s='new shell',var="srv.obs.NatZ.MNM"),
+                         list(x=  'male',m=  'mature',s='old shell',var="srv.obs.NatZ.MOM"));
         dfr<-NULL;
         #observed
-        rws<-list();
-        rws[["srv.obs.NatZ.F"]]<-list(x='female',m='all',s='all')
-        rws[["srv.obs.NatZ.M"]]<-list(x=  'male',m='all',s='all')
         for (case in cases){
-            for (nm in names(rws)){
-                rw<-rws[[nm]];
-                vals_yz<-(lst[[case]]$rep)[[nm]];
+            for (r in 1:nrow(rws)){
+                vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
                 dimnames(vals_yz)<-list(y=as.character(obsyears[[case]]),
                                         z=as.character(lst[[case]]$rep$mod.zBs));
                 dfrp<-reshape2::melt(vals_yz,value.name='val');
                 dfrp<-cbind(case=case,category='observed',
-                            x=rw$x,m=rw$m,s=rw$s,dfrp);
+                            x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
                 dfr<-rbind(dfr,dfrp[,c("case","category","y","x","m","s","z","val")]);
             }
-        }
+        }##-cases
         #predicted
-        rws<-list();
-        rws[["srv.mod.NatZ.F"]]<-list(x='female',m='all',s='all')
-        rws[["srv.mod.NatZ.M"]]<-list(x=  'male',m='all',s='all')
+        rws$var<-gsub(".obs.",".mod.",rws$var,fixed=TRUE);#switch to ".mod."
         for (case in cases){
-            idx<-years[[case]] %in% obsyears[[case]];
-            for (nm in names(rws)){
-                rw<-rws[[nm]];
-                vals_yz<-(lst[[case]]$rep)[[nm]];
+            for (r in 1:nrow(rws)){
+                vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
+                #vals_yz<-vals_yz[idx,];
                 dimnames(vals_yz)<-list(y=as.character(obsyears[[case]]),
                                         z=as.character(lst[[case]]$rep$mod.zBs));
                 dfrp<-reshape2::melt(vals_yz,value.name='val');
                 dfrp<-cbind(case=case,category='predicted',
-                            x=rw$x,m=rw$m,s=rw$s,dfrp);
+                            x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
                 dfr<-rbind(dfr,dfrp[,c("case","category","y","x","m","s","z","val")]);
             }
         }##-cases
-        dfrp<-getMDFR.CanonicalFormat(dfr);
+        if (type[1]=="N_yxmsz") dfrp<-dfr;
+        if (type[1]=="N_yxmz") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+m+z~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[7]<-'val';
+        }
+        if (type[1]=="N_yxz") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+z~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[6]<-'val';
+        }
+        if (type[1]=="N_yxms") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+m+s~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[7]<-'val';
+        }
+        if (type[1]=="N_yxm") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+m~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[6]<-'val';
+        }
+        if (type[1]=="N_yx") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[5]<-'val';
+        }
+        dfrp<-getMDFR.CanonicalFormat(dfrp);
+        dfr$type<-'survey';
+        dfrp$fleet<-fleet;
+        return(dfrp);
+    }    
+
+    #----------------------------------
+    # observed and predicted abundance from survey
+    #----------------------------------
+    if (substr(type[1],1,3)=="B_y"){
+        rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="srv.obs.BatZ.INF",stringsAsFactors=FALSE),
+                         list(x='female',m='immature',s='old shell',var="srv.obs.BatZ.IOF"),
+                         list(x='female',m=  'mature',s='new shell',var="srv.obs.BatZ.MNF"),
+                         list(x='female',m=  'mature',s='old shell',var="srv.obs.BatZ.MOF"),
+                         list(x=  'male',m='immature',s='new shell',var="srv.obs.BatZ.INM"),
+                         list(x=  'male',m='immature',s='old shell',var="srv.obs.BatZ.IOM"),
+                         list(x=  'male',m=  'mature',s='new shell',var="srv.obs.BatZ.MNM"),
+                         list(x=  'male',m=  'mature',s='old shell',var="srv.obs.BatZ.MOM"));
+        dfr<-NULL;
+        #observed
+        for (case in cases){
+            for (r in 1:nrow(rws)){
+                vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
+                dimnames(vals_yz)<-list(y=as.character(obsyears[[case]]),
+                                        z=as.character(lst[[case]]$rep$mod.zBs));
+                dfrp<-reshape2::melt(vals_yz,value.name='val');
+                dfrp<-cbind(case=case,category='observed',
+                            x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
+                dfr<-rbind(dfr,dfrp[,c("case","category","y","x","m","s","z","val")]);
+            }
+        }##-cases
+        #predicted
+        rws$var<-gsub(".obs.",".mod.",rws$var,fixed=TRUE);#switch to ".mod."
+        for (case in cases){
+            for (r in 1:nrow(rws)){
+                vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
+                #vals_yz<-vals_yz[idx,];
+                dimnames(vals_yz)<-list(y=as.character(obsyears[[case]]),
+                                        z=as.character(lst[[case]]$rep$mod.zBs));
+                dfrp<-reshape2::melt(vals_yz,value.name='val');
+                dfrp<-cbind(case=case,category='predicted',
+                            x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
+                dfr<-rbind(dfr,dfrp[,c("case","category","y","x","m","s","z","val")]);
+            }
+        }##-cases
+        if (type[1]=="B_yxmsz") dfrp<-dfr;
+        if (type[1]=="B_yxmz") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+m+z~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[7]<-'val';
+        }
+        if (type[1]=="B_yxz") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+z~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[6]<-'val';
+        }
+        if (type[1]=="B_yxms") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+m+s~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[7]<-'val';
+        }
+        if (type[1]=="B_yxm") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+m~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[6]<-'val';
+        }
+        if (type[1]=="B_yx") {
+            dfrp<-reshape2::dcast(dfr,formula="case+category+y+x~.",fun.aggregate=sum,value.var='val');
+            names(dfrp)[5]<-'val';
+        }
+        dfrp<-getMDFR.CanonicalFormat(dfrp);
         dfr$type<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);

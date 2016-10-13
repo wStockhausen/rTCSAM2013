@@ -4,11 +4,12 @@
 \alias{getMDFR.SurveyQuantities}
 \title{Get estimated/predicted survey-related quantities from several model runs}
 \usage{
-getMDFR.SurveyQuantities(obj, type = c("MB_yx", "B_yx", "lglN_y", "lglB_y",
-  "N_yxms", "N_yxm", "N_yx", "NatZ_yxz", "prNatZ_yxmsz", "prNatZ_yxmz",
-  "prNatZ_yxz", "PRs_yxmsz", "PRs_yxmz", "PRs_yxz", "mnPrNatZ_xmz",
-  "mnPrNatZ_xz", "zscrs_yx", "effSS_y"), pdfType = c("lognormal", "normal"),
-  ci = 0.8, verbose = FALSE)
+getMDFR.SurveyQuantities(obj, type = c("MB_yx", "lglN_y", "lglB_y", "N_yxmsz",
+  "N_yxmz", "N_yxz", "N_yxms", "N_yxm", "N_yx", "B_yxmsz", "B_yxmz", "B_yxz",
+  "B_yxms", "B_yxm", "B_yx", "prNatZ_yxmsz", "prNatZ_yxmz", "prNatZ_yxz",
+  "PRs_yxmsz", "PRs_yxmz", "PRs_yxz", "mnPrNatZ_xmz", "mnPrNatZ_xz", "zscrs_yx",
+  "effSS_y"), pdfType = c("lognormal", "normal"), ci = 0.8,
+  verbose = FALSE)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -29,12 +30,18 @@ Potential values for 'type' are:
 \itemize{
  \item {'MB_yx' - mature biomass at survey time, by sex (1000's t)}
  \item {'B_yx' - total biomass at survey time, by sex (1000's t)}
- \item {'N_yxms'  - annual abundance by x,m,s (millions)}
- \item {'N_yxm'   - annual abundance by x,m (millions)}
- \item {'N_yx'    - annual abundance by x (millions)}
- \item {'lglN_y'  - legal male annual abundance (millions)}
- \item {'lglB_y'  - legal male annual abundance (millions)}
- \item {'NatZ_yxz'   - annual abundance-at-size by x (millions)}
+ \item {'N_yxmsz'  - annual survey abundance-at-size by x,m,s (millions)}
+ \item {'N_yxmz'  - annual survey abundance-at-size by x,m (millions)}
+ \item {'N_yxz'  - annual survey abundance-at-size by x (millions)}
+ \item {'N_yxms'  - annual survey abundance by x,m,s (millions)}
+ \item {'N_yxm'   - annual survey abundance by x,m (millions)}
+ \item {'N_yx'    - annual survey abundance by x (millions)}
+ \item {'B_yxmsz'  - annual survey biomass-at-size by x,m,s (1000's t)}
+ \item {'B_yxms'  - annual survey biomass by x,m,s (1000's t)}
+ \item {'B_yxm'   - annual survey biomass by x,m (1000's t)}
+ \item {'B_yx'    - annual survey biomass by x (1000's t)}
+ \item {'lglN_y'  - legal male annual survey abundance (millions)}
+ \item {'lglB_y'  - legal male annual survey biomass (1000's t)}
  \item {'prNatZ_yxmsz' - annual proportions-at-size by x,m,s}
  \item {'prNatZ_yxmz'  - annual proportions-at-size by x,m}
  \item {'prNatZ_yxz'   - annual proportions-at-size by x}

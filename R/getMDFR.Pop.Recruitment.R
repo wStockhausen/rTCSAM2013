@@ -53,8 +53,8 @@ getMDFR.Pop.Recruitment<-function(obj,
             dfr<-rbind(dfr,dfrp);
         }
     }#--case
-    dfrp<-getMDFR.CanonicalFormat(dfr);
-    dfrp$type<-'population';
+    dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+    dfrp$process<-'population';
     dfrp$m<-'immature';
     dfrp$s<-'new shell';
     return(dfrp);

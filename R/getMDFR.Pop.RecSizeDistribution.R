@@ -38,7 +38,7 @@ getMDFR.Pop.RecSizeDistribution<-function(obj,
                          val=(lst[[case]]$rep)[["pop.prR_z"]]);
         dfr<-rbind(dfr,dfrp);
     }
-    mdfr<-getMDFR.CanonicalFormat(dfr);
+    mdfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
     mdfr$type<-"population";
     
     

@@ -166,8 +166,8 @@ getMDFR.PopQuantities<-function(obj,
             names(dfrp)[4]<-'val';
         }
         if (!is.null(dfrp)){
-            dfrp<-getMDFR.CanonicalFormat(dfrp);
-            dfrp$type<-'population';
+            dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfrp);
+            dfrp$process<-'population';
         }
         return(dfrp);
     }
