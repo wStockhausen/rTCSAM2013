@@ -22,9 +22,9 @@
 #'
 #'@export
 #'
-getMDFR.PopProcesses<-function(obj,
-                               type=c('M_yxm',"R_cz",'prM2M_cxz','mnZAM_cxz','T_cxzz'),
-                               verbose=FALSE){
+getMDFR.Pop.Processes<-function(obj,
+                                type=c('M_yxm',"R_cz",'prM2M_cxz','mnZAM_cxz','T_cxzz'),
+                                verbose=FALSE){
 
     #----------------------------------
     #natural mortality rates

@@ -61,7 +61,7 @@ getMDFR.Surveys.Biomass<-function(obj,category='index',cast="y+x",fleet='NMFS tr
             }
         }
     }##-cases
-    mdfr<-getMDFR.CanonicalFormat(dfr);
+    mdfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
     mdfr$process<-'surveys';
     mdfr$fleet<-fleet;
     mdfr$category<-category;

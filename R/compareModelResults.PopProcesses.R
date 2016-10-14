@@ -69,7 +69,7 @@ compareModelResults.PopProcesses<-function(obj,
     #-------------------------------------------#
     #plot recruitment size distribution
     #-------------------------------------------#
-    dfr<-getMDFR.PopProcesses(obj,type="R_cz");
+    dfr<-getMDFR.Pop.Processes(obj,type="R_cz");
     dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='z',y='val',colour='case'));
     p <- p + geom_line();

@@ -88,7 +88,7 @@ compareModelResults.PopQuantities<-function(obj,
     #-------------------------------------------#
     #plot annual abundance by x
     #-------------------------------------------#
-    dfr<-getMDFR.PopQuantities(lst,type="N_yx");
+    dfr<-getMDFR.Pop.Quantities(lst,type="N_yx");
     dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
@@ -108,7 +108,7 @@ compareModelResults.PopQuantities<-function(obj,
     #-------------------------------------------#
     #plot annual abundance by xm
     #-------------------------------------------#
-    dfr<-getMDFR.PopQuantities(lst,type="N_yxm");
+    dfr<-getMDFR.Pop.Quantities(lst,type="N_yxm");
     dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
@@ -128,7 +128,7 @@ compareModelResults.PopQuantities<-function(obj,
     #-------------------------------------------#
     #plot annual abundance by xms
     #-------------------------------------------#
-    dfr<-getMDFR.PopQuantities(lst,type="N_yxms");
+    dfr<-getMDFR.Pop.Quantities(lst,type="N_yxms");
     dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
@@ -148,7 +148,7 @@ compareModelResults.PopQuantities<-function(obj,
     #-------------------------------------------#
     #plot final abundance by xmz
     #-------------------------------------------#
-    dfr<-getMDFR.PopQuantities(lst,type="fN_xmsz");
+    dfr<-getMDFR.Pop.Quantities(lst,type="fN_xmsz");
     dfr<-reshape2::dcast(dfr,"case+x+m+z~.",fun.aggregate=sum,value.var='val');
     dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='z',y='.',colour='case'));
