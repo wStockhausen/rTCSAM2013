@@ -17,6 +17,7 @@
 #'
 getMDFR.Pop.PrM2M<-function(obj,
                        verbose=FALSE){
+    options(stringsAsFactors=FALSE);
 
     dfr<-getMDFR.XZ(obj,
                     rep.m="pop.prM2M.M",

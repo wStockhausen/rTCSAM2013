@@ -20,6 +20,7 @@
 #'@export
 #'
 getMDFR.XZ<-function(obj,rep.m=NULL,rep.f=NULL,std.m=NULL,std.f=NULL,verbose=FALSE){
+    options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);

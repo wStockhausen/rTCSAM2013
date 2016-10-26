@@ -12,6 +12,7 @@
 #'@export
 #' 
 getPar<-function(inp=NULL){
+    options(stringsAsFactors=FALSE);
     if (is.null(inp)){
         inp<-wtsUtilities::selectFile(ext='par',caption="Select par file");
     }

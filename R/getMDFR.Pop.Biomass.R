@@ -16,6 +16,7 @@
 getMDFR.Pop.Biomass<-function(obj,cast="y+x",verbose=FALSE){
 
     if (verbose) cat("--rTCSAM2013::Getting population biomass time series.\n");
+    options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);

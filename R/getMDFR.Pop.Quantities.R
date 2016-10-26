@@ -39,6 +39,7 @@ getMDFR.Pop.Quantities<-function(obj,
                                         "B_yxmsz","B_yxmz","B_yxms","B_yxm","B_yx",
                                         "N_yxmsz","N_yxmz","N_yxms","N_yxm","N_yx"),
                                  verbose=FALSE){
+    options(stringsAsFactors=FALSE);
 
     if (type[1]=="MB_yx"){
         dfr<-getMDFR.Pop.MatureBiomass(obj);

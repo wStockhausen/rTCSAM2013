@@ -12,6 +12,7 @@
 #'@export
 #' 
 getStd<-function(inp=NULL){
+    options(stringsAsFactors=FALSE);
     if (is.null(inp)){
         inp<-wtsUtilities::selectFile(ext='std',caption="Select std file");
     }

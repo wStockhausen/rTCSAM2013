@@ -26,6 +26,7 @@ getMDFR.Pop.Processes<-function(obj,
                                 type=c('M_yxm',"R_cz",'prM2M_cxz','mnZAM_cxz','T_cxzz'),
                                 verbose=FALSE){
 
+    options(stringsAsFactors=FALSE);
     #----------------------------------
     #natural mortality rates
     #----------------------------------

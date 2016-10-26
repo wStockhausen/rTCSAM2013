@@ -15,6 +15,7 @@
 #'
 getMDFR.Pop.GrowthMatrices<-function(obj,
                                      verbose=FALSE){
+    options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);

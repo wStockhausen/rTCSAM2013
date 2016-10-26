@@ -6,13 +6,18 @@
 \usage{
 getMDFR.FisheryQuantities(obj, type = c("bio.retm", "bio.dscm", "bio.totm",
   "prNatZ.ret", "prNatZ.tot", "PRs.ret", "PRs.tot", "mnPrNatZ.ret",
-  "mnPrNatZ.tot", "selfcns", "zscores", "effSS.ret", "effSS.tot", "max rates",
-  "mean rates"), verbose = FALSE)
+  "mnPrNatZ.tot", "selfcns", "zscores.tot", "zscores.ret", "effSS.ret",
+  "effSS.tot", "max rates", "mean rates"), ci = 0.8, pdfType = c("norm2",
+  "normal", "lognormal"), verbose = FALSE)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
 \item{type}{- fishery-related quantity to retrieve}
+
+\item{ci}{- confidence interval for error bars on observations}
+
+\item{pdfType}{- type of error distribution for observations}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }
@@ -36,7 +41,8 @@ Potential values for 'type' are:
  \item {'mnPrNatZ.ret' - mean proportions-at-size for retained catch data}
  \item {'mnPrNatZ.tot' - mean proportions-at-size for total catch data}
  \item {'selfcns' - fishery selectivity and retention functions, by time period and sex}
- \item {'zscores' - annual z-scores for fits to catch biomass}
+ \item {'zscores.tot' - annual z-scores for fits to total catch biomass}
+ \item {'zscores.ret' - annual z-scores for fits to retained catch biomass}
  \item {'effSS.tot' - effective (and input) sample sizes for total catch size comps}
  \item {'effSS.ret' - effective (and input) sample sizes for retained catch size comps}
  \item {'max rates' - max fishing mortality, retained mortality, and capture rates}

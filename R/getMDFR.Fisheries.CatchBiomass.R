@@ -21,6 +21,7 @@ getMDFR.Fisheries.CatchBiomass<-function(obj,
                                            fleets=c('TCF','SCF','RKF','GTF'),
                                            verbose=FALSE){
     if (verbose) cat("--rTCSAM2013::Getting fishery catch biomass time series.\n");
+    options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
@@ -33,7 +34,7 @@ getMDFR.Fisheries.CatchBiomass<-function(obj,
     
     category<-category[1];
 
-    rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="fsh.mod.&&cat.BatZ.&&flt.INF",stringsAsFactors=FALSE),
+    rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="fsh.mod.&&cat.BatZ.&&flt.INF"),
                      list(x='female',m='immature',s='old shell',var="fsh.mod.&&cat.BatZ.&&flt.IOF"),
                      list(x='female',m=  'mature',s='new shell',var="fsh.mod.&&cat.BatZ.&&flt.MNF"),
                      list(x='female',m=  'mature',s='old shell',var="fsh.mod.&&cat.BatZ.&&flt.MOF"),
@@ -84,7 +85,7 @@ getMDFR.Fisheries.CatchBiomass<-function(obj,
     }#--flt
     
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
-    mdfr$process<-'fisheries';
+    mdfr$process<-'fishery';
     mdfr$category<-category;
     mdfr$type<-"predicted";
     mdfr<-removeImmOS(mdfr);

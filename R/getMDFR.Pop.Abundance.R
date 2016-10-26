@@ -15,7 +15,8 @@
 #'
 getMDFR.Pop.Abundance<-function(obj,cast="y+x",verbose=FALSE){
 
-    if (verbose) cat("--rTCSAM2013::Getting population abundance time series.\n");
+    if (verbose) cat("--rTCSAM2013::getMDFR.Pop.Abundance().\n");
+    options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);

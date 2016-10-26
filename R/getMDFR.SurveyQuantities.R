@@ -6,6 +6,8 @@
 #'
 #'@param obj - object that can be converted into a list of tcsam2013.resLst objects
 #'@param type - survey-related quantity to retrieve
+#'@param pdfType - type of error distribution for observations
+#'@param ci - confidence interval for error bars on observations
 #'@param verbose - flag (T/F) to print debug info
 #'
 #'@details Potential values for 'type' are:
@@ -18,7 +20,7 @@
 #'  \item {'N_yxms'  - annual survey abundance by x,m,s (millions)}
 #'  \item {'N_yxm'   - annual survey abundance by x,m (millions)}
 #'  \item {'N_yx'    - annual survey abundance by x (millions)}
-#'  \item {'B_yxmsz'  - annual survey biomass-at-size by x,m,s (1000's t)}
+#'  \item {'B_yxmsz'  - annual survey biomass-at-size by x,m,s,z (1000's t)}
 #'  \item {'B_yxms'  - annual survey biomass by x,m,s (1000's t)}
 #'  \item {'B_yxm'   - annual survey biomass by x,m (1000's t)}
 #'  \item {'B_yx'    - annual survey biomass by x (1000's t)}
@@ -33,7 +35,7 @@
 #'  \item {'mnPrNatZ_xmz' - mean proportions-at-size by x,m}
 #'  \item {'mnPrNatZ_xz'  - mean proportions-at-size by x}
 #'  \item {'selSrv_cxz' - survey selectivity, by time period and sex}
-#'  \item {'zscrs_yx'  - annual z-scores for fit to mature survey biomass, by sex}
+#'  \item {'zscores'  - annual z-scores for fit to mature survey biomass, by sex}
 #'  \item {'effSS_y' - effective (and input) sample sizes for multinomial fits}
 #'}
 #'Requires sqldf package.
@@ -52,11 +54,13 @@ getMDFR.SurveyQuantities<-function(obj,
                                           "prNatZ_yxmsz","prNatZ_yxmz","prNatZ_yxz",
                                           "PRs_yxmsz","PRs_yxmz","PRs_yxz",
                                           "mnPrNatZ_xmz","mnPrNatZ_xz",
-                                          "zscrs_yx","effSS_y"),
+                                          "zscores","effSS_y"),
                                    pdfType=c('lognormal','normal'),
                                    ci=0.80,
                                    verbose=FALSE){
 
+    options(stringsAsFactors=FALSE);
+    
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
 
@@ -66,7 +70,7 @@ getMDFR.SurveyQuantities<-function(obj,
     years.m1 <-tinfo$years.m1;
     obsyears <-tinfo$obsyears;
 
-    fleet<-'NMFS';
+    fleet<-'NMFS trawl survey';
     
     #----------------------------------
     # observed and predicted mature biomass from survey (1000's t)
@@ -79,27 +83,28 @@ getMDFR.SurveyQuantities<-function(obj,
             obs <-(lst[[case]]$rep)[["srv.obs.bio.MF"]][idx];
             cv  <-(lst[[case]]$rep)[["srv.obs.bio.cv.MF"]];
             cis<-calcCIs(obs,cvs=cv,pdfType=pdfType[1],ci=ci);
-            dfrof<-data.frame(case=case,category='observed',
+            dfrof<-data.frame(case=case,type='observed',
                               y=years[[case]][idx],x='female',m='mature',s='all',
                               val=obs,lci=cis$lci,uci=cis$uci);
             obs <-(lst[[case]]$rep)[["srv.obs.bio.MM"]][idx];
             cv  <-(lst[[case]]$rep)[["srv.obs.bio.cv.MM"]];
             cis<-calcCIs(obs,cvs=cv,pdfType=pdfType[1],ci=ci);
-            dfrom<-data.frame(case=case,category='observed',
+            dfrom<-data.frame(case=case,type='observed',
                               y=years[[case]][idx],x='male',m='mature',s='all',
                               val=obs,lci=cis$lci,uci=cis$uci);
             #predicted
             mod <-(lst[[case]]$rep)[["srv.mod.bio.MF"]][idx];
-            dfrmf<-data.frame(case=case,category='predicted',
+            dfrmf<-data.frame(case=case,type='predicted',
                               y=years[[case]][idx],x='female',m='mature',s='all',val=mod,lci=NA,uci=NA);
             mod <-(lst[[case]]$rep)[["srv.mod.bio.MM"]][idx];
-            dfrmm<-data.frame(case=case,category='predicted',
+            dfrmm<-data.frame(case=case,type='predicted',
                               y=years[[case]][idx],x='male',m='mature',s='all',val=mod,lci=NA,uci=NA);
             dfr<-rbind(dfr,dfrof,dfrom,dfrmf,dfrmm);
         }
-        dfr<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-'survey';
+        dfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfr$process<-'survey';
         dfr$fleet<-fleet;
+        dfr$category<-'index';
         return(dfr);
     }    
 
@@ -120,8 +125,8 @@ getMDFR.SurveyQuantities<-function(obj,
                              val=(lst[[case]]$rep)[["srv.mod.num.LMs"]][idx]);
             dfr<-rbind(dfr,dfro,dfrm);
         }
-        dfrp<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -143,8 +148,8 @@ getMDFR.SurveyQuantities<-function(obj,
                              val=(lst[[case]]$rep)[["srv.mod.bio.LMs"]][idx]);
             dfr<-rbind(dfr,dfro,dfrm);
         }
-        dfrp<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -209,8 +214,8 @@ getMDFR.SurveyQuantities<-function(obj,
             dfrp<-reshape2::dcast(dfr,formula="case+category+y+x~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[5]<-'val';
         }
-        dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfrp);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    
@@ -275,8 +280,8 @@ getMDFR.SurveyQuantities<-function(obj,
             dfrp<-reshape2::dcast(dfr,formula="case+category+y+x~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[5]<-'val';
         }
-        dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfrp);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    
@@ -329,8 +334,8 @@ getMDFR.SurveyQuantities<-function(obj,
             dfrp<-reshape2::dcast(dfr,formula="case+category+y+x+z~.",fun.aggregate=sum,value.var='val');
             names(dfrp)[6]<-'val';
         }
-        dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfrp);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    
@@ -359,8 +364,8 @@ getMDFR.SurveyQuantities<-function(obj,
         }
         cis<-calcCIs(dfrp1$val,sdvs=dfrp2$stdv/sqrt(dfrp3$N),pdfType='normal',ci=0.80)
         dfrp<-cbind(dfrp1,lci=cis$lci,uci=cis$uci)
-        dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfrp);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -414,8 +419,8 @@ getMDFR.SurveyQuantities<-function(obj,
                     s.category="input";'
             dfrp<-sqldf::sqldf(qry);
         }
-        dfrp<-getMDFR.CanonicalFormat(dfrp);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfrp);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }
@@ -443,8 +448,8 @@ getMDFR.SurveyQuantities<-function(obj,
                              x='male',dfrp);
             dfr<-rbind(dfr,dfrp[,c("case","pc","x","z","val")]);
         }
-        dfrp<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         dfrp$category<-'selectivity';
         return(dfrp);
@@ -453,23 +458,27 @@ getMDFR.SurveyQuantities<-function(obj,
     #----------------------------------
     # z-scores for mature survey biomass
     #----------------------------------
-    if (type[1]=="zscrs_yx"){
+    if (type[1]=="zscores"){
+        if (verbose) cat('--Getting z-scores for mature survey biomass\n')
         dfr<-NULL;
         for (case in cases){
             idx<-years[[case]] %in% obsyears[[case]];#select only years with observations
             #females
             val <-(lst[[case]]$rep)[["srv.bio.zscr.F"]][idx];
-            dfrf<-data.frame(case=case,category='z-score',
-                              y=obsyears[[case]],x='female',m='all',s='all',val=val);
+            dfrf<-data.frame(case=case,
+                              y=obsyears[[case]],x='female',m='mature',val=val,stringsAsFactors=FALSE);
             #males
             val <-(lst[[case]]$rep)[["srv.bio.zscr.M"]][idx];
-            dfrm<-data.frame(case=case,category='z-score',
-                              y=obsyears[[case]],x='male',m='all',s='all',val=val);
+            dfrm<-data.frame(case=case,
+                              y=obsyears[[case]],x='male',m='mature',val=val,stringsAsFactors=FALSE);
             dfr<-rbind(dfr,dfrf,dfrm);
         }
-        dfrp<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
+        dfrp$category<-'index';
+        dfrp$type<-'z-score';
+        
         return(dfrp);
     }    
 
@@ -490,8 +499,8 @@ getMDFR.SurveyQuantities<-function(obj,
                               y=obsyears[[case]],x='all',m='all',s='all',val=val);
             dfr<-rbind(dfr,dfri,dfre);
         }
-        dfrp<-getMDFR.CanonicalFormat(dfr);
-        dfr$type<-'survey';
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         return(dfrp);
     }    

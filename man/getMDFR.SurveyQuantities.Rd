@@ -7,7 +7,7 @@
 getMDFR.SurveyQuantities(obj, type = c("MB_yx", "lglN_y", "lglB_y", "N_yxmsz",
   "N_yxmz", "N_yxz", "N_yxms", "N_yxm", "N_yx", "B_yxmsz", "B_yxmz", "B_yxz",
   "B_yxms", "B_yxm", "B_yx", "prNatZ_yxmsz", "prNatZ_yxmz", "prNatZ_yxz",
-  "PRs_yxmsz", "PRs_yxmz", "PRs_yxz", "mnPrNatZ_xmz", "mnPrNatZ_xz", "zscrs_yx",
+  "PRs_yxmsz", "PRs_yxmz", "PRs_yxz", "mnPrNatZ_xmz", "mnPrNatZ_xz", "zscores",
   "effSS_y"), pdfType = c("lognormal", "normal"), ci = 0.8,
   verbose = FALSE)
 }
@@ -15,6 +15,10 @@ getMDFR.SurveyQuantities(obj, type = c("MB_yx", "lglN_y", "lglB_y", "N_yxmsz",
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
 
 \item{type}{- survey-related quantity to retrieve}
+
+\item{pdfType}{- type of error distribution for observations}
+
+\item{ci}{- confidence interval for error bars on observations}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }
@@ -36,7 +40,7 @@ Potential values for 'type' are:
  \item {'N_yxms'  - annual survey abundance by x,m,s (millions)}
  \item {'N_yxm'   - annual survey abundance by x,m (millions)}
  \item {'N_yx'    - annual survey abundance by x (millions)}
- \item {'B_yxmsz'  - annual survey biomass-at-size by x,m,s (1000's t)}
+ \item {'B_yxmsz'  - annual survey biomass-at-size by x,m,s,z (1000's t)}
  \item {'B_yxms'  - annual survey biomass by x,m,s (1000's t)}
  \item {'B_yxm'   - annual survey biomass by x,m (1000's t)}
  \item {'B_yx'    - annual survey biomass by x (1000's t)}
@@ -51,7 +55,7 @@ Potential values for 'type' are:
  \item {'mnPrNatZ_xmz' - mean proportions-at-size by x,m}
  \item {'mnPrNatZ_xz'  - mean proportions-at-size by x}
  \item {'selSrv_cxz' - survey selectivity, by time period and sex}
- \item {'zscrs_yx'  - annual z-scores for fit to mature survey biomass, by sex}
+ \item {'zscores'  - annual z-scores for fit to mature survey biomass, by sex}
  \item {'effSS_y' - effective (and input) sample sizes for multinomial fits}
 }
 Requires sqldf package.

@@ -18,6 +18,7 @@
 getMDFR.Surveys.Biomass<-function(obj,category='index',cast="y+x",fleet='NMFS trawl survey',verbose=FALSE){
 
     if (verbose) cat("--rTCSAM2013::Getting survey biomass time series.\n");
+    options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
@@ -33,7 +34,7 @@ getMDFR.Surveys.Biomass<-function(obj,category='index',cast="y+x",fleet='NMFS tr
     #----------------------------------
     # predicted biomass from survey
     #----------------------------------
-    rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="srv.mod.BatZ.INF",stringsAsFactors=FALSE),
+    rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="srv.mod.BatZ.INF"),
                      list(x='female',m='immature',s='old shell',var="srv.mod.BatZ.IOF"),
                      list(x='female',m=  'mature',s='new shell',var="srv.mod.BatZ.MNF"),
                      list(x='female',m=  'mature',s='old shell',var="srv.mod.BatZ.MOF"),
@@ -62,7 +63,7 @@ getMDFR.Surveys.Biomass<-function(obj,category='index',cast="y+x",fleet='NMFS tr
         }
     }##-cases
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
-    mdfr$process<-'surveys';
+    mdfr$process<-'survey';
     mdfr$fleet<-fleet;
     mdfr$category<-category;
     mdfr$type<-'predicted';

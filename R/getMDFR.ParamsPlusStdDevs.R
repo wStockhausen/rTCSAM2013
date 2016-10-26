@@ -29,6 +29,8 @@
 getMDFR.ParamsPlusStdDevs<-function(obj,
                                     dp=0.01,
                                     verbose=FALSE){
+    options(stringsAsFactors=FALSE);
+    
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
 

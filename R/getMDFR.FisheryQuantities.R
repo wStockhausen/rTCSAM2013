@@ -6,6 +6,8 @@
 #'
 #'@param obj - object that can be converted into a list of tcsam2013.resLst objects
 #'@param type - fishery-related quantity to retrieve
+#'@param pdfType - type of error distribution for observations
+#'@param ci - confidence interval for error bars on observations
 #'@param verbose - flag (T/F) to print debug info
 #'
 #'@details Potential values for 'type' are:
@@ -20,7 +22,8 @@
 #'  \item {'mnPrNatZ.ret' - mean proportions-at-size for retained catch data}
 #'  \item {'mnPrNatZ.tot' - mean proportions-at-size for total catch data}
 #'  \item {'selfcns' - fishery selectivity and retention functions, by time period and sex}
-#'  \item {'zscores' - annual z-scores for fits to catch biomass}
+#'  \item {'zscores.tot' - annual z-scores for fits to total catch biomass}
+#'  \item {'zscores.ret' - annual z-scores for fits to retained catch biomass}
 #'  \item {'effSS.tot' - effective (and input) sample sizes for total catch size comps}
 #'  \item {'effSS.ret' - effective (and input) sample sizes for retained catch size comps}
 #'  \item {'max rates' - max fishing mortality, retained mortality, and capture rates}
@@ -37,11 +40,14 @@ getMDFR.FisheryQuantities<-function(obj,
                                            "prNatZ.ret","prNatZ.tot",
                                            "PRs.ret","PRs.tot",
                                            "mnPrNatZ.ret","mnPrNatZ.tot",
-                                           "selfcns","zscores",
+                                           "selfcns","zscores.tot","zscores.ret",
                                            "effSS.ret","effSS.tot",
                                            "max rates","mean rates"),
+                                    ci=0.80,
+                                    pdfType=c("norm2","normal","lognormal"),
                                     verbose=FALSE){
-
+    options(stringsAsFactors=FALSE);
+    
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
 
@@ -74,7 +80,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
-        dfrp$process<-'fisheries';
+        dfrp$process<-'fishery';
         dfrp$category<-'retained';
         return(dfrp);
     }    
@@ -125,7 +131,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
-        dfrp$process<-'fisheries';
+        dfrp$process<-'fishery';
         dfrp$category<-"total mortality";
         return(dfrp);
     }    
@@ -153,7 +159,7 @@ getMDFR.FisheryQuantities<-function(obj,
             }#--case
         }#--fsh
         dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
-        dfrp$process<-'fisheries';
+        dfrp$process<-'fishery';
         dfrp$category<-'discard mortality';
         return(dfrp);
     }    
@@ -433,7 +439,8 @@ getMDFR.FisheryQuantities<-function(obj,
     #----------------------------------
     # z-scores for total catch biomass
     #----------------------------------
-    if (type[1]=="zscores"){
+    if (type[1]=="zscores.tot"){
+        if (verbose) cat("Getting total catch biomass z-scores.\n")
         dfr<-NULL;
         for (fsh in c('TCF','SCF','RKF','GTF')){
             nmv<-gsub("&&fsh",fsh,"fsh.bio.zscr.&&fsh",fixed=TRUE);
@@ -443,32 +450,46 @@ getMDFR.FisheryQuantities<-function(obj,
                     idx<-years[[case]] %in% (lst[[case]]$rep)[[nmy]];#select only years with observations
                     #females
                     val <-(lst[[case]]$rep)[[paste0(nmv,".F")]][idx];
-                    dfrf<-data.frame(case=case,type='catch',fleet=fsh,
-                                      y=years[[case]][idx],x='female',m='all',s='all',val=val);
+                    dfrf<-data.frame(case=case,category='total',fleet=fsh,
+                                      y=years[[case]][idx],x='female',m='all',s='all',val=val,stringsAsFactors=FALSE);
                     #males
                     val <-(lst[[case]]$rep)[[paste0(nmv,".M")]][idx];
-                    dfrm<-data.frame(case=case,type='catch',fleet=fsh,
-                                      y=years[[case]][idx],x='male',m='all',s='all',val=val);
+                    dfrm<-data.frame(case=case,category='total',fleet=fsh,
+                                      y=years[[case]][idx],x='male',m='all',s='all',val=val,stringsAsFactors=FALSE);
                     dfr<-rbind(dfr,dfrf,dfrm);
                 } else {
                     idx<-years[[case]] %in% (lst[[case]]$rep)[[nmy]];#select only years with observations
                     val <-(lst[[case]]$rep)[[nmv]][idx];
-                    dfrp<-data.frame(case=case,type='catch',fleet=fsh,
-                                      y=years[[case]][idx],x='all',m='all',s='all',val=val);
-                    dfr<-rbind(dfr,dfrp);
-                }
-                if (fsh=='TCF'){
-                    idx<-years[[case]] %in% as.numeric((lst[[case]]$rep)[["fsh.obs.ret.bio.yrs.TCF"]]);#select only years with observations
-                    val <-(lst[[case]]$rep)[["fsh.ret.zscr.TCF"]][idx];
-                    dfrp<-data.frame(case=case,type='retained catch',fleet=fsh,
-                                      y=years[[case]][idx],x='male',m='all',s='all',val=val);
+                    dfrp<-data.frame(case=case,category='total',fleet=fsh,
+                                      y=years[[case]][idx],x='all',m='all',s='all',val=val,stringsAsFactors=FALSE);
                     dfr<-rbind(dfr,dfrp);
                 }
             }#--case
         }#--fsh
         dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
         dfrp$process<-'fishery';
-        dfrp$category<-'z-scores';
+        dfrp$type<-'z-score';
+        
+        return(dfrp);
+    }
+        
+    #----------------------------------
+    # z-scores for retained catch biomass
+    #----------------------------------
+    if (type[1]=="zscores.ret"){
+        if (verbose) cat("Getting retained catch biomass z-scores.\n")
+        dfr<-NULL;
+        for (case in cases){
+            idx<-years[[case]] %in% as.numeric((lst[[case]]$rep)[["fsh.obs.ret.bio.yrs.TCF"]]);#select only years with observations
+            val <-(lst[[case]]$rep)[["fsh.ret.zscr.TCF"]][idx];
+            dfrp<-data.frame(case=case,category='retained',fleet='TCF',
+                              y=years[[case]][idx],x='male',m='all',s='all',val=val,stringsAsFactors=FALSE);
+            dfr<-rbind(dfr,dfrp);
+        }#--case
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'fishery';
+        dfrp$type<-'z-score';
+        
         return(dfrp);
     }    
 

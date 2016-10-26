@@ -15,6 +15,7 @@
 #'@export
 #'
 getMDFR.ObjFunComponents<-function(obj,base=NULL){
+    options(stringsAsFactors=FALSE);
     
     lst <- convertToListOfResults(obj);
     cases<-names(lst);

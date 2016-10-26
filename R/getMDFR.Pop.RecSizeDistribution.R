@@ -16,7 +16,8 @@
 getMDFR.Pop.RecSizeDistribution<-function(obj,
                                           verbose=FALSE){
 
-    if (verbose) cat("rTCSAM2013::getMDFR.Pop.RecSizeDistribution: starting!\n");
+    if (verbose) cat("Starting rTCSAM2013::getMDFR.Pop.RecSizeDistribution().\n");
+    options(stringsAsFactors=FALSE);
     
     lst<-convertToListOfResults(obj);
     cases<-names(lst);

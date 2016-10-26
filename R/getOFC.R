@@ -13,6 +13,7 @@
 #'@export
 #' 
 getOFC<-function(inp.dir="./"){
+    options(stringsAsFactors=FALSE);
     if (is.null(inp.dir)){
         csv<-wtsUtilities::selectFile(ext="csv",caption="Select TCSAM2013.final_likelihood_components.csv file");
     } else {

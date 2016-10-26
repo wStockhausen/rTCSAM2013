@@ -17,6 +17,7 @@
 #'
 getMDFR.Pop.MeanGrowth<-function(obj,
                              verbose=FALSE){
+    options(stringsAsFactors=FALSE);
 
     dfr<-getMDFR.XZ(obj,
                     rep.m="pop.grw.mnPMZ.M",

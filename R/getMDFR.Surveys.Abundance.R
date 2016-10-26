@@ -19,6 +19,7 @@ getMDFR.Surveys.Abundance<-function(obj,category='index',cast="y+x",
                                     fleets='NMFS trawl survey',verbose=FALSE){
 
     if (verbose) cat("--rTCSAM2013::Getting survey abundance time series.\n");
+    options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
@@ -34,7 +35,7 @@ getMDFR.Surveys.Abundance<-function(obj,category='index',cast="y+x",
     #----------------------------------
     # predicted abundance from survey
     #----------------------------------
-    rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="srv.mod.NatZ.INF",stringsAsFactors=FALSE),
+    rws<-rbind(data.frame(x='female',m='immature',s='new shell',var="srv.mod.NatZ.INF"),
                      list(x='female',m='immature',s='old shell',var="srv.mod.NatZ.IOF"),
                      list(x='female',m=  'mature',s='new shell',var="srv.mod.NatZ.MNF"),
                      list(x='female',m=  'mature',s='old shell',var="srv.mod.NatZ.MOF"),
@@ -64,7 +65,7 @@ getMDFR.Surveys.Abundance<-function(obj,category='index',cast="y+x",
     }##-cases
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
     mdfr$fleet<-fleets[1];
-    mdfr$process<-'surveys';
+    mdfr$process<-'survey';
     mdfr$category<-category;
     mdfr$type<-'predicted';
 

@@ -75,7 +75,7 @@ compareModelResults.SurveyQuantities<-function(obj=NULL,
     #----------------------------------
     # plot z-scores for observed and predicted mature (spawning) biomass from the survey
     #----------------------------------
-    dfrp<-getMDFR.SurveyQuantities(obj,"zscrs_yx");
+    dfrp<-getMDFR.SurveyQuantities(obj,"zscores");
     dfrp$case<-factor(dfrp$case,levels=cases);
     xmax<-max(dfrp$y,na.rm=TRUE);
     p<-plotZScores(dfrp,x='y',y='val',
