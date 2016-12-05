@@ -34,7 +34,9 @@
 #'  \item {'PRs_yxz'      - pearsons residuals for annual proportions-at-size by x}
 #'  \item {'mnPrNatZ_xmz' - mean proportions-at-size by x,m}
 #'  \item {'mnPrNatZ_xz'  - mean proportions-at-size by x}
+#'  \item {'qSrv_yxz'   - survey catchability, by survey, year and sex}
 #'  \item {'selSrv_cxz' - survey selectivity, by time period and sex}
+#'  \item {'selSrv_yxz' - survey selectivity, by survey, year and sex}
 #'  \item {'zscores'  - annual z-scores for fit to mature survey biomass, by sex}
 #'  \item {'effSS_y' - effective (and input) sample sizes for multinomial fits}
 #'}
@@ -54,6 +56,7 @@ getMDFR.SurveyQuantities<-function(obj,
                                           "prNatZ_yxmsz","prNatZ_yxmz","prNatZ_yxz",
                                           "PRs_yxmsz","PRs_yxmz","PRs_yxz",
                                           "mnPrNatZ_xmz","mnPrNatZ_xz",
+                                          "qSrv_xy","selSrv_cxz","selSrv_yxz",
                                           "zscores","effSS_y"),
                                    pdfType=c('lognormal','normal'),
                                    ci=0.80,
@@ -61,11 +64,11 @@ getMDFR.SurveyQuantities<-function(obj,
 
     options(stringsAsFactors=FALSE);
     
-    lst<-convertToListOfResults(obj);
+    lst<-rTCSAM2013::convertToListOfResults(obj);
     cases<-names(lst);
 
     #set up time info
-    tinfo<-getTimeInfo(obj);
+    tinfo<-rTCSAM2013::getTimeInfo(obj);
     years    <-tinfo$years;
     years.m1 <-tinfo$years.m1;
     obsyears <-tinfo$obsyears;
@@ -88,7 +91,7 @@ getMDFR.SurveyQuantities<-function(obj,
                               val=obs,lci=cis$lci,uci=cis$uci);
             obs <-(lst[[case]]$rep)[["srv.obs.bio.MM"]][idx];
             cv  <-(lst[[case]]$rep)[["srv.obs.bio.cv.MM"]];
-            cis<-calcCIs(obs,cvs=cv,pdfType=pdfType[1],ci=ci);
+            cis<-rTCSAM2013::calcCIs(obs,cvs=cv,pdfType=pdfType[1],ci=ci);
             dfrom<-data.frame(case=case,type='observed',
                               y=years[[case]][idx],x='male',m='mature',s='all',
                               val=obs,lci=cis$lci,uci=cis$uci);
@@ -452,6 +455,57 @@ getMDFR.SurveyQuantities<-function(obj,
         dfrp$process<-'survey';
         dfrp$fleet<-fleet;
         dfrp$category<-'selectivity';
+        return(dfrp);
+    }
+    
+    #----------------------------------
+    #survey selectivities
+    #----------------------------------
+    if (type[1]=="selSrv_yxz"){
+        dfr<-NULL;
+        for (case in cases){
+            #females
+            sel_yz<-(lst[[case]]$rep)[["srv.mod.sel.NMFS.FEMALE"]];
+            dimnames(sel_yz)<-list(y=years[[case]],
+                                   z=as.character(lst[[case]]$rep$mod.zBs));
+            dfrp<-reshape2::melt(sel_yz,value.name='val');
+            dfrp<-cbind(case=case,x='female',dfrp);
+            dfr<-rbind(dfr,dfrp[,c("case","y","x","z","val")]);
+            #males
+            sel_yz<-(lst[[case]]$rep)[["srv.mod.sel.NMFS.MALE"]];
+            dimnames(sel_yz)<-list(y=years[[case]],
+                                   z=as.character(lst[[case]]$rep$mod.zBs));
+            dfrp<-reshape2::melt(sel_yz,value.name='val');
+            dfrp<-cbind(case=case,x='male',dfrp);
+            dfr<-rbind(dfr,dfrp[,c("case","y","x","z","val")]);
+        }
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'survey';
+        dfrp$fleet<-fleet;
+        dfrp$category<-'selectivity';
+        return(dfrp);
+    }
+    
+    #----------------------------------
+    #survey catchabilities
+    #----------------------------------
+    if (type[1]=="qSrv_xy"){
+        dfr<-NULL;
+        for (case in cases){
+            #females
+            val<-(lst[[case]]$rep)[["srv.mod.selQ.NMFS.FEMALE"]];
+            dfrf<-data.frame(case=case,
+                             y=years[[case]],x='female',val=val,stringsAsFactors=FALSE);
+            #males
+            val<-(lst[[case]]$rep)[["srv.mod.selQ.NMFS.MALE"]];
+            dfrm<-data.frame(case=case,
+                             y=years[[case]],x='male',val=val,stringsAsFactors=FALSE);
+            dfr<-rbind(dfr,dfrf,dfrm);
+        }
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'survey';
+        dfrp$fleet<-fleet;
+        dfrp$category<-'catchability';
         return(dfrp);
     }
     

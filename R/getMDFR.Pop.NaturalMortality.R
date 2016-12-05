@@ -31,10 +31,10 @@ getMDFR.Pop.NaturalMortality<-function(obj,
     rws<-list();
     rws$INF<-list(m='immature',s='new shell',x='female');
     rws$MNF<-list(m=  'mature',s='new shell',x='female');
-    rws$MOF<-list(m=  'mature',s='old shell',x='female');
+#    rws$MOF<-list(m=  'mature',s='old shell',x='female');
     rws$INM<-list(m='immature',s='new shell',x=  'male');
     rws$MNM<-list(m=  'mature',s='new shell',x=  'male');
-    rws$MOM<-list(m=  'mature',s='old shell',x=  'male');
+#    rws$MOM<-list(m=  'mature',s='old shell',x=  'male');
     dfr<-NULL;
     for (case in cases){
         if (is.null(lst[[case]]$std)) {
@@ -65,5 +65,6 @@ getMDFR.Pop.NaturalMortality<-function(obj,
     }#--case
     dfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
     dfr$process<-"population";
+    dfr$s<-"all";
     return(dfr);
 }

@@ -21,11 +21,14 @@
 #'  \item {'PRs.tot'      - pearsons residuals for total catch proportions-at-size}
 #'  \item {'mnPrNatZ.ret' - mean proportions-at-size for retained catch data}
 #'  \item {'mnPrNatZ.tot' - mean proportions-at-size for total catch data}
-#'  \item {'selfcns' - fishery selectivity and retention functions, by time period and sex}
+#'  \item {'sel_cxz' - fishery selectivity and retention functions, by time period and sex}
+#'  \item {'sel_yxz' - fishery selectivity functions, by year and sex}
+#'  \item {'ret_yxz' - fishery retention functions, by year and sex}
 #'  \item {'zscores.tot' - annual z-scores for fits to total catch biomass}
 #'  \item {'zscores.ret' - annual z-scores for fits to retained catch biomass}
 #'  \item {'effSS.tot' - effective (and input) sample sizes for total catch size comps}
 #'  \item {'effSS.ret' - effective (and input) sample sizes for retained catch size comps}
+#'  \item {'qFsh_xy' - annual fishery catchabilities (i.e. max capture rates)}
 #'  \item {'max rates' - max fishing mortality, retained mortality, and capture rates}
 #'  \item {'mean rates' - mean fishing mortality, retained mortality, and capture rates}
 #'}
@@ -40,8 +43,10 @@ getMDFR.FisheryQuantities<-function(obj,
                                            "prNatZ.ret","prNatZ.tot",
                                            "PRs.ret","PRs.tot",
                                            "mnPrNatZ.ret","mnPrNatZ.tot",
-                                           "selfcns","zscores.tot","zscores.ret",
+                                           "sel_cxz","sel_yxz","ret_yxz",
+                                           "zscores.tot","zscores.ret",
                                            "effSS.ret","effSS.tot",
+                                           "qFsh_xy",
                                            "max rates","mean rates"),
                                     ci=0.80,
                                     pdfType=c("norm2","normal","lognormal"),
@@ -367,9 +372,9 @@ getMDFR.FisheryQuantities<-function(obj,
     }
 
     #----------------------------------
-    #selectivity functions
+    #selectivity/retention functions by time period
     #----------------------------------
-    if (type[1]=="selfcns"){
+    if (type[1]=="sel_cxz"){
         dfr<-NULL;
         cols.out<-c("case","type","fleet","pc","x","m","s","z","val");
         for (fsh in c('TCF','SCF','RKF','GTF')){
@@ -433,6 +438,84 @@ getMDFR.FisheryQuantities<-function(obj,
         dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
         dfrp$process<-'fishery';
         dfrp$category<-'selectivity functions';
+        return(dfrp);
+    }
+    
+    #----------------------------------
+    #selectivity functions by year
+    #----------------------------------
+    if (type[1]=="sel_yxz"){
+        dfr<-NULL;
+        cols.out<-c("case","type","fleet","y","x","m","s","z","val");
+        for (fsh in c('TCF','SCF','RKF','GTF')){
+            nm<-gsub("&&fsh",fsh,"fsh.mod.sel.&&fsh",fixed=TRUE);
+            for (case in cases){
+                if (fsh!='TCF'){
+                    #females
+                    sel_cz<-(lst[[case]]$rep)[[paste0(nm,".FEMALE")]];
+                    dimnames(sel_cz)<-list(y=years.m1[[case]],
+                                           z=as.character(lst[[case]]$rep$mod.zBs));
+                    dfrp<-reshape2::melt(sel_cz,value.name='val');
+                    dfrp<-cbind(case=case,type='selectivity',fleet=fsh,
+                                     x='female',m='all',s='all',dfrp);
+                    dfr<-rbind(dfr,dfrp[,cols.out]);
+                    #males
+                    sel_cz<-(lst[[case]]$rep)[[paste0(nm,".MALE")]];
+                    dimnames(sel_cz)<-list(y=years.m1[[case]],
+                                           z=as.character(lst[[case]]$rep$mod.zBs));
+                    dfrp<-reshape2::melt(sel_cz,value.name='val');
+                    dfrp<-cbind(case=case,type='selectivity',fleet=fsh,
+                                     x='male',m='all',s='all',dfrp);
+                    dfr<-rbind(dfr,dfrp[,cols.out]);
+                } else { 
+                    #TCF
+                    #--female selectivity
+                    sel_cz<-(lst[[case]]$rep)[[paste0(nm,".FEMALE")]];
+                    dimnames(sel_cz)<-list(y=years.m1[[case]],
+                                           z=as.character(lst[[case]]$rep$mod.zBs));
+                    dfrp<-reshape2::melt(sel_cz,value.name='val');
+                    dfrp<-cbind(case=case,type='selectivity',fleet=fsh,
+                                     x='female',m='all',s='all',dfrp);
+                    dfr<-rbind(dfr,dfrp[,cols.out]);
+                    #--male selectivity
+                    sel_cz<-(lst[[case]]$rep)[[paste0(nm,".MALE")]];
+                    dimnames(sel_cz)<-list(y=years.m1[[case]],
+                                           z=as.character(lst[[case]]$rep$mod.zBs));
+                    dfrp<-reshape2::melt(sel_cz,value.name='val');
+                    dfrp<-cbind(case=case,type='selectivity',fleet=fsh,
+                                     x='male',m='all',s='all',dfrp);
+                    dfr<-rbind(dfr,dfrp[,cols.out]);
+                }
+            }#--case
+        }#--fsh
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'fishery';
+        dfrp$category<-'selectivity functions';
+        return(dfrp);
+    }
+    
+    #----------------------------------
+    #retention functions by year
+    #----------------------------------
+    if (type[1]=="ret_yxz"){
+        dfr<-NULL;
+        cols.out<-c("case","type","fleet","y","x","m","s","z","val");
+        for (fsh in c('TCF')){
+            nm<-gsub("&&fsh",fsh,"fsh.mod.sel.&&fsh",fixed=TRUE);
+            for (case in cases){
+                #--retention functions
+                ret_cz<-(lst[[case]]$rep)[["fsh.mod.ret.TCF.MALE"]];
+                dimnames(ret_cz)<-list(y=years.m1[[case]],
+                                       z=as.character(lst[[case]]$rep$mod.zBs));
+                dfrp<-reshape2::melt(ret_cz,value.name='val');
+                dfrp<-cbind(case=case,type='retention',fleet='TCF',
+                                 x='male',m='all',s='all',dfrp);
+                dfr<-rbind(dfr,dfrp[,cols.out]);
+            }#--case
+        }#--fsh
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'fishery';
+        dfrp$category<-'retention functions';
         return(dfrp);
     }
     
@@ -577,6 +660,31 @@ getMDFR.FisheryQuantities<-function(obj,
         return(dfrp);
     }    
 
+    #----------------------------------
+    # fishery catchabilities (i.e., max fishery capture rates)
+    #----------------------------------
+    if (type[1]=="qFsh_xy"){
+        dfr<-NULL;
+        for (fsh in c('TCF','SCF','RKF','GTF')){
+            nmcr<-gsub("&&fsh",fsh,"fsh.fcr.max.&&fsh",fixed=TRUE);
+            for (case in cases){
+                for (x in c('male','female')){
+                    #fishery capture rates
+                    vals<-(lst[[case]]$rep)[[paste0(nmcr,".",toupper(substr(x,1,1)))]];
+                    if (!is.null(vals)){
+                        dfrp<-data.frame(case=case,type="capture",fleet=fsh,
+                                         y=years.m1[[case]],x=x,m="all",s="all",val=vals);
+                        dfr<-rbind(dfr,dfrp);
+                    }
+                }#--x
+            }#--case
+        }#--fsh
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'fishery';
+        dfrp$category<-'catchability';
+        return(dfrp);
+    }
+    
     #----------------------------------
     # max fishing mortality rates
     #----------------------------------

@@ -7,9 +7,9 @@
 getMDFR.SurveyQuantities(obj, type = c("MB_yx", "lglN_y", "lglB_y", "N_yxmsz",
   "N_yxmz", "N_yxz", "N_yxms", "N_yxm", "N_yx", "B_yxmsz", "B_yxmz", "B_yxz",
   "B_yxms", "B_yxm", "B_yx", "prNatZ_yxmsz", "prNatZ_yxmz", "prNatZ_yxz",
-  "PRs_yxmsz", "PRs_yxmz", "PRs_yxz", "mnPrNatZ_xmz", "mnPrNatZ_xz", "zscores",
-  "effSS_y"), pdfType = c("lognormal", "normal"), ci = 0.8,
-  verbose = FALSE)
+  "PRs_yxmsz", "PRs_yxmz", "PRs_yxz", "mnPrNatZ_xmz", "mnPrNatZ_xz", "qSrv_xy",
+  "selSrv_cxz", "selSrv_yxz", "zscores", "effSS_y"), pdfType = c("lognormal",
+  "normal"), ci = 0.8, verbose = FALSE)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -54,7 +54,9 @@ Potential values for 'type' are:
  \item {'PRs_yxz'      - pearsons residuals for annual proportions-at-size by x}
  \item {'mnPrNatZ_xmz' - mean proportions-at-size by x,m}
  \item {'mnPrNatZ_xz'  - mean proportions-at-size by x}
+ \item {'qSrv_yxz'   - survey catchability, by survey, year and sex}
  \item {'selSrv_cxz' - survey selectivity, by time period and sex}
+ \item {'selSrv_yxz' - survey selectivity, by survey, year and sex}
  \item {'zscores'  - annual z-scores for fit to mature survey biomass, by sex}
  \item {'effSS_y' - effective (and input) sample sizes for multinomial fits}
 }
