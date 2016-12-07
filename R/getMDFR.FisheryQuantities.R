@@ -182,7 +182,8 @@ getMDFR.FisheryQuantities<-function(obj,
                 for (x in c('female','male')){
                     #observed
                     vals_yz<-(lst[[case]]$rep)[[paste0(nmo,".",toupper(substr(x,1,1)))]];
-                    dimnames(vals_yz)<-list(y=as.character((lst[[case]]$rep)[[nmy]]),
+                    obsy<-as.character((lst[[case]]$rep)[[nmy]]);
+                    dimnames(vals_yz)<-list(y=obsy,
                                             z=as.character(lst[[case]]$rep$mod.zBs));
                     dfrp<-reshape2::melt(vals_yz,value.name='val');
                     dfrp<-cbind(case=case,type='observed',fleet=fsh,
@@ -194,8 +195,9 @@ getMDFR.FisheryQuantities<-function(obj,
                                             z=as.character(lst[[case]]$rep$mod.zBs));
                     dfrp<-reshape2::melt(vals_yz,value.name='val');
                     dfrp<-cbind(case=case,type='predicted',fleet=fsh,
-                                x=x,m="all",s="all",dfrp);
+                                x=x,m="all",s="all",dfrp[dfrp$y %in% obsy,]);
                     dfr<-rbind(dfr,dfrp[,c("case","type","fleet","y","x","m","s","z","val")]);
+                    rm(obsy);
                 }#--x
             }#--cases
         }#--fsh
@@ -218,7 +220,8 @@ getMDFR.FisheryQuantities<-function(obj,
                 for (x in c('male')){
                     #observed
                     vals_yz<-(lst[[case]]$rep)[[paste0(nmo,".",toupper(substr(x,1,1)))]];
-                    dimnames(vals_yz)<-list(y=as.character((lst[[case]]$rep)[[nmy]]),
+                    obsy<-as.character((lst[[case]]$rep)[[nmy]]);
+                    dimnames(vals_yz)<-list(y=obsy,
                                             z=as.character(lst[[case]]$rep$mod.zBs));
                     dfrp<-reshape2::melt(vals_yz,value.name='val');
                     dfrp<-cbind(case=case,type='observed',fleet=fsh,
@@ -230,8 +233,9 @@ getMDFR.FisheryQuantities<-function(obj,
                                             z=as.character(lst[[case]]$rep$mod.zBs));
                     dfrp<-reshape2::melt(vals_yz,value.name='val');
                     dfrp<-cbind(case=case,type='predicted',fleet=fsh,
-                                x=x,m="all",s="all",dfrp);
+                                x=x,m="all",s="all",dfrp[dfrp$y %in% obsy,]);
                     dfr<-rbind(dfr,dfrp[,c("case","type","fleet","y","x","m","s","z","val")]);
+                    rm(obsy);
                 }#--x
             }#--cases
         }#--fsh
