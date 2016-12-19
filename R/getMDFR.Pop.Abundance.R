@@ -4,7 +4,7 @@
 #'@description Function to get population abundance time series from model results from TCSAM2013 model runs as a dataframe.
 #'
 #'@param obj - single tcsam2013.rep object, tcsam2013.resLst object, or named list of the latter
-#'@param cast - casting formula for excluding y,x,m,s,z factor levels from an average-at-size of N_yxmsz across unspecified factors
+#'@param cast - casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum of N_yxmsz across the unspecified factors
 #'@param verbose - flag (T/F) to print debug info
 #'
 #'@return dataframe in canonical format
@@ -13,9 +13,9 @@
 #'
 #'@export
 #'
-getMDFR.Pop.Abundance<-function(obj,cast="y+x",verbose=FALSE){
+getMDFR.Pop.Abundance<-function(obj,cast="x",verbose=FALSE){
 
-    if (verbose) cat("--rTCSAM2013::getMDFR.Pop.Abundance().\n");
+    if (verbose) cat("--starting rTCSAM2013::getMDFR.Pop.Abundance().\n");
     options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
@@ -64,14 +64,15 @@ getMDFR.Pop.Abundance<-function(obj,cast="y+x",verbose=FALSE){
 
     mdfr<-removeImmOS(mdfr);
 
-    castform<-"case+process+fleet+category+type+pc&&cast~.";
-    castform<-gsub("&&cast",paste0("+",cast),castform,fixed=TRUE);
-    ddfr<-reshape2::dcast(mdfr,castform,fun.aggregate=mean,na.rm=TRUE,value.var='val',drop=TRUE)
+    castform<-"case+process+fleet+category+type+pc+y";
+    if (!is.null(cast)|(cast!='')) castform<-paste0(castform,"+",cast);
+    castform<-paste0(castform,"~.");
+    ddfr<-reshape2::dcast(mdfr,castform,fun.aggregate=sum,na.rm=TRUE,value.var='val',drop=TRUE)
     ddfr[['.']]<-ifelse(ddfr[['.']]==0,NA,ddfr[['.']]);
     ddfr<-ddfr[!is.na(ddfr[['.']]),];#remove NA's
 
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(ddfr);
 
-    if (verbose) cat("--Done. \n");
+    if (verbose) cat("--finished rTCSAM2013::getMDFR.Pop.Abundance().\n");
     return(mdfr);
 }

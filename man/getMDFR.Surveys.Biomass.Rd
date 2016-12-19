@@ -12,9 +12,9 @@ getMDFR.Surveys.Biomass(obj, category = "index", cast = "y+x",
 
 \item{category}{- 'index' is only choice}
 
-\item{cast}{- casting formula for excluding y,x,m,s,z factor levels from an average-at-size across unspecified factors}
+\item{cast}{- casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum across the unspecified factors}
 
-\item{fleet}{- name of survey}
+\item{fleet}{- name(s) of survey(s)}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }

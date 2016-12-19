@@ -4,12 +4,12 @@
 \alias{getMDFR.Pop.Abundance}
 \title{Get population abundance time series from model results from TCSAM2013 model runs as a dataframe}
 \usage{
-getMDFR.Pop.Abundance(obj, cast = "y+x", verbose = FALSE)
+getMDFR.Pop.Abundance(obj, cast = "x", verbose = FALSE)
 }
 \arguments{
 \item{obj}{- single tcsam2013.rep object, tcsam2013.resLst object, or named list of the latter}
 
-\item{cast}{- casting formula for excluding y,x,m,s,z factor levels from an average-at-size of N_yxmsz across unspecified factors}
+\item{cast}{- casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum of N_yxmsz across the unspecified factors}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }

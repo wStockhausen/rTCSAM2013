@@ -5,8 +5,8 @@
 #'
 #'@param obj - single tcsam2013.rep object, tcsam2013.resLst object, or named list of the latter
 #'@param category - 'captured','discarded','retained', 'discard mortality', 'total mortality', or 'index'
-#'@param cast - casting formula for excluding y,x,m,s,z factor levels from an average-at-size across unspecified factors
-#'@param fleets - name(s) of fisheriess
+#'@param cast - casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum across the unspecified factors
+#'@param fleets - name(s) of fisheries
 #'@param verbose - flag (T/F) to print debug info
 #'
 #'@return dataframe in canonical format
@@ -20,7 +20,7 @@ getMDFR.Fisheries.CatchBiomass<-function(obj,
                                            cast="y+x",
                                            fleets=c('TCF','SCF','RKF','GTF'),
                                            verbose=FALSE){
-    if (verbose) cat("--rTCSAM2013::Getting fishery catch biomass time series.\n");
+    if (verbose) cat("--starting rTCSAM2013::getMDFR.Fisheries.CatchBiomass().\n");
     options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
@@ -60,7 +60,7 @@ getMDFR.Fisheries.CatchBiomass<-function(obj,
     
     dfr<-NULL;
     for (flt in fleets){
-        if (verbose) cat("Processing",case,"\n");
+        if (verbose) cat("Processing",flt,"\n");
         rwsp<-rws;
         rwsp$var<-gsub("&&flt",flt,rwsp$var,fixed=TRUE)
         for (case in cases){
@@ -69,16 +69,16 @@ getMDFR.Fisheries.CatchBiomass<-function(obj,
                 cat("yrs:",years.m1[[case]],"\n");
                 cat("zBs:",(lst[[case]]$rep)[["mod.zBs"]],"\n");
             }
-            for (r in 1:nrow(rws)){
+            for (r in 1:nrow(rwsp)){
                 vals_yz<-(lst[[case]]$rep)[[rwsp$var[r]]];
                 if (!is.null(vals_yz)){
-                    #vals_yz<-vals_yz[idx,];
-                    dimnames(vals_yz)<-list(y=as.character(years[[case]]),
+                    if (verbose) cat(rwsp$var[r],": dim(vals_yz) = ",dim(vals_yz),"\n");
+                    dimnames(vals_yz)<-list(y=as.character(years.m1[[case]]),
                                             z=as.character((lst[[case]]$rep)[["mod.zBs"]]));
                     dfrp<-reshape2::melt(vals_yz,value.name='val');
-                    dfrp<-cbind(case=case,
+                    dfrp<-cbind(case=case,fleet=flt,
                                 x=rwsp$x[r],m=rwsp$m[r],s=rwsp$s[r],dfrp);
-                    dfr<-rbind(dfr,dfrp[,c("case","y","x","m","s","z","val")]);
+                    dfr<-rbind(dfr,dfrp[,c("case","fleet","y","x","m","s","z","val")]);
                 }
             }
         }##-cases
@@ -90,14 +90,15 @@ getMDFR.Fisheries.CatchBiomass<-function(obj,
     mdfr$type<-"predicted";
     mdfr<-removeImmOS(mdfr);
 
-    castform<-"case+process+fleet+category+type+pc&&cast~.";
-    castform<-gsub("&&cast",paste0("+",cast),castform,fixed=TRUE);
-    ddfr<-reshape2::dcast(mdfr,castform,fun.aggregate=mean,na.rm=TRUE,value.var='val',drop=TRUE)
+    castform<-"case+process+fleet+category+type+pc+y";
+    if (!is.null(cast)|(cast!='')) castform<-paste0(castform,"+",cast);
+    castform<-paste0(castform,"~.");
+    ddfr<-reshape2::dcast(mdfr,castform,fun.aggregate=sum,na.rm=TRUE,value.var='val',drop=TRUE)
     ddfr[['.']]<-ifelse(ddfr[['.']]==0,NA,ddfr[['.']]);
     ddfr<-ddfr[!is.na(ddfr[['.']]),];#remove NA's
 
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(ddfr);
 
-    if (verbose) cat("--Done. \n");
+    if (verbose) cat("--finished rTCSAM2013::getMDFR.Fisheries.CatchBiomass(). \n");
     return(mdfr);
 }

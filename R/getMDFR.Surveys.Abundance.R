@@ -5,7 +5,7 @@
 #'
 #'@param obj - single tcsam2013.rep object, tcsam2013.resLst object, or named list of the latter
 #'@param category - 'index' is only choice
-#'@param cast - casting formula for excluding y,x,m,s,z factor levels from an average-at-size across unspecified factors
+#'@param cast - casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum across the unspecified factors
 #'@param fleets - name(s) of surveys
 #'@param verbose - flag (T/F) to print debug info
 #'
@@ -18,7 +18,7 @@
 getMDFR.Surveys.Abundance<-function(obj,category='index',cast="y+x",
                                     fleets='NMFS trawl survey',verbose=FALSE){
 
-    if (verbose) cat("--rTCSAM2013::Getting survey abundance time series.\n");
+    if (verbose) cat("--starting rTCSAM2013::getMDFR.Surveys.Abundance().\n");
     options(stringsAsFactors=FALSE);
 
     lst<-convertToListOfResults(obj);
@@ -50,16 +50,16 @@ getMDFR.Surveys.Abundance<-function(obj,category='index',cast="y+x",
             cat("yrs:",years[[case]],"\n");
             cat("zBs:",(lst[[case]]$rep)[["mod.zBs"]],"\n");
         }
-        for (r in 1:nrow(rws)){
+        for (r in 1:nrow(rwsp)){
             vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
             if (!is.null(vals_yz)){
-                #vals_yz<-vals_yz[idx,];
+                if (verbose) cat(rwsp$var[r],": dim(vals_yz) = ",dim(vals_yz),"\n");
                 dimnames(vals_yz)<-list(y=as.character(years[[case]]),
                                         z=as.character((lst[[case]]$rep)[["mod.zBs"]]));
                 dfrp<-reshape2::melt(vals_yz,value.name='val');
-                dfrp<-cbind(case=case,
-                            x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
-                dfr<-rbind(dfr,dfrp[,c("case","y","x","m","s","z","val")]);
+                dfrp<-cbind(case=case,fleet=flt,
+                            x=rwsp$x[r],m=rwsp$m[r],s=rwsp$s[r],dfrp);
+                dfr<-rbind(dfr,dfrp[,c("case","fleet","y","x","m","s","z","val")]);
             }
         }
     }##-cases
@@ -72,14 +72,15 @@ getMDFR.Surveys.Abundance<-function(obj,category='index',cast="y+x",
     mdfr$fleet<-gsub("_"," ",mdfr$fleet,fixed=TRUE);#replace '_'s in survey names with spaces
     mdfr<-removeImmOS(mdfr);
 
-    castform<-"case+process+fleet+category+type+pc&&cast~.";
-    castform<-gsub("&&cast",paste0("+",cast),castform,fixed=TRUE);
-    ddfr<-reshape2::dcast(mdfr,castform,fun.aggregate=mean,na.rm=TRUE,value.var='val',drop=TRUE)
+    castform<-"case+process+fleet+category+type+pc+y";
+    if (!is.null(cast)|(cast!='')) castform<-paste0(castform,"+",cast);
+    castform<-paste0(castform,"~.");
+    ddfr<-reshape2::dcast(mdfr,castform,fun.aggregate=sum,na.rm=TRUE,value.var='val',drop=TRUE)
     ddfr[['.']]<-ifelse(ddfr[['.']]==0,NA,ddfr[['.']]);
     ddfr<-ddfr[!is.na(ddfr[['.']]),];#remove NA's
 
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(ddfr);
 
-    if (verbose) cat("--Done. \n");
+    if (verbose) cat("--finished rTCSAM2013::getMDFR.Surveys.Abundance(). \n");
     return(mdfr);
 }

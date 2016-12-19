@@ -9,7 +9,7 @@ getMDFR.Pop.Biomass(obj, cast = "y+x", verbose = FALSE)
 \arguments{
 \item{obj}{- single tcsam2013.rep object, tcsam2013.resLst object, or named list of the latter}
 
-\item{cast}{- casting formula for excluding y,x,m,s,z factor levels from an average-at-size of B_yxmsz across unspecified factors}
+\item{cast}{- casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum of B_yxmsz across the unspecified factors}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }
