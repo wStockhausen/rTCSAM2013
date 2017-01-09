@@ -50,21 +50,22 @@ getMDFR.Surveys.Abundance<-function(obj,category='index',cast="y+x",
             cat("yrs:",years[[case]],"\n");
             cat("zBs:",(lst[[case]]$rep)[["mod.zBs"]],"\n");
         }
-        for (r in 1:nrow(rwsp)){
-            vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
-            if (!is.null(vals_yz)){
-                if (verbose) cat(rwsp$var[r],": dim(vals_yz) = ",dim(vals_yz),"\n");
-                dimnames(vals_yz)<-list(y=as.character(years[[case]]),
-                                        z=as.character((lst[[case]]$rep)[["mod.zBs"]]));
-                dfrp<-reshape2::melt(vals_yz,value.name='val');
-                dfrp<-cbind(case=case,fleet=flt,
-                            x=rwsp$x[r],m=rwsp$m[r],s=rwsp$s[r],dfrp);
-                dfr<-rbind(dfr,dfrp[,c("case","fleet","y","x","m","s","z","val")]);
-            }
-        }
-    }##-cases
+        for (flt in fleets){
+            for (r in 1:nrow(rws)){
+                vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
+                if (!is.null(vals_yz)){
+                    if (verbose) cat(rws$var[r],": dim(vals_yz) = ",dim(vals_yz),"\n");
+                    dimnames(vals_yz)<-list(y=as.character(years[[case]]),
+                                            z=as.character((lst[[case]]$rep)[["mod.zBs"]]));
+                    dfrp<-reshape2::melt(vals_yz,value.name='val');
+                    dfrp<-cbind(case=case,fleet=flt,
+                                x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
+                    dfr<-rbind(dfr,dfrp[,c("case","fleet","y","x","m","s","z","val")]);
+                }
+            }##--r
+        }##--flt
+    }##-case
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
-    mdfr$fleet<-fleets[1];
     mdfr$process<-'survey';
     mdfr$category<-category;
     mdfr$type<-'predicted';

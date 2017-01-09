@@ -6,7 +6,7 @@
 #'@param obj - single tcsam2013.rep object, tcsam2013.resLst object, or named list of the latter
 #'@param category - 'index' is only choice
 #'@param cast - casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum across the unspecified factors
-#'@param fleet - name(s) of survey(s)
+#'@param fleets - name(s) of survey(s)
 #'@param verbose - flag (T/F) to print debug info
 #'
 #'@return dataframe in canonical format
@@ -15,7 +15,7 @@
 #'
 #'@export
 #'
-getMDFR.Surveys.Biomass<-function(obj,category='index',cast="y+x",fleet='NMFS trawl survey',verbose=FALSE){
+getMDFR.Surveys.Biomass<-function(obj,category='index',cast="y+x",fleets='NMFS trawl survey',verbose=FALSE){
 
     if (verbose) cat("--starting rTCSAM2013::getMDFR.Surveys.Biomass().\n");
     options(stringsAsFactors=FALSE);
@@ -49,22 +49,23 @@ getMDFR.Surveys.Biomass<-function(obj,category='index',cast="y+x",fleet='NMFS tr
             cat("yrs:",years[[case]],"\n");
             cat("zBs:",(lst[[case]]$rep)[["mod.zBs"]],"\n");
         }
-        for (r in 1:nrow(rws)){
-            vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
-            if (!is.null(vals_yz)){
-                if (verbose) cat(rws$var[r],": dim(vals_yz) = ",dim(vals_yz),"\n");
-                dimnames(vals_yz)<-list(y=as.character(years[[case]]),
-                                        z=as.character((lst[[case]]$rep)[["mod.zBs"]]));
-                dfrp<-reshape2::melt(vals_yz,value.name='val');
-                dfrp<-cbind(case=case,fleet=flt,
-                            x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
-                dfr<-rbind(dfr,dfrp[,c("case","fleet","y","x","m","s","z","val")]);
-            }
-        }
-    }##-cases
+        for (flt in fleets){
+            for (r in 1:nrow(rws)){
+                vals_yz<-(lst[[case]]$rep)[[rws$var[r]]];
+                if (!is.null(vals_yz)){
+                    if (verbose) cat(rws$var[r],": dim(vals_yz) = ",dim(vals_yz),"\n");
+                    dimnames(vals_yz)<-list(y=as.character(years[[case]]),
+                                            z=as.character((lst[[case]]$rep)[["mod.zBs"]]));
+                    dfrp<-reshape2::melt(vals_yz,value.name='val');
+                    dfrp<-cbind(case=case,fleet=flt,
+                                x=rws$x[r],m=rws$m[r],s=rws$s[r],dfrp);
+                    dfr<-rbind(dfr,dfrp[,c("case","fleet","y","x","m","s","z","val")]);
+                }
+            }##--r
+        }##--flt
+    }##-case
     mdfr<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
     mdfr$process<-'survey';
-    mdfr$fleet<-fleet;
     mdfr$category<-category;
     mdfr$type<-'predicted';
 

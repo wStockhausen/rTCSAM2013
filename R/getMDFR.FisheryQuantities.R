@@ -177,6 +177,7 @@ getMDFR.FisheryQuantities<-function(obj,
         for (fsh in c('TCF','SCF','RKF','GTF')){
             nmo<-gsub("&&fsh",fsh,"fsh.obs.tot.PrNatZ.&&fsh",fixed=TRUE);
             nmp<-gsub("&&fsh",fsh,"fsh.mod.tot.PrNatZ.&&fsh",fixed=TRUE);
+            nmc<-gsub("&&fsh",fsh,"fsh.mod.cap.PrNatZ.&&fsh",fixed=TRUE);
             nmy<-gsub("&&fsh",fsh,"fsh.obs.tot.PrNatZ.yrs.&&fsh",fixed=TRUE);
             for (case in cases){
                 for (x in c('female','male')){
@@ -190,7 +191,9 @@ getMDFR.FisheryQuantities<-function(obj,
                                 x=x,m="all",s="all",dfrp);
                     dfr<-rbind(dfr,dfrp[,c("case","type","fleet","y","x","m","s","z","val")]);
                     #predicted
-                    vals_yz<-(lst[[case]]$rep)[[paste0(nmp,".",toupper(substr(x,1,1)))]];
+                    nmm<-paste0(nmp,".",toupper(substr(x,1,1)));
+                    if (lst[[case]]$rep$mod.optFMFit==1) nmm<-paste0(nmc,".",toupper(substr(x,1,1)))
+                    vals_yz<-(lst[[case]]$rep)[[nmm]];
                     dimnames(vals_yz)<-list(y=as.character(years.m1[[case]]),
                                             z=as.character(lst[[case]]$rep$mod.zBs));
                     dfrp<-reshape2::melt(vals_yz,value.name='val');

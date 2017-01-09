@@ -5,7 +5,7 @@
 \title{Get survey biomass time series from model results from TCSAM2013 model runs as a dataframe}
 \usage{
 getMDFR.Surveys.Biomass(obj, category = "index", cast = "y+x",
-  fleet = "NMFS trawl survey", verbose = FALSE)
+  fleets = "NMFS trawl survey", verbose = FALSE)
 }
 \arguments{
 \item{obj}{- single tcsam2013.rep object, tcsam2013.resLst object, or named list of the latter}
@@ -14,7 +14,7 @@ getMDFR.Surveys.Biomass(obj, category = "index", cast = "y+x",
 
 \item{cast}{- casting formula (e.g., "x+m") for excluding x,m,s,z factor levels from a sum across the unspecified factors}
 
-\item{fleet}{- name(s) of survey(s)}
+\item{fleets}{- name(s) of survey(s)}
 
 \item{verbose}{- flag (T/F) to print debug info}
 }
