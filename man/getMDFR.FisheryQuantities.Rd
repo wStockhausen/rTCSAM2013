@@ -7,8 +7,8 @@
 getMDFR.FisheryQuantities(obj, type = c("bio.retm", "bio.dscm", "bio.totm",
   "prNatZ.ret", "prNatZ.tot", "PRs.ret", "PRs.tot", "mnPrNatZ.ret",
   "mnPrNatZ.tot", "sel_cxz", "sel_yxz", "ret_yxz", "zscores.tot", "zscores.ret",
-  "effSS.ret", "effSS.tot", "qFsh_xy", "max rates", "mean rates"), ci = 0.8,
-  pdfType = c("norm2", "normal", "lognormal"), verbose = FALSE)
+  "effSS.ret", "effSS.tot", "qFsh_xy", "maxFc_xy", "max rates", "mean rates"),
+  ci = 0.8, pdfType = c("norm2", "normal", "lognormal"), verbose = FALSE)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -47,7 +47,8 @@ Potential values for 'type' are:
  \item {'zscores.ret' - annual z-scores for fits to retained catch biomass}
  \item {'effSS.tot' - effective (and input) sample sizes for total catch size comps}
  \item {'effSS.ret' - effective (and input) sample sizes for retained catch size comps}
- \item {'qFsh_xy' - annual fishery catchabilities (i.e. max capture rates)}
+ \item {'qFsh_xy' - annual fishery catchabilities}
+ \item {'maxFc_xy' - annual max capture rates}
  \item {'max rates' - max fishing mortality, retained mortality, and capture rates}
  \item {'mean rates' - mean fishing mortality, retained mortality, and capture rates}
 }

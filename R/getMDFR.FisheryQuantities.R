@@ -28,7 +28,8 @@
 #'  \item {'zscores.ret' - annual z-scores for fits to retained catch biomass}
 #'  \item {'effSS.tot' - effective (and input) sample sizes for total catch size comps}
 #'  \item {'effSS.ret' - effective (and input) sample sizes for retained catch size comps}
-#'  \item {'qFsh_xy' - annual fishery catchabilities (i.e. max capture rates)}
+#'  \item {'qFsh_xy' - annual fishery catchabilities}
+#'  \item {'maxFc_xy' - annual max capture rates}
 #'  \item {'max rates' - max fishing mortality, retained mortality, and capture rates}
 #'  \item {'mean rates' - mean fishing mortality, retained mortality, and capture rates}
 #'}
@@ -46,7 +47,7 @@ getMDFR.FisheryQuantities<-function(obj,
                                            "sel_cxz","sel_yxz","ret_yxz",
                                            "zscores.tot","zscores.ret",
                                            "effSS.ret","effSS.tot",
-                                           "qFsh_xy",
+                                           "qFsh_xy","maxFc_xy",
                                            "max rates","mean rates"),
                                     ci=0.80,
                                     pdfType=c("norm2","normal","lognormal"),
@@ -192,7 +193,7 @@ getMDFR.FisheryQuantities<-function(obj,
                     dfr<-rbind(dfr,dfrp[,c("case","type","fleet","y","x","m","s","z","val")]);
                     #predicted
                     nmm<-paste0(nmp,".",toupper(substr(x,1,1)));
-                    if (lst[[case]]$rep$mod.optFMFit==1) nmm<-paste0(nmc,".",toupper(substr(x,1,1)))
+                    if (lst[[case]]$rep$mod.optFMFit>0) nmm<-paste0(nmc,".",toupper(substr(x,1,1)))
                     vals_yz<-(lst[[case]]$rep)[[nmm]];
                     dimnames(vals_yz)<-list(y=as.character(years.m1[[case]]),
                                             z=as.character(lst[[case]]$rep$mod.zBs));
@@ -668,7 +669,38 @@ getMDFR.FisheryQuantities<-function(obj,
     }    
 
     #----------------------------------
-    # fishery catchabilities (i.e., max fishery capture rates)
+    # fishery catchabilities
+    #----------------------------------
+    if (type[1]=="qFsh_xy"){
+        dfr<-NULL;
+        for (fsh in c('TCF','SCF','RKF','GTF')){
+            nmcr<-gsub("&&fsh",fsh,"fsh.mod.fcr.fully.selected.&&fsh",fixed=TRUE);
+            for (case in cases){
+                #fishery catchability rates
+                vals<-(lst[[case]]$rep)[[nmcr]];
+                if (!is.null(vals)){
+                    ##males
+                    dfrp<-data.frame(case=case,type="capture",fleet=fsh,
+                                     y=years.m1[[case]],x="male",m="all",s="all",val=vals);
+                    dfr<-rbind(dfr,dfrp);
+                    ##females
+                    nmpr<-gsub("&&fsh",fsh," pAvgLnF_&&fshF",fixed=TRUE);
+                    pLnF_F<-(lst[[case]]$prs)$value[(lst[[case]]$prs)$name==nmpr];
+                    dfrp<-data.frame(case=case,type="capture",fleet=fsh,
+                                     y=years.m1[[case]],x="female",m="all",s="all",val=vals*exp(pLnF_F));
+                    dfr<-rbind(dfr,dfrp);
+                    rm(pLnF_F);
+                }
+            }#--case
+        }#--fsh
+        dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
+        dfrp$process<-'fishery';
+        dfrp$category<-'catchability';
+        return(dfrp);
+    }
+    
+    #----------------------------------
+    # max fishery capture rates
     #----------------------------------
     if (type[1]=="qFsh_xy"){
         dfr<-NULL;
@@ -688,7 +720,7 @@ getMDFR.FisheryQuantities<-function(obj,
         }#--fsh
         dfrp<-rCompTCMs::getMDFR.CanonicalFormat(dfr);
         dfrp$process<-'fishery';
-        dfrp$category<-'catchability';
+        dfrp$category<-'max capture rate';
         return(dfrp);
     }
     
