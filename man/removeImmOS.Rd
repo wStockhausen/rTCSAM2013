@@ -22,4 +22,3 @@ Function to remove rows marked as immature, old shell from a dataframe.
 \details{
 none.
 }
-

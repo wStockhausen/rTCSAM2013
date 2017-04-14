@@ -22,4 +22,3 @@ Function to plot a quad plot from a TCSAM report object.
 \details{
 None.
 }
-

@@ -32,4 +32,3 @@ This function compares observed and predicted size comps by year.
 \details{
 Deprecated. Don't use.
 }
-

@@ -18,4 +18,3 @@ Immatures are plotted in blue, matures in green. Shell condition is summed over.
 \details{
 Uses \code{wtsPlots::plotCompsAsCircles}.
 }
-

@@ -20,4 +20,3 @@ Function to create a TCSAM2013 rep object from a TCSAM_OLDSTYLE R file.
 Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
 Uses \code{PBSmodelling::readList} to read file.
 }
-

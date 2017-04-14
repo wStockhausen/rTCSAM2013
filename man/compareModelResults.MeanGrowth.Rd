@@ -22,4 +22,3 @@ Function to compare mean post-molt growth among several model runs.
 \details{
 None.
 }
-

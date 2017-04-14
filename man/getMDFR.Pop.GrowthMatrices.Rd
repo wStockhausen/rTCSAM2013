@@ -21,4 +21,3 @@ several model runs.
 \details{
 Uses \code{reshape2} package.
 }
-

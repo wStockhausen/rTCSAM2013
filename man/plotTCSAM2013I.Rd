@@ -43,4 +43,3 @@ Function to plot model results from TCSAM2013.
 Uses \code{wtsPlots::plotErrorBars.V()}, 
 \code{wtsUtilities::formatZeros} and \code{wtsUtilities::parseNum}.
 }
-

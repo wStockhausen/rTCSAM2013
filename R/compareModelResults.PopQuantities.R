@@ -8,6 +8,7 @@
 #'@param numRecent - number of recent years to zoom in on
 #'@param showPlot - flag (T/F) to show plot immediately
 #'@param pdf - name for output pdf file
+#'@param figno - initial figure number for plot captions
 #'
 #'@details Plots include mature (mating time) biomass, recruitment, annual abundance by x, xm, and xms, 
 #'initial size distribution, final size distribution, annual NatZ by x.
@@ -22,7 +23,8 @@
 compareModelResults.PopQuantities<-function(obj,
                                             numRecent=15,
                                             showPlot=FALSE,
-                                            pdf=NULL){
+                                            pdf=NULL,
+                                            figno=1){
     
     lst<-convertToListOfResults(obj);
     cases<-names(lst);
@@ -39,12 +41,11 @@ compareModelResults.PopQuantities<-function(obj,
     on.exit(par(oldpar),add=TRUE);
     
     plots<-list();#output list
-    fino<-1;
-    
+
     #-------------------------------------------#
     #plot mature biomass
     #-------------------------------------------#
-    dfr<-getMDFR.MatureBiomass(lst);
+    dfr<-getMDFR.Pop.MatureBiomass(lst);
     dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();
@@ -66,7 +67,7 @@ compareModelResults.PopQuantities<-function(obj,
     #-------------------------------------------#
     #plot recruitment
     #-------------------------------------------#
-    dfr<-getMDFR.Recruitment(lst);
+    dfr<-getMDFR.Pop.Recruitment(lst);
     dfr$case<-factor(dfr$case,levels=cases);
     p <- ggplot(dfr,aes_string(x='y',y='val',colour='case'));
     p <- p + geom_line();

@@ -36,4 +36,3 @@ Values for 'paths' and 'obj' should not be given simultaneously.
 Output files will be TCSAM2013ReportFigures.ext and TCSAM2013ReportTables.ext,
 where 'ext' is 'pdf' or 'docx', depending on the format chosen.
 }
-

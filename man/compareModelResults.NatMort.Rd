@@ -21,4 +21,3 @@ This function plots natural mortality estimates by year
 \details{
 None.
 }
-

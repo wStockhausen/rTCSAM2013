@@ -46,4 +46,3 @@ is deleted.\cr
 If the path associated with \code{configFile} is a relative one, it should
 be relative to the \code{path} variable.
 }
-

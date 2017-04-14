@@ -19,4 +19,3 @@ Function to create a tcsam2013.ofc object from a TCSAM2013.final_likelihood_comp
 \details{
 Uses \code{wtsUtilities::selectFile} to open a file dialog if inp.dir is NULL.
 }
-

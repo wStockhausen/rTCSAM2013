@@ -64,4 +64,3 @@ standard deviations for estimated model parameters are available in the .std fil
 
 Uses \code{wtsUtilities::formatZeros()}.
 }
-

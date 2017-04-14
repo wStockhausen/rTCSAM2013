@@ -28,4 +28,3 @@ Function to get fishery catch biomass time series from model results from TCSAM2
 \details{
 Extracts the estimated fishery biomass time series.
 }
-

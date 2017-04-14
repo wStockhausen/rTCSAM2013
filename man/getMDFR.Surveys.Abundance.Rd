@@ -27,4 +27,3 @@ Function to get survey abundance time series from model results from TCSAM2013 m
 \details{
 Extracts the estimated survey abundance time series.
 }
-

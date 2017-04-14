@@ -30,4 +30,3 @@ if inp.dir is NULL. A tcsam2013.resLst object is a list with elements
  \item{ofc - a tcsam2013.ofc object}
 }
 }
-

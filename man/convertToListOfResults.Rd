@@ -33,4 +33,3 @@ Object can be one of the following:
  \item{a single tcsam2013.rep object}
 }
 }
-

@@ -39,4 +39,3 @@ re-running the best run, this time estimating the hessian and obtaining the std 
 
 Uses \code{wtsUtilities::formatZeros()}.
 }
-

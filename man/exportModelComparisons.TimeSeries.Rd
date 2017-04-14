@@ -28,4 +28,3 @@ Function to export time series from a set of model runs to csv for comparison.
 \details{
 None.
 }
-

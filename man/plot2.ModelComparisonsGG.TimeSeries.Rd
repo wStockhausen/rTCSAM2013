@@ -64,4 +64,3 @@ Function to plot a comparison of time series from a set of model runs, with a "z
 numRecent provides the "zoom" for a second set of faceted plots including
 only the most recent years. Calls \code{plotcaseComparisonsGG.TimeSeries}.
 }
-

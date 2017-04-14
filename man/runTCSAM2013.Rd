@@ -57,4 +57,3 @@ saved for each model run in a csv file (the value of out.csv).
 If the path associated with \code{configFile} is a relative one, it should
 be relative to the \code{path} variable.
 }
-

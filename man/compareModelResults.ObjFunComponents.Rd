@@ -31,4 +31,3 @@ differences indicate a better fit (smaller value for the component in the altern
 \code{y="diff"} plots relative objective function values--i.e., relative to the base model. Selecting \code{y="objFun"}
 plots absolute values.
 }
-

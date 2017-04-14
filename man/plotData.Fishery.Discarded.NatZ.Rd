@@ -18,4 +18,3 @@ New shell crab are plotted in blue, old shells in green. Plots are created by se
 \details{
 Uses \code{wtsPlots::plotCompsAsCircles}.
 }
-

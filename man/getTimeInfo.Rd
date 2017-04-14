@@ -24,4 +24,3 @@ Function to get time information for a number of model runs.
  \item{a single tcsam2013.rep object}
 }
 }
-

@@ -46,4 +46,3 @@ Potential values for 'type' are:
 
 Uses \code{reshape2::melt} and \code{reshape2::dcast}.
 }
-

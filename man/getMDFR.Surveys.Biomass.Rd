@@ -27,4 +27,3 @@ Function to get survey biomass time series from model results from TCSAM2013 mod
 \details{
 Extracts the estimated survey biomass time series.
 }
-

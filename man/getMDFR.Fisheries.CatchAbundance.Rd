@@ -28,4 +28,3 @@ Function to get fishery catch abundance time series from model results from TCSA
 \details{
 Extracts the estimated fishery abundance time series.
 }
-

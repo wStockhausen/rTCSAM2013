@@ -26,4 +26,3 @@ This function calculates ABC and OFL from TCSAM2013 projection model output.
 \details{
 Uses standard graphics. Creates "OFL_plot.png".
 }
-

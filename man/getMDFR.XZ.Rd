@@ -32,4 +32,3 @@ Uses \code{reshape2::melt} and \code{reshape2::dcast}. If obj is a tcsam2013.lst
 object, then results will be extracted from the tcsam2013.std object for a given case, if it exists; 
 otherwise they will be extracted from the tcsam2013.rep object.
 }
-

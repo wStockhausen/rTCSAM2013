@@ -47,4 +47,3 @@ Function to plot z-scores from a set of model runs.
 \details{
 None.
 }
-

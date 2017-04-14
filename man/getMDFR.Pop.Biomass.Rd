@@ -22,4 +22,3 @@ Function to get population biomass time series from model results from TCSAM2013
 \details{
 Extracts the estimated population biomass time series.
 }
-

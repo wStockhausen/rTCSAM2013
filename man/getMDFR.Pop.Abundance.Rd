@@ -22,4 +22,3 @@ Function to get population abundance time series from model results from TCSAM20
 \details{
 Extracts the estimated population abundance time series.
 }
-

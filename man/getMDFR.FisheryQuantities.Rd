@@ -54,4 +54,3 @@ Potential values for 'type' are:
 }
 Requires sqldf package.
 }
-

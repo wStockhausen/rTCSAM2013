@@ -23,4 +23,3 @@ several model runs.
 \details{
 Uses \code{getMDFR.FisheryQuantities}.
 }
-

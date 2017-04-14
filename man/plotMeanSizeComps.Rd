@@ -43,4 +43,3 @@ This function plots comparisons of size comps using their averages.
 \details{
 Uses \code{wtsPlots::plotErrorBars.V}.
 }
-

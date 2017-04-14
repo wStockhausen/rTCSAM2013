@@ -22,4 +22,3 @@ Function to compare probability of molt-to-maturity among several model runs.
 \details{
 None.
 }
-

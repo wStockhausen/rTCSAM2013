@@ -22,4 +22,3 @@ Function to extract subpaths from a vector of file paths.
 \details{
 If first and last are both given, only the "last" subpaths will be exported.
 }
-

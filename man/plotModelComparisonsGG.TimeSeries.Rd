@@ -63,4 +63,3 @@ Function to plot a comparison of time series from a set of model runs.
 \details{
 None.
 }
-

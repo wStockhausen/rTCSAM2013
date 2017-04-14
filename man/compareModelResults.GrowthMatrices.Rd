@@ -23,4 +23,3 @@ Function to compare growth matrices among several model runs.
 If multiple models are compared, then a set of sex-specific faceted line plots 
 are created. If a single model is plotted, then sex-specific bubble plots are created.
 }
-

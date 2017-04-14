@@ -5,7 +5,7 @@
 \title{Compare population time series among several model runs}
 \usage{
 compareModelResults.PopQuantities(obj, numRecent = 15, showPlot = FALSE,
-  pdf = NULL)
+  pdf = NULL, figno = 1)
 }
 \arguments{
 \item{obj}{- object that can be converted into a list of tcsam2013.resLst objects}
@@ -15,6 +15,8 @@ compareModelResults.PopQuantities(obj, numRecent = 15, showPlot = FALSE,
 \item{showPlot}{- flag (T/F) to show plot immediately}
 
 \item{pdf}{- name for output pdf file}
+
+\item{figno}{- initial figure number for plot captions}
 }
 \value{
 (nested) list of ggplot2 objects, returned invisibly.
@@ -27,4 +29,3 @@ several model runs.
 Plots include mature (mating time) biomass, recruitment, annual abundance by x, xm, and xms, 
 initial size distribution, final size distribution, annual NatZ by x.
 }
-

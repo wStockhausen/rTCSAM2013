@@ -22,4 +22,3 @@ relative to a base model for several models.
 Objective function component comparisons are relative to the base (or first) case. NEGATIVE
 differences indicate a better fit (smaller value for the component in the alternative model).
 }
-

@@ -18,4 +18,3 @@ Function to create a TCSAM2013 wts object from a TCSAM_WTS R file.
 \details{
 Uses \code{wtsUtilities::selectFile()}.
 }
-

@@ -42,4 +42,3 @@ Initial model parameters can be jittered based on the system clock time as a see
 to the random number generator. The seed and final objective function value are
 saved for each model run in a csv file (the value of out.csv).
 }
-

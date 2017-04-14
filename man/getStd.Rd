@@ -18,4 +18,3 @@ Function to create a dataframe (an std object) from an ADMB std file.
 \details{
 Uses \code{wtsUtilities::selectFile} to open a file dialog if in.par is NULL.
 }
-

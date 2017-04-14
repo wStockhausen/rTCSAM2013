@@ -32,4 +32,3 @@ Potential values for 'type' are:
 }
 Uses \code{reshape2::melt}.
 }
-

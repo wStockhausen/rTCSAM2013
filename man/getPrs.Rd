@@ -23,4 +23,3 @@ one associated with the initial parameter values and one associated with the fin
 The user can select to return either all the parameters, or only the active parameters (ones
 with phase > 0). The returned object will be a dataframe of class 'tcsam2013.prs'.
 }
-

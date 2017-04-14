@@ -36,4 +36,3 @@ Function to plot time series from a set of model runs to csv for comparison.
 \details{
 Uses \code{wtsPlots::plotErrorBars.V}.
 }
-

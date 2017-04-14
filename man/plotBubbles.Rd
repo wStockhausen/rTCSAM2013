@@ -22,4 +22,3 @@ Function to compare size comps using bubble plots for Pearson residuals
 Assumes 5mm size bins starting at 27.5 as center of smallest bin. 
 Filled circles represent pred > obs, empty circles represent pred. < obs.
 }
-

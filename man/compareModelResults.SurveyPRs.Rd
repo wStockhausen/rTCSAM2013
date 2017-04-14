@@ -30,4 +30,3 @@ several model runs.
 \details{
 Uses \code{getMDFR.SurveyQuantities}.
 }
-
